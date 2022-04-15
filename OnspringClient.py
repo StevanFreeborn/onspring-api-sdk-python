@@ -344,4 +344,4 @@ onspringClient = OnspringClient(url, apiKey)
 
 response = onspringClient.GetFieldsByAppId(8)
 
-print()
+print(response.data.fields[0].name)
