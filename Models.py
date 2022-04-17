@@ -1,4 +1,5 @@
 import datetime
+import uuid
 
 # generic
 
@@ -97,7 +98,6 @@ class GetFileByIdResponse:
     def __init__(self, file: File):
         self.file = file
 
-
 class SaveFileRequest:
     def __init__(self, recordId: int, fieldId: int, fileName: str, filePath: str, contentType: str, notes: str=None, modifiedDate: datetime=None):
         self.recordId = recordId
@@ -110,4 +110,18 @@ class SaveFileRequest:
 
 class SaveFileResponse:
     def __init__(self, id: int):
+        self.id = id
+
+# list specific
+
+class ListItemRequest:
+    def __init__(self, listId: int, name: str, id: uuid=None, numericValue: int=None, color: str=None):
+        self.listId = listId
+        self.name = name
+        self.id = id
+        self.numericValue = numericValue
+        self.color = color
+
+class AddOrUpdateListItemResponse:
+    def __init__(self, id: uuid):
         self.id = id
