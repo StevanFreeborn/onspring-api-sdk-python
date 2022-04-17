@@ -1,6 +1,8 @@
 import datetime
 import uuid
 
+from Enums import DataFormat
+
 # generic
 
 class ApiResponse:
@@ -125,3 +127,13 @@ class ListItemRequest:
 class AddOrUpdateListItemResponse:
     def __init__(self, id: uuid):
         self.id = id
+
+# record specific
+
+class GetRecordsByAppRequest:
+    def __init__(self, appId: int, fieldIds: list[int]=[], dataFormat: str=DataFormat.Raw.name, pagingRequest: PagingRequest=PagingRequest(1,50)):
+        self.appId = appId
+        self.fieldIds = fieldIds
+        self.dataFormat = dataFormat
+        self.pageSize = pagingRequest.pageSize
+        self.pageNumber = pagingRequest.pageNumber

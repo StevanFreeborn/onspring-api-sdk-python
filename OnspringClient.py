@@ -798,14 +798,25 @@ class OnspringClient:
 
     # record methods
 
-    def GetRecordsByAppId(self, appId: int):
+    def GetRecordsByAppId(self, getRecordsByAppRequest: GetRecordsByAppRequest):
 
-        endpoint = GetRecordsByAppIdEndpoint(self.baseUrl, appId)
+        endpoint = GetRecordsByAppIdEndpoint(self.baseUrl, getRecordsByAppRequest.appId)
+
+        params = getRecordsByAppRequest.__dict__
+        
+        # remove appId from params
+        del params['appId']
+
+        # convert list of fieldIds to string of comma separated values
+        params['fieldIds'] = ",".join([str(i) for i in params['fieldIds']])
 
         response = requests.request(
-            'GET',)
+            'GET',
+            endpoint,
+            headers=self.headers,
+            params=params)
 
-        return
+        return response
     
     def GetRecordById(self, appId: int, recordId: int):
 
