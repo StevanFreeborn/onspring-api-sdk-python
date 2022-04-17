@@ -856,4 +856,3 @@ class OnspringClient:
         endpoint = GetReportsByAppIdEndpoint(self.baseUrl, appId)
 
         return
-
