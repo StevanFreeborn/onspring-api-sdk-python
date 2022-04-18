@@ -10,12 +10,20 @@ url = cfg['prod']['url']
 
 onspringClient = OnspringClient(url, key)
 
-request = GetRecordsByAppRequest(195, dataFormat=DataFormat.Formatted.name, fieldIds=[6985,6978])
+request = GetRecordsByAppRequest(195)
 
 response = onspringClient.GetRecordsByAppId(request)
 
-print(response.status_code)
-print(response.url)
-print(response.json())
+print(f'Status Code: {response.statusCode}')
+print(f'Page Size: {response.data.pageSize}')
+print(f'Page Number: {response.data.pageNumber}')
+print(f'Total Pages: {response.data.totalPages}')
+print(f'Total Records: {response.data.totalRecords}')
 
+for record in response.data.records:
+    print(f' AppId: {record.appId}')
+    print(f' RecordId: {record.recordId}')
+
+    for value in record.fieldData:
+        print(f'  Type: {value.type}, FieldId: {value.fieldId}, Value: {value.value}')
 

@@ -686,12 +686,9 @@ class OnspringClient:
 
         self.headers['Content-Type'] = 'application/json'
 
-        requestData = json.dumps({
-            'id': listItemRequest.id,
-            'name': listItemRequest.name,
-            'numericValue': listItemRequest.numericValue,
-            'color': listItemRequest.color
-        })
+        del listItemRequest.__dict__['listId']
+
+        requestData = json.dumps(listItemRequest.__dict__)
 
         response = requests.request(
             'PUT', 
@@ -802,6 +799,7 @@ class OnspringClient:
 
         endpoint = GetRecordsByAppIdEndpoint(self.baseUrl, getRecordsByAppRequest.appId)
 
+        # use request object as key-value pairs for params
         params = getRecordsByAppRequest.__dict__
         
         # remove appId from params
@@ -816,7 +814,47 @@ class OnspringClient:
             headers=self.headers,
             params=params)
 
-        return response
+        if response.status_code != 200:
+            return response
+
+        jsonResponse = response.json()
+
+        records = []
+
+        for item in jsonResponse['items']:
+            
+            fields = []
+
+            record = Record(
+                item['appId'],
+                item['recordId'],
+                fields)
+
+            for field in item['fieldData']:
+
+                field = RecordFieldValue(
+                    field['type'],
+                    field['fieldId'],
+                    field['value'])
+                
+                fields.append(field)
+        
+            record.fieldData = fields
+
+            records.append(record)
+
+        data = GetRecordsByAppResponse(
+            jsonResponse['pageNumber'],
+            jsonResponse['pageSize'],
+            jsonResponse['totalPages'],
+            jsonResponse['totalRecords'],
+            records)
+
+        return ApiResponse(
+            response.status_code,
+            data,
+            headers=response.headers,
+            responseText=response.text)
     
     def GetRecordById(self, appId: int, recordId: int):
 

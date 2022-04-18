@@ -1,7 +1,8 @@
 import datetime
+from decimal import Decimal
 import uuid
 
-from Enums import DataFormat
+from Enums import DataFormat, ResultValueType
 
 # generic
 
@@ -128,7 +129,105 @@ class AddOrUpdateListItemResponse:
     def __init__(self, id: uuid):
         self.id = id
 
+# field types
+
+class StringFieldValue:
+    def __init__(self, value: str, fieldId: int):
+        self.type = ResultValueType.String.name
+        self.fieldId = fieldId
+        self.value = value
+
+class IntegerFieldValue:
+    def __init__(self, value: int, fieldId: int):
+        self.type = ResultValueType.Integer.name
+        self.value = value
+        self.fieldId = fieldId
+
+class DecimalFieldValue:
+    def __init__(self, value: Decimal, fieldId: int):
+        self.type = ResultValueType.Decimal.name
+        self.value = value
+        self.fieldId = fieldId
+
+class DateFieldValue:
+    def __init__(self, value: datetime, fieldId: int):
+        self.type = ResultValueType.Date.name
+        self.value = value
+        self.fieldId = fieldId
+
+class GuidFieldValue:
+    def __init__(self, value: uuid, fieldId: int):
+        self.type = ResultValueType.Guid.name
+        self.value = value
+        self.fieldId = fieldId
+
+class TimeSpanData:
+    def __init__(self, quantity: Decimal, ):
+        pass
+
+class TimeSpanValue:
+    def __init__(self, value: uuid, fieldId: int):
+        self.type = ResultValueType.Guid.name
+        self.value = value
+        self.fieldId = fieldId
+
 # record specific
+
+class RecordFieldValue:
+    def __init__(self, type: str, fieldId: int, value: str):
+        self.type = type
+        self.fieldId = fieldId
+        self.value = value
+
+    def AsString(self):
+        
+        if self.type != ResultValueType.String.name:
+            return None
+
+        return StringFieldValue(str(self.value), self.fieldId).value
+
+    def AsInt(self):
+        
+        if self.type != ResultValueType.Integer.name:
+            return None
+        
+        return IntegerFieldValue(int(self.value), self.fieldId).value
+
+    def AsDecimal(self):
+        
+        if self.type != ResultValueType.Decimal.name:
+            return None
+        
+        return DecimalFieldValue(Decimal(self.value), self.fieldId).value
+
+    def AsDate(self):
+        
+        if self.type != ResultValueType.Date.name:
+            return None
+
+        for format in ["%Y-%m-%dT%H:%M:%S.%fZ","%Y-%m-%dT%H:%M:%SZ"]:
+            try:
+                date = datetime.datetime.strptime(self.value, format)
+            except ValueError:
+                pass
+
+        return DateFieldValue(date, self.fieldId).value
+
+    def AsGuid(self):
+
+        if self.type != ResultValueType.Guid.name:
+            return None
+        
+        return GuidFieldValue(uuid.UUID(self.value), self.fieldId).value
+        
+    def AsTimeSpan():
+        return
+
+class Record:
+    def __init__(self, appId: int, recordId: int, fieldData: list[RecordFieldValue]):
+        self.appId = appId
+        self.recordId = recordId
+        self.fieldData = fieldData
 
 class GetRecordsByAppRequest:
     def __init__(self, appId: int, fieldIds: list[int]=[], dataFormat: str=DataFormat.Raw.name, pagingRequest: PagingRequest=PagingRequest(1,50)):
@@ -137,3 +236,11 @@ class GetRecordsByAppRequest:
         self.dataFormat = dataFormat
         self.pageSize = pagingRequest.pageSize
         self.pageNumber = pagingRequest.pageNumber
+
+class GetRecordsByAppResponse:
+    def __init__(self, pageNumber: int, pageSize: int, totalPages: int, totalRecords: int, records: list[Record]):
+        self.pageNumber = pageNumber
+        self.pageSize = pageSize
+        self.totalPages = totalPages
+        self.totalRecords = totalRecords
+        self.records = records
