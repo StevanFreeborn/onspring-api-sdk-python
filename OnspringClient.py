@@ -459,12 +459,15 @@ class OnspringClient:
 
             jsonResponse = response.json()
 
+            createdDate = parseDate(jsonResponse['createdDate'])
+            modifiedDate = parseDate(jsonResponse['modifiedDate'])
+
             fileInfo = FileInfo(
                 jsonResponse['type'],
                 jsonResponse['contentType'],
                 jsonResponse['name'],
-                jsonResponse['createdDate'],
-                jsonResponse['modifiedDate'],
+                createdDate,
+                modifiedDate,
                 jsonResponse['owner'],
                 jsonResponse['fileHref'])
 
@@ -839,7 +842,7 @@ class OnspringClient:
                 
                 fields.append(field)
         
-            record.fieldData = fields
+            record.fields = fields
 
             records.append(record)
 

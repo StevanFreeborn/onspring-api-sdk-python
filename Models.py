@@ -1,8 +1,10 @@
 import datetime
-from decimal import Decimal
 import uuid
 
-from Enums import DataFormat, ResultValueType
+from Enums import *
+from decimal import Decimal
+from datetime import datetime
+from Helpers import parseDate
 
 # generic
 
@@ -84,7 +86,7 @@ class File:
         self.content = content
 
 class FileInfo:
-    def __init__(self, type: str, contentType: str, name: str, createdDate: str, modifiedDate: str, owner: str, fileHref: str):
+    def __init__(self, type: str, contentType: str, name: str, createdDate: datetime, modifiedDate: datetime, owner: str, fileHref: str):
         self.type = type
         self.contentType = contentType
         self.name = name
@@ -133,43 +135,58 @@ class AddOrUpdateListItemResponse:
 
 class StringFieldValue:
     def __init__(self, value: str, fieldId: int):
-        self.type = ResultValueType.String.name
         self.fieldId = fieldId
         self.value = value
 
 class IntegerFieldValue:
     def __init__(self, value: int, fieldId: int):
-        self.type = ResultValueType.Integer.name
         self.value = value
         self.fieldId = fieldId
 
 class DecimalFieldValue:
     def __init__(self, value: Decimal, fieldId: int):
-        self.type = ResultValueType.Decimal.name
         self.value = value
         self.fieldId = fieldId
 
 class DateFieldValue:
     def __init__(self, value: datetime, fieldId: int):
-        self.type = ResultValueType.Date.name
         self.value = value
         self.fieldId = fieldId
 
 class GuidFieldValue:
-    def __init__(self, value: uuid, fieldId: int):
-        self.type = ResultValueType.Guid.name
+    def __init__(self, value: uuid.UUID, fieldId: int):
         self.value = value
         self.fieldId = fieldId
 
 class TimeSpanData:
-    def __init__(self, quantity: Decimal, ):
-        pass
+    def __init__(self, quantity: Decimal, increment: str, recurrence: str=None, endByDate: datetime=None, endAfterOccurrences: int=None):
+        self.quantity = quantity
+        self.increment = increment
+        self.recurrence = recurrence
+        self.endByDate = endByDate
+        self.endAfterOccurrences = endAfterOccurrences
+
 
 class TimeSpanValue:
-    def __init__(self, value: uuid, fieldId: int):
-        self.type = ResultValueType.Guid.name
+    def __init__(self, value: TimeSpanData, fieldId: int):
         self.value = value
         self.fieldId = fieldId
+
+class StringListValue:
+    def __init__(self, value: list[str], fieldId: int):
+        self.value = value
+        self.fieldId = fieldId
+
+class IntegerListValue:
+    def __init__(self, value: list[int], fieldId: int):
+        self.value = value
+        self.fieldId = fieldId
+
+class GuidListValue:
+    def __init__(self, value: list[uuid.UUID], fieldId: int):
+        self.value = value
+        self.fieldId = fieldId
+
 
 # record specific
 
@@ -184,7 +201,7 @@ class RecordFieldValue:
         if self.type != ResultValueType.String.name:
             return None
 
-        return StringFieldValue(str(self.value), self.fieldId).value
+        return StringFieldValue(self.value, self.fieldId).value
 
     def AsInt(self):
         
@@ -205,11 +222,7 @@ class RecordFieldValue:
         if self.type != ResultValueType.Date.name:
             return None
 
-        for format in ["%Y-%m-%dT%H:%M:%S.%fZ","%Y-%m-%dT%H:%M:%SZ"]:
-            try:
-                date = datetime.datetime.strptime(self.value, format)
-            except ValueError:
-                pass
+        date = parseDate(self.value)
 
         return DateFieldValue(date, self.fieldId).value
 
@@ -220,14 +233,70 @@ class RecordFieldValue:
         
         return GuidFieldValue(uuid.UUID(self.value), self.fieldId).value
         
-    def AsTimeSpan():
+    def AsTimeSpan(self):
+
+        if self.type != ResultValueType.TimeSpan.name:
+            return None
+        
+        value = dict(self.value)
+
+        quantity = value.get('quantity')
+        increment = value.get('increment')
+        recurrence = value.get('recurrence')
+        endByDate = value.get('endByDate')
+        endAfterOccurrences = value.get('endAfterOccurrences')
+
+        endByDate = parseDate(endByDate)
+
+        data = TimeSpanData(
+            quantity,
+            increment,
+            recurrence,
+            endByDate,
+            endAfterOccurrences)
+
+        return TimeSpanValue(data, self.fieldId).value
+
+    def AsStringList(self):
+
+        if self.type != ResultValueType.StringList.name:
+            return None
+            
+        return StringListValue(self.value, self.fieldId).value
+
+    def AsIntegerList(self):
+        
+        if self.type != ResultValueType.IntegerList.name:
+            return None
+            
+        return IntegerListValue(self.value, self.fieldId).value
+
+    def AsGuidList(self):
+
+        if self.type != ResultValueType.GuidList.name:
+            return None
+
+        guids = []
+
+        for guid in self.value:
+            guids.append(uuid.UUID(guid))
+            
+        return GuidListValue(guids, self.fieldId).value
+
+    def AsAttachmentList(self):
+        return
+
+    def AsScoringGroupList(self):
+        return
+
+    def AsFileList(self):
         return
 
 class Record:
-    def __init__(self, appId: int, recordId: int, fieldData: list[RecordFieldValue]):
+    def __init__(self, appId: int, recordId: int, fields: list[RecordFieldValue]):
         self.appId = appId
         self.recordId = recordId
-        self.fieldData = fieldData
+        self.fields = fields
 
 class GetRecordsByAppRequest:
     def __init__(self, appId: int, fieldIds: list[int]=[], dataFormat: str=DataFormat.Raw.name, pagingRequest: PagingRequest=PagingRequest(1,50)):
