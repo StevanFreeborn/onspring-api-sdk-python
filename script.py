@@ -10,7 +10,7 @@ url = cfg['prod']['url']
 
 onspringClient = OnspringClient(url, key)
 
-request = GetRecordsByAppRequest(195, dataFormat=DataFormat.Raw.name)
+request = GetRecordsByAppRequest(240, dataFormat=DataFormat.Raw.name)
 
 response = onspringClient.GetRecordsByAppId(request)
 
@@ -25,6 +25,4 @@ for record in response.data.records:
     print(f' RecordId: {record.recordId}')
 
     for field in record.fields:
-        if field.type == ResultValueType.Decimal.name:
-            print(f'  Type: {field.type}, FieldId: {field.fieldId}, Value: {field.AsDecimal()}')
-            print(field.AsDecimal())
+        print(f'  Type: {field.type}, FieldId: {field.fieldId}, Value: {field.getValue()}')

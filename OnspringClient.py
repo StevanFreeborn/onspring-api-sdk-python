@@ -817,47 +817,46 @@ class OnspringClient:
             headers=self.headers,
             params=params)
 
-        if response.status_code != 200:
-            return response
+        if response.status_code == 200:
 
-        jsonResponse = response.json()
+            jsonResponse = response.json()
 
-        records = []
+            records = []
 
-        for item in jsonResponse['items']:
-            
-            fields = []
-
-            record = Record(
-                item['appId'],
-                item['recordId'],
-                fields)
-
-            for field in item['fieldData']:
-
-                field = RecordFieldValue(
-                    field['type'],
-                    field['fieldId'],
-                    field['value'])
+            for item in jsonResponse['items']:
                 
-                fields.append(field)
-        
-            record.fields = fields
+                fields = []
 
-            records.append(record)
+                record = Record(
+                    item['appId'],
+                    item['recordId'],
+                    fields)
 
-        data = GetRecordsByAppResponse(
-            jsonResponse['pageNumber'],
-            jsonResponse['pageSize'],
-            jsonResponse['totalPages'],
-            jsonResponse['totalRecords'],
-            records)
+                for field in item['fieldData']:
 
-        return ApiResponse(
-            response.status_code,
-            data,
-            headers=response.headers,
-            responseText=response.text)
+                    field = RecordFieldValue(
+                        field['type'],
+                        field['fieldId'],
+                        field['value'])
+                    
+                    fields.append(field)
+            
+                record.fields = fields
+
+                records.append(record)
+
+            data = GetRecordsByAppResponse(
+                jsonResponse['pageNumber'],
+                jsonResponse['pageSize'],
+                jsonResponse['totalPages'],
+                jsonResponse['totalRecords'],
+                records)
+
+            return ApiResponse(
+                response.status_code,
+                data,
+                headers=response.headers,
+                responseText=response.text)
     
     def GetRecordById(self, appId: int, recordId: int):
 

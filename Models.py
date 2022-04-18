@@ -166,7 +166,6 @@ class TimeSpanData:
         self.endByDate = endByDate
         self.endAfterOccurrences = endAfterOccurrences
 
-
 class TimeSpanValue:
     def __init__(self, value: TimeSpanData, fieldId: int):
         self.value = value
@@ -187,6 +186,34 @@ class GuidListValue:
         self.value = value
         self.fieldId = fieldId
 
+class Attachment:
+    def __init__(self, fileId: int, fileName: str, notes: str, storageLocation: str):
+        self.fileId = fileId
+        self.fileName = fileName
+        self.notes = notes
+        self.storageLocation = storageLocation
+
+class AttachmentListValue:
+    def __init__(self, value: list[Attachment], fieldId: int):
+        self.value = value
+        self.fieldId = fieldId
+
+class FileListValue:
+    def __init__(self, value: list[int], fieldId: int):
+        self.value = value
+        self.fieldId = fieldId
+
+class ScoringGroup:
+    def __init__(self, listValueId: uuid.UUID, name: str, score: Decimal, maximumScore: Decimal):
+        self.listValueId = listValueId
+        self.name = name
+        self.score = score
+        self.maximumScore = maximumScore
+
+class ScoringGroupListValue:
+    def __init__(self, value: list[ScoringGroup], fieldId: int):
+        self.value = value
+        self.fieldId = fieldId
 
 # record specific
 
@@ -203,7 +230,7 @@ class RecordFieldValue:
 
         return StringFieldValue(self.value, self.fieldId).value
 
-    def AsInt(self):
+    def AsInteger(self):
         
         if self.type != ResultValueType.Integer.name:
             return None
@@ -284,13 +311,82 @@ class RecordFieldValue:
         return GuidListValue(guids, self.fieldId).value
 
     def AsAttachmentList(self):
-        return
+
+        if self.type != ResultValueType.AttachmentList.name:
+            return None
+
+        attachments = []
+
+        for attachment in self.value:
+
+            attachment = dict(attachment)
+
+            attachment = Attachment(
+                attachment.get('fileId'),
+                attachment.get('fileName'),
+                attachment.get('notes'),
+                attachment.get('storageLocation'))
+
+            attachments.append(attachment)
+
+        return AttachmentListValue(attachments, self.fieldId).value
 
     def AsScoringGroupList(self):
-        return
+
+        if self.type != ResultValueType.ScoringGroupList.name:
+            return
+
+        scoringGroups = []
+
+        for scoringGroup in self.value:
+
+            scoringGroup = dict(scoringGroup)
+
+            scoringGroup = ScoringGroup(
+                uuid.UUID(scoringGroup.get('listValueId')),
+                scoringGroup.get('name'),
+                Decimal(scoringGroup.get('score')),
+                Decimal(scoringGroup.get('maximumScore')))
+
+            scoringGroups.append(scoringGroup)
+        
+        return ScoringGroupListValue(scoringGroups, self.fieldId).value
 
     def AsFileList(self):
-        return
+        
+        if self.type != ResultValueType.FileList.name:
+            return None
+            
+        return FileListValue(self.value, self.fieldId).value
+
+    def getValue(self):
+
+        if self.type == ResultValueType.String.name:
+            return self.AsString()
+        elif self.type == ResultValueType.Integer.name:
+            return self.AsInteger()
+        elif self.type == ResultValueType.Decimal.name:
+            return self.AsDecimal()
+        elif self.type == ResultValueType.Date.name:
+            return self.AsDate()
+        elif self.type == ResultValueType.TimeSpan.name:
+            return self.AsTimeSpan()
+        elif self.type == ResultValueType.Guid.name:
+            return self.AsGuid()
+        elif self.type == ResultValueType.StringList.name:
+            return self.AsStringList()
+        elif self.type == ResultValueType.IntegerList.name:
+            return self.AsIntegerList()
+        elif self.type == ResultValueType.GuidList.name:
+            return self.AsGuidList()
+        elif self.type == ResultValueType.AttachmentList.name:
+            return self.AsAttachmentList()
+        elif self.type == ResultValueType.ScoringGroupList.name:
+            return self.AsScoringGroupList()
+        elif self.type == ResultValueType.FileList.name:
+            return self.AsFileList()
+        else:
+            return None
 
 class Record:
     def __init__(self, appId: int, recordId: int, fields: list[RecordFieldValue]):
