@@ -15,7 +15,7 @@ class OnspringClient:
 
     # connectivity methods
 
-    def canConnect(self):
+    def CanConnect(self):
 
         endpoint = GetPingEndpoint(self.baseUrl)
 
@@ -672,18 +672,19 @@ class OnspringClient:
 
         if response.status_code in [403,404,500]:
 
-            jsonResponse = response.json()
+            jsonResponse = dict(response.json())
 
             return ApiResponse(
                 response.status_code,
-                message=jsonResponse['message'],
+                message=jsonResponse.get('message'),
                 headers=response.headers,
                 responseText=response.text)
 
         if response.status_code == 201:
-            responseJson = response.json()
 
-            data = SaveFileResponse(responseJson['id'])
+            responseJson = dict(response.json())
+
+            data = SaveFileResponse(responseJson.get('id'))
 
             return ApiResponse(
                     response.status_code,
@@ -724,19 +725,19 @@ class OnspringClient:
 
         if response.status_code in [403,404]:
 
-            jsonResponse = response.json()
+            jsonResponse = dict(response.json())
 
             return ApiResponse(
                 response.status_code,
-                message=jsonResponse['message'],
+                message=jsonResponse.get('message'),
                 headers=response.headers,
                 responseText=response.text)
 
         if response.status_code == 201:
             
-            responseJson = response.json()
+            responseJson = dict(response.json())
 
-            data = AddOrUpdateListItemResponse(responseJson['id'])
+            data = AddOrUpdateListItemResponse(responseJson.get('id'))
 
             return ApiResponse(
                     response.status_code,
@@ -747,9 +748,9 @@ class OnspringClient:
 
         if response.status_code == 200:
             
-            responseJson = response.json()
+            responseJson = dict(response.json())
 
-            data = AddOrUpdateListItemResponse(responseJson['id'])
+            data = AddOrUpdateListItemResponse(responseJson.get('id'))
 
             return ApiResponse(
                     response.status_code,
@@ -782,11 +783,11 @@ class OnspringClient:
 
         if response.status_code == 403:
 
-            jsonResponse = response.json()
+            jsonResponse = dict(response.json())
 
             return ApiResponse(
                 response.status_code,
-                message=jsonResponse['message'],
+                message=jsonResponse.get('message'),
                 headers=response.headers,
                 responseText=response.text)
 
@@ -834,25 +835,29 @@ class OnspringClient:
 
         if response.status_code == 200:
 
-            jsonResponse = response.json()
+            jsonResponse = dict(response.json())
 
             records = []
 
-            for item in jsonResponse['items']:
+            for item in jsonResponse.get('items'):
                 
+                item = dict(item)
+
                 fields = []
 
                 record = Record(
-                    item['appId'],
-                    item['recordId'],
+                    item.get('appId'),
+                    item.get('recordId'),
                     fields)
 
-                for field in item['fieldData']:
+                for field in item.get('fieldData'):
+                    
+                    field = dict(field)
 
                     field = RecordFieldValue(
-                        field['type'],
-                        field['fieldId'],
-                        field['value'])
+                        field.get('type'),
+                        field.get('fieldId'),
+                        field.get('value'))
                     
                     fields.append(field)
             
@@ -861,10 +866,10 @@ class OnspringClient:
                 records.append(record)
 
             data = GetRecordsByAppResponse(
-                jsonResponse['pageNumber'],
-                jsonResponse['pageSize'],
-                jsonResponse['totalPages'],
-                jsonResponse['totalRecords'],
+                jsonResponse.get('pageNumber'),
+                jsonResponse.get('pageSize'),
+                jsonResponse.get('totalPages'),
+                jsonResponse.get('totalRecords'),
                 records)
 
             return ApiResponse(
