@@ -144,7 +144,7 @@ class OnspringClient:
             headers=response.headers,
             responseText=response.text)
 
-    def GetAppByIds(self, appIds: list):
+    def GetAppsByIds(self, appIds: list):
 
         endpoint = GetAppByIdsEndpoint(self.baseUrl)
 

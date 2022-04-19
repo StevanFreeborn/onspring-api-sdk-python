@@ -1,6 +1,7 @@
 from http import client
 import mimetypes
 import os
+import sys
 
 from OnspringClient import OnspringClient
 from configparser import ConfigParser
@@ -19,16 +20,22 @@ onspring = OnspringClient(url, key)
 
 def main():
 
-    # PrintGetApps(onspring)
-
-    PrintGetAppById(onspring, 195)
-    
-    # PrintSaveFile(
-    #     onspring,
-    #     'C:\\Users\\sfree\\OneDrive\\Desktop\\Test Attachment.txt',
-    #     60,
-    #     6989
-    # )
+    match sys.argv[1].lower():
+        case 'connect':
+            PrintCanConnect(onspring)
+        case 'getapps':
+            PrintGetApps(onspring)
+        case 'getappbyid':
+            PrintGetAppById(onspring, 195)
+        case 'getappsbyids':
+            PrintGetAppsByIds(onspring, [195, 240])
+        case 'savefile':
+            PrintSaveFile(
+                onspring,
+                'C:\\Users\\sfree\\OneDrive\\Desktop\\Test Attachment.txt',
+                60,
+                6989
+            )
 
     return
 
@@ -67,6 +74,22 @@ def PrintGetAppById(client: OnspringClient, appId: int):
     print(f'id: {response.data.app.id}')
     print(f'Name: {response.data.app.name}')
     print(f'href: {response.data.app.href}')
+
+def PrintGetAppsByIds(client: OnspringClient, appIds: list[int]):
+
+    response = client.GetAppsByIds(appIds)
+
+    print(f'Status Code: {response.statusCode}')
+    print(f'Count: {response.data.count}')
+    print('----')
+
+    for app in response.data.apps:
+        print(f'Id: {app.id}')
+        print(f'Name: {app.name}')
+        print(f'href: {app.href}')
+        print('--')
+
+    print('----')
 
 # records
 
