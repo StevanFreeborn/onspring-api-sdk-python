@@ -10,19 +10,36 @@ url = cfg['prod']['url']
 
 onspringClient = OnspringClient(url, key)
 
-request = GetRecordsByAppRequest(240, dataFormat=DataFormat.Raw.name)
+def GetRecordsByAppRequestTest():
 
-response = onspringClient.GetRecordsByAppId(request)
+    request = GetRecordsByAppRequest(240, dataFormat=DataFormat.Raw.name)
 
-print(f'Status Code: {response.statusCode}')
-print(f'Page Size: {response.data.pageSize}')
-print(f'Page Number: {response.data.pageNumber}')
-print(f'Total Pages: {response.data.totalPages}')
-print(f'Total Records: {response.data.totalRecords}')
+    response = onspringClient.GetRecordsByAppId(request)
 
-for record in response.data.records:
-    print(f' AppId: {record.appId}')
-    print(f' RecordId: {record.recordId}')
+    print(f'Status Code: {response.statusCode}')
+    print(f'Page Size: {response.data.pageSize}')
+    print(f'Page Number: {response.data.pageNumber}')
+    print(f'Total Pages: {response.data.totalPages}')
+    print(f'Total Records: {response.data.totalRecords}')
 
-    for field in record.fields:
-        print(f'  Type: {field.type}, FieldId: {field.fieldId}, Value: {field.getValue()}')
+    for record in response.data.records:
+        print(f' AppId: {record.appId}')
+        print(f' RecordId: {record.recordId}')
+
+        for field in record.fields:
+            print(f'  Type: {field.type}, FieldId: {field.fieldId}, Value: {field.getValue()}')
+
+
+
+filePath = 'C:\\Users\\sfree\\OneDrive\\Desktop\\Test Attachment.txt'
+
+request = SaveFileRequest(
+    60, 
+    6989, 
+    'Test Attachment.text', 
+    filePath, 'text/plain', 
+    'Updating record with attachment')
+
+response = onspringClient.SaveFile(request)
+
+print(response.statusCode)

@@ -56,23 +56,26 @@ class OnspringClient:
 
         if response.status_code == 200:
 
-            responseJson = response.json()
+            responseJson = dict(response.json())
 
             apps = []
 
-            for item in responseJson['items']:
+            for item in responseJson.get('items'):
+
+                item = dict(item)
+
                 app = App(
-                    item['href'],
-                    item['id'],
-                    item['name'])
+                    item.get('href'),
+                    item.get('id'),
+                    item.get('name'))
 
                 apps.append(app)
 
             data = GetAppsResponse(
-                responseJson['pageNumber'],
-                responseJson['pageSize'],
-                responseJson['totalPages'],
-                responseJson['totalRecords'],
+                responseJson.get('pageNumber'),
+                responseJson.get('pageSize'),
+                responseJson.get('totalPages'),
+                responseJson.get('totalRecords'),
                 apps)
 
             return ApiResponse(
@@ -121,12 +124,12 @@ class OnspringClient:
 
         if response.status_code == 200:
 
-            responseJson = response.json()
+            responseJson = dict(response.json())
 
             app = App(
-                responseJson['href'],
-                responseJson['id'],
-                responseJson['name'])
+                responseJson.get('href'),
+                responseJson.get('id'),
+                responseJson.get('name'))
 
             data = GetAppByIdResponse(app)
 
@@ -179,20 +182,23 @@ class OnspringClient:
 
         if response.status_code == 200:
 
-            responseJson = response.json()
+            responseJson = dict(response.json())
 
             apps = []
 
             for item in responseJson['items']:
+
+                item = dict(item)
+
                 app = App(
-                    item['href'],
-                    item['id'],
-                    item['name'])
+                    item.get('href'),
+                    item.get('id'),
+                    item.get('name'))
 
                 apps.append(app)
 
             data = GetAppsByIdsResponse(
-                responseJson['count'],
+                responseJson.get('count'),
                 apps)
 
             return ApiResponse(
@@ -243,16 +249,16 @@ class OnspringClient:
 
         if response.status_code == 200:
 
-            jsonResponse = response.json()
+            jsonResponse = dict(response.json())
 
             field = Field(
-                jsonResponse['id'],
-                jsonResponse['appId'],
-                jsonResponse['name'],
-                jsonResponse['type'],
-                jsonResponse['status'],
-                jsonResponse['isRequired'],
-                jsonResponse['isUnique'],)
+                jsonResponse.get('id'),
+                jsonResponse.get('appId'),
+                jsonResponse.get('name'),
+                jsonResponse.get('type'),
+                jsonResponse.get('status'),
+                jsonResponse.get('isRequired'),
+                jsonResponse.get('isUnique'))
 
             data = GetFieldByIdResponse(field)
 
@@ -313,24 +319,27 @@ class OnspringClient:
 
         if response.status_code == 200:
 
-            responseJson = response.json()
+            responseJson = dict(response.json())
 
             fields = []
 
-            for item in responseJson['items']:
+            for item in responseJson.get('items'):
+                
+                item = dict(item)
+                
                 field = Field(
-                    item['id'],
-                    item['appId'],
-                    item['name'],
-                    item['type'],
-                    item['status'],
-                    item['isRequired'],
-                    item['isUnique'])
+                    item.get('id'),
+                    item.get('appId'),
+                    item.get('name'),
+                    item.get('type'),
+                    item.get('status'),
+                    item.get('isRequired'),
+                    item.get('isUnique'))
 
                 fields.append(field)
 
             data = GetFieldsByIdsResponse(
-                responseJson['count'],
+                responseJson.get('count'),
                 fields)
 
             return ApiResponse(
@@ -374,27 +383,30 @@ class OnspringClient:
 
         if response.status_code == 200:
 
-            responseJson = response.json()
+            responseJson = dict(response.json())
 
             fields = []
 
-            for item in responseJson['items']:
+            for item in responseJson.get('items'):
+
+                item = dict(item)
+
                 field = Field(
-                    item['id'],
-                    item['appId'],
-                    item['name'],
-                    item['type'],
-                    item['status'],
-                    item['isRequired'],
-                    item['isUnique'])
+                    item.get('id'),
+                    item.get('appId'),
+                    item.get('name'),
+                    item.get('type'),
+                    item.get('status'),
+                    item.get('isRequired'),
+                    item.get('isUnique'))
 
                 fields.append(field)
 
             data = GetFieldsByAppIdResponse(
-                responseJson['pageNumber'],
-                responseJson['pageSize'],
-                responseJson['totalPages'],
-                responseJson['totalRecords'],
+                responseJson.get('pageNumber'),
+                responseJson.get('pageSize'),
+                responseJson.get('totalPages'),
+                responseJson.get('totalRecords'),
                 fields)
 
             return ApiResponse(
@@ -457,19 +469,19 @@ class OnspringClient:
 
         if response.status_code == 200:
 
-            jsonResponse = response.json()
+            jsonResponse = dict(response.json())
 
-            createdDate = parseDate(jsonResponse['createdDate'])
-            modifiedDate = parseDate(jsonResponse['modifiedDate'])
+            createdDate = parseDate(jsonResponse.get('createdDate'))
+            modifiedDate = parseDate(jsonResponse.get('modifiedDate'))
 
             fileInfo = FileInfo(
-                jsonResponse['type'],
-                jsonResponse['contentType'],
-                jsonResponse['name'],
+                jsonResponse.get('type'),
+                jsonResponse.get('contentType'),
+                jsonResponse.get('name'),
                 createdDate,
                 modifiedDate,
-                jsonResponse['owner'],
-                jsonResponse['fileHref'])
+                jsonResponse.get('owner'),
+                jsonResponse.get('fileHref'))
 
             data = GetFileInfoByIdResponse(fileInfo)
 
@@ -515,11 +527,11 @@ class OnspringClient:
 
         if response.status_code == 403 or response.status_code == 404:
 
-            jsonResponse = response.json()
+            jsonResponse = dict(response.json())
 
             return ApiResponse(
                 response.status_code,
-                message=jsonResponse['message'],
+                message=jsonResponse.get('message'),
                 headers=response.headers,
                 responseText=response.text)
 
@@ -575,19 +587,23 @@ class OnspringClient:
 
         if response.status_code == 403 or response.status_code == 404:
             
-            jsonResponse = response.json()
+            jsonResponse = dict(response.json())
 
             return ApiResponse(
                 response.status_code,
-                message=jsonResponse['message'],
+                message=jsonResponse.get('message'),
                 headers=response.headers,
                 responseText=response.text)
 
         if response.status_code == 200:
-            
-            fileName = response.headers['Content-Disposition']
-            result = re.search('filename=.*;', fileName).group()
 
+            headers = dict(response.headers)
+            
+            fileName = headers.get('Content-Disposition')
+            result = re.search('filename=.*;', fileName).group()
+            
+            # TODO: implement attempting to build file name using content-type header
+            # TODO: implement default filename value
             if result:
                 fileName = re.sub('filename=|\'|;', '', result)
             else:
@@ -595,8 +611,8 @@ class OnspringClient:
 
             file = File(
                 fileName,
-                response.headers['Content-Type'],
-                response.headers['Content-Length'],
+                headers.get('Content-Type'),
+                headers.get('Content-Length'),
                 response.content)
 
             data = GetFileByIdResponse(file)
@@ -617,13 +633,6 @@ class OnspringClient:
 
         endpoint = SaveFileEndpoint(self.baseUrl)
 
-        requestData = {
-            'recordId': saveFileRequest.recordId,
-            'fieldId': saveFileRequest.fieldId,
-            'notes': saveFileRequest.notes,
-            'modifiedDate': saveFileRequest.modifiedDate
-        }
-
         files = [
             (
                 'File',
@@ -631,13 +640,19 @@ class OnspringClient:
             )
         ]
 
+        saveFileRequest = saveFileRequest.__dict__
+        del saveFileRequest['fileName']
+        del saveFileRequest['filePath']
+        del saveFileRequest['contentType']
+
+        requestData = saveFileRequest
+
         response = requests.request(
             'POST', 
             endpoint, 
             headers=self.headers,
             data=requestData,
             files=files)
-
 
         if response.status_code == 400:
             
