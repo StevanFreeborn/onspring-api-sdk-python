@@ -10,7 +10,7 @@ url = cfg['prod']['url']
 
 onspringClient = OnspringClient(url, key)
 
-def GetRecordsByAppRequestTest():
+def GetRecordsByAppIdTest():
 
     request = GetRecordsByAppRequest(240, dataFormat=DataFormat.Raw.name)
 
@@ -29,17 +29,18 @@ def GetRecordsByAppRequestTest():
         for field in record.fields:
             print(f'  Type: {field.type}, FieldId: {field.fieldId}, Value: {field.getValue()}')
 
+def SaveFileTest():
 
+    filePath = 'C:\\Users\\sfree\\OneDrive\\Desktop\\Test Attachment.txt'
 
-filePath = 'C:\\Users\\sfree\\OneDrive\\Desktop\\Test Attachment.txt'
+    request = SaveFileRequest(
+        60, 
+        6989, 
+        'Test Attachment.text', 
+        filePath, 'text/plain', 
+        'Updating record with attachment')
 
-request = SaveFileRequest(
-    60, 
-    6989, 
-    'Test Attachment.text', 
-    filePath, 'text/plain', 
-    'Updating record with attachment')
+    response = onspringClient.SaveFile(request)
 
-response = onspringClient.SaveFile(request)
-
-print(response.statusCode)
+    print(response.statusCode)
+    print(response.data.id)
