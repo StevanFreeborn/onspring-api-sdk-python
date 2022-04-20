@@ -1,4 +1,3 @@
-from http import client
 import mimetypes
 import os
 import sys
@@ -20,23 +19,76 @@ onspring = OnspringClient(url, key)
 
 def main():
 
-    match sys.argv[1].lower():
-        case 'connect':
-            PrintCanConnect(onspring)
-        case 'getapps':
-            PrintGetApps(onspring)
-        case 'getappbyid':
-            PrintGetAppById(onspring, 195)
-        case 'getappsbyids':
-            PrintGetAppsByIds(onspring, [195, 240])
-        case 'savefile':
-            PrintSaveFile(
-                onspring,
-                'C:\\Users\\sfree\\OneDrive\\Desktop\\Test Attachment.txt',
-                60,
-                6989
-            )
+    if not len(sys.argv) > 1:
+        print('No valid command given')
+        return
 
+    command = sys.argv[1].lower()
+
+    if command =='connect':
+        PrintCanConnect(onspring)
+        
+    if command == 'getapps':
+        PrintGetApps(onspring)
+    
+    if command == 'getappbyid':
+        PrintGetAppById(onspring, 195)
+        
+    if command == 'getappsbyids':
+        PrintGetAppsByIds(onspring, [195, 240])
+    
+    if command == 'savefile':
+        PrintSaveFile(
+            onspring,
+            'C:\\Users\\sfree\\OneDrive\\Desktop\\Test Attachment.txt',
+            60,
+            6989
+        )
+    
+    if command == 'getrecordsbyappid':
+        PrintGetRecordsByAppId(onspring, 195)
+        return
+    
+    if command == 'getrecordbyid':
+        PrintGetRecordById(onspring, 195, 5)
+        return
+    
+    if command == 'deleterecord':
+        PrintDeleteRecord(onspring, 195, sys.argv[2])
+        return
+    
+    if command == 'getrecordsbyids':
+        PrintGetRecordsByIds(onspring, 195, [1, 2], [6983, 6984])
+        return
+
+    if command == 'queryrecords':
+        fieldId = 6983
+        operator = 'eq'
+        value = '\'Test Task 5\''
+        PrintQueryRecords(onspring, 195, f'{fieldId} {operator} {value}')
+        return
+
+    if command == 'addrecord':
+
+        fields = [
+            RecordFieldValue(6983, 'A New Test Task'),
+            RecordFieldValue(6984, 'This is a test task.')
+        ]
+
+        PrintAddOrUpdateRecord(onspring, 195, fields)
+        return
+
+    if command == 'updaterecord':
+
+        fields = [
+            RecordFieldValue(6983, 'Updated'),
+            RecordFieldValue(6984, 'Updated')
+        ]
+
+        PrintAddOrUpdateRecord(onspring, 195, fields, 60)
+        return
+
+    print('No valid command given')
     return
 
 #connectivity
@@ -118,6 +170,110 @@ def PrintGetRecordsByAppId(client: OnspringClient, appId: int):
             print('--')
         
         print('----')
+
+def PrintGetRecordById(client: OnspringClient, appId: int, recordId: int, fieldIds: list[int]=[], dataFormat: str=DataFormat.Raw.name):
+
+    request = GetRecordByIdRequest(
+        appId,
+        recordId,
+        fieldIds,
+        dataFormat)
+
+    response = client.GetRecordById(request)
+
+    print(f'Status Code: {response.statusCode}')
+    print('----')
+    print(f'AppId: {response.data.appId}')
+    print(f'RecordId: {response.data.recordId}')
+    print('--')
+
+    for field in response.data.fields:
+        print(f'Type: {field.type}')
+        print(f'FieldId: {field.fieldId}')
+        print(f'Value: {GetResultValueString(field)}')
+        print('--')
+    
+    print('----')
+
+def PrintDeleteRecord(client: OnspringClient, appId: int, recordId: int):
+
+    response = client.DeleteRecordById(appId, recordId)
+
+    print(f'Status Code: {response.statusCode}')
+    print(f'Message: {response.message}')
+
+def PrintGetRecordsByIds(client: OnspringClient, appId: int, recordIds: list[int], fieldIds: list[int]=[], dataFormat: str=DataFormat.Raw.name):
+
+    request = GetBatchRecordsRequest(
+        appId,
+        recordIds,
+        fieldIds,
+        dataFormat)
+
+    response = client.GetRecordsByIds(request)
+
+    print(f'Status Code: {response.statusCode}')
+    print(f'Count: {response.data.count}')
+    print('----')
+
+    for record in response.data.records:
+        print(f'AppId: {record.appId}')
+        print(f'RecordId: {record.recordId}')
+        print('--')
+
+        for field in record.fields:
+            print(f'Type: {field.type}')
+            print(f'FieldId: {field.fieldId}')
+            print(f'Value: {GetResultValueString(field)}')
+            print('--')
+        
+        print('----')
+
+
+def PrintQueryRecords(client: OnspringClient, appId: int, filter: str, fieldIds: list[int]=[], dataFormat: str=DataFormat.Raw.name, pagingRequest: PagingRequest=PagingRequest(1,50)):
+
+    request = QueryRecordsRequest(
+        appId,
+        filter,
+        fieldIds,
+        dataFormat,
+        pagingRequest)
+
+    response = client.QueryRecords(request)
+
+    print(f'Status Code: {response.statusCode}')
+    print(f'Page Size: {response.data.pageSize}')
+    print(f'Page Number: {response.data.pageNumber}')
+    print(f'Total Pages: {response.data.totalPages}')
+    print(f'Total Records: {response.data.totalRecords}')
+    print('----')
+
+    for record in response.data.records:
+        print(f'AppId: {record.appId}')
+        print(f'RecordId: {record.recordId}')
+        print('--')
+
+        for field in record.fields:
+            print(f'Type: {field.type}')
+            print(f'FieldId: {field.fieldId}')
+            print(f'Value: {GetResultValueString(field)}')
+            print('--')
+        
+        print('----')
+
+def PrintAddOrUpdateRecord(client: OnspringClient, appId: int, fields: list[RecordFieldValue], recordId: int=None):
+
+    record = Record(
+        appId,
+        fields,
+        recordId)
+
+    response = client.AddOrUpdateRecord(record)
+
+    print(response.status_code)
+    print(response.text)
+    print(response.request.body)
+    
 
 # files
 

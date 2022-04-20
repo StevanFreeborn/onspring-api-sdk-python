@@ -1,3 +1,4 @@
+from urllib import response
 import requests
 import json
 import re
@@ -44,15 +45,13 @@ class OnspringClient:
             return ApiResponse(
                 response.status_code,
                 message='Invalid paging information',
-                headers=response.headers,
-                responseText=response.text)
+                raw=response)
 
         if response.status_code == 401:
             return ApiResponse(
                 response.status_code,
                 message='Unauthorized request',
-                headers=response.headers,
-                responseText=response.text)
+                raw=response)
 
         if response.status_code == 200:
 
@@ -81,13 +80,11 @@ class OnspringClient:
             return ApiResponse(
                 response.status_code,
                 data,
-                headers=response.headers,
-                responseText=response.text)
+                raw=response)
 
         return ApiResponse(
             response.status_code,
-            headers=response.headers,
-            responseText=response.text)
+            raw=response)
 
     def GetAppById(self, appId: int):
 
@@ -103,24 +100,21 @@ class OnspringClient:
             return ApiResponse(
                 response.status_code,
                 message='Unauthorized request',
-                headers=response.headers,
-                responseText=response.text)
+                raw=response)
 
         if response.status_code == 403:
             
             return ApiResponse(
                 response.status_code,
                 message='Client does not have read access to the app',
-                headers=response.headers,
-                responseText=response.text)
+                raw=response)
 
         if response.status_code == 404:
             
             return ApiResponse(
                 response.status_code,
                 message='App could not be found',
-                headers=response.headers,
-                responseText=response.text)
+                raw=response)
 
         if response.status_code == 200:
 
@@ -136,13 +130,11 @@ class OnspringClient:
             return ApiResponse(
                 response.status_code,
                 data,
-                headers=response.headers,
-                responseText=response.text)
+                raw=response)
 
         return ApiResponse(
             response.status_code,
-            headers=response.headers,
-            responseText=response.text)
+            raw=response)
 
     def GetAppsByIds(self, appIds: list):
 
@@ -169,16 +161,14 @@ class OnspringClient:
             return ApiResponse(
                 response.status_code,
                 message='Unauthorized request',
-                headers=response.headers,
-                responseText=response.text)
+                raw=response)
 
         if response.status_code == 403:
             
             return ApiResponse(
                 response.status_code,
                 message='Client does not have read access to the app',
-                headers=response.headers,
-                responseText=response.text)
+                raw=response)
 
         if response.status_code == 200:
 
@@ -204,13 +194,11 @@ class OnspringClient:
             return ApiResponse(
                 response.status_code,
                 data,
-                headers=response.headers,
-                responseText=response.text)
+                raw=response)
 
         return ApiResponse(
             response.status_code,
-            headers=response.headers,
-            responseText=response.text)
+            raw=response)
 
     # field methods
 
@@ -228,24 +216,21 @@ class OnspringClient:
             return ApiResponse(
                 response.status_code,
                 message='Unauthorized request',
-                headers=response.headers,
-                responseText=response.text)
+                raw=response)
 
         if response.status_code == 403:
             
             return ApiResponse(
                 response.status_code,
                 message='Client does not have read access to the field',
-                headers=response.headers,
-                responseText=response.text)
+                raw=response)
 
         if response.status_code == 404:
             
             return ApiResponse(
                 response.status_code,
                 message='Field could not be found',
-                headers=response.headers,
-                responseText=response.text)
+                raw=response)
 
         if response.status_code == 200:
 
@@ -265,13 +250,11 @@ class OnspringClient:
             return ApiResponse(
                 response.status_code,
                 data,
-                headers=response.headers,
-                responseText=response.text)
+                raw=response)
 
         return ApiResponse(
             response.status_code,
-            headers=response.headers,
-            responseText=response.text)
+            raw=response)
 
     def GetFieldsByIds(self, fieldIds: list):
 
@@ -298,24 +281,21 @@ class OnspringClient:
             return ApiResponse(
                 response.status_code,
                 message='Unauthorized request',
-                headers=response.headers,
-                responseText=response.text)
+                raw=response)
 
         if response.status_code == 403:
             
             return ApiResponse(
                 response.status_code,
                 message='Client does not have read access to the field(s)',
-                headers=response.headers,
-                responseText=response.text)
+                raw=response)
 
         if response.status_code == 404:
             
             return ApiResponse(
                 response.status_code,
                 message='Field(s) could not be found',
-                headers=response.headers,
-                responseText=response.text)
+                raw=response)
 
         if response.status_code == 200:
 
@@ -345,13 +325,11 @@ class OnspringClient:
             return ApiResponse(
                 response.status_code,
                 data,
-                headers=response.headers,
-                responseText=response.text)
+                raw=response)
 
         return ApiResponse(
             response.status_code,
-            headers=response.headers,
-            responseText=response.text)
+            raw=response)
 
     def GetFieldsByAppId(self, appId: int, pagingRequest=PagingRequest(1, 50)):
 
@@ -370,16 +348,14 @@ class OnspringClient:
             return ApiResponse(
                 response.status_code,
                 message='Invalid paging information',
-                headers=response.headers,
-                responseText=response.text)
+                raw=response)
 
         if response.status_code == 401:
             
             return ApiResponse(
                 response.status_code,
                 message='Unauthorized request',
-                headers=response.headers,
-                responseText=response.text)
+                raw=response)
 
         if response.status_code == 200:
 
@@ -412,13 +388,11 @@ class OnspringClient:
             return ApiResponse(
                 response.status_code,
                 data,
-                headers=response.headers,
-                responseText=response.text)
+                raw=response)
 
         return ApiResponse(
             response.status_code,
-            headers=response.headers,
-            responseText=response.text)
+            raw=response)
 
     # file methods
 
@@ -440,32 +414,28 @@ class OnspringClient:
             return ApiResponse(
                 response.status_code,
                 message='Request is invalid based on underlying data',
-                headers=response.headers,
-                responseText=response.text)
+                raw=response)
 
         if response.status_code == 401:
             
             return ApiResponse(
                 response.status_code,
                 message='Unauthorized request',
-                headers=response.headers,
-                responseText=response.text)
+                raw=response)
 
         if response.status_code == 403:
             
             return ApiResponse(
                 response.status_code,
                 message='Client does not have read access to the file',
-                headers=response.headers,
-                responseText=response.text)
+                raw=response)
 
         if response.status_code == 404:
             
             return ApiResponse(
                 response.status_code,
                 message='File could not be found',
-                headers=response.headers,
-                responseText=response.text)
+                raw=response)
 
         if response.status_code == 200:
 
@@ -488,13 +458,11 @@ class OnspringClient:
             return ApiResponse(
                 response.status_code,
                 data,
-                headers=response.headers,
-                responseText=response.text)
+                raw=response)
 
         return ApiResponse(
             response.status_code,
-            headers=response.headers,
-            responseText=response.text)
+            raw=response)
 
     def DeleteFileById(self, recordId: int, fieldId: int, fileId: int):
 
@@ -514,16 +482,14 @@ class OnspringClient:
             return ApiResponse(
                 response.status_code,
                 message='Request is invalid based on underlying data',
-                headers=response.headers,
-                responseText=response.text)
+                raw=response)
 
         if response.status_code == 401:
             
             return ApiResponse(
                 response.status_code,
                 message='Unauthorized request',
-                headers=response.headers,
-                responseText=response.text)
+                raw=response)
 
         if response.status_code == 403 or response.status_code == 404:
 
@@ -532,29 +498,25 @@ class OnspringClient:
             return ApiResponse(
                 response.status_code,
                 message=jsonResponse.get('message'),
-                headers=response.headers,
-                responseText=response.text)
+                raw=response)
 
         if response.status_code == 500:
             
             return ApiResponse(
                 response.status_code,
                 message='File could not be deleted due to internal error',
-                headers=response.headers,
-                responseText=response.text)
+                raw=response)
 
         if response.status_code == 204:
             
             return ApiResponse(
                 response.status_code,
                 message='File deleted successfully',
-                headers=response.headers,
-                responseText=response.text)
+                raw=response)
 
         return ApiResponse(
             response.status_code,
-            headers=response.headers,
-            responseText=response.text)
+            raw=response)
 
     def GetFileById(self, recordId: int, fieldId: int, fileId: int):
 
@@ -574,16 +536,14 @@ class OnspringClient:
             return ApiResponse(
                 response.status_code,
                 message='Request is invalid based on underlying data',
-                headers=response.headers,
-                responseText=response.text)
+                raw=response)
 
         if response.status_code == 401:
             
             return ApiResponse(
                 response.status_code,
                 message='Unauthorized request',
-                headers=response.headers,
-                responseText=response.text)
+                raw=response)
 
         if response.status_code == 403 or response.status_code == 404:
             
@@ -592,8 +552,7 @@ class OnspringClient:
             return ApiResponse(
                 response.status_code,
                 message=jsonResponse.get('message'),
-                headers=response.headers,
-                responseText=response.text)
+                raw=response)
 
         if response.status_code == 200:
 
@@ -607,7 +566,7 @@ class OnspringClient:
             if result:
                 fileName = re.sub('filename=|\'|;', '', result)
             else:
-                fileName = None
+                fileName = 'OnspringFile'
 
             file = File(
                 fileName,
@@ -620,14 +579,12 @@ class OnspringClient:
             return ApiResponse(
                 response.status_code,
                 data,
-                headers=response.headers,
-                responseText=response.text)
+                raw=response)
         
 
         return ApiResponse(
             response.status_code,
-            headers=response.headers,
-            responseText=response.text)
+            raw=response)
 
     def SaveFile(self,  saveFileRequest: SaveFileRequest):
 
@@ -659,16 +616,14 @@ class OnspringClient:
             return ApiResponse(
                 response.status_code,
                 message='Request is invalid based on underlying data',
-                headers=response.headers,
-                responseText=response.text)
+                raw=response)
 
         if response.status_code == 401:
             
             return ApiResponse(
                 response.status_code,
                 message='Unauthorized request',
-                headers=response.headers,
-                responseText=response.text)
+                raw=response)
 
         if response.status_code in [403,404,500]:
 
@@ -677,8 +632,7 @@ class OnspringClient:
             return ApiResponse(
                 response.status_code,
                 message=jsonResponse.get('message'),
-                headers=response.headers,
-                responseText=response.text)
+                raw=response)
 
         if response.status_code == 201:
 
@@ -689,13 +643,11 @@ class OnspringClient:
             return ApiResponse(
                     response.status_code,
                     data,
-                    headers=response.headers,
-                    responseText=response.text)
+                    raw=response)
 
         return ApiResponse(
             response.status_code,
-            headers=response.headers,
-            responseText=response.text)
+            raw=response)
 
     # list methods
 
@@ -720,8 +672,7 @@ class OnspringClient:
             return ApiResponse(
                 response.status_code,
                 message='Unauthorized request',
-                headers=response.headers,
-                responseText=response.text)
+                raw=response)
 
         if response.status_code in [403,404]:
 
@@ -730,8 +681,7 @@ class OnspringClient:
             return ApiResponse(
                 response.status_code,
                 message=jsonResponse.get('message'),
-                headers=response.headers,
-                responseText=response.text)
+                raw=response)
 
         if response.status_code == 201:
             
@@ -743,8 +693,7 @@ class OnspringClient:
                     response.status_code,
                     data,
                     message='New list value successfully added',
-                    headers=response.headers,
-                    responseText=response.text)
+                    raw=response)
 
         if response.status_code == 200:
             
@@ -756,13 +705,11 @@ class OnspringClient:
                     response.status_code,
                     data,
                     message='Existing list value successfully updated',
-                    headers=response.headers,
-                    responseText=response.text)
+                    raw=response)
         
         return ApiResponse(
             response.status_code,
-            headers=response.headers,
-            responseText=response.text)
+            raw=response)
 
     def DeleteListItem(self, listId: int, itemId: uuid):
 
@@ -778,8 +725,7 @@ class OnspringClient:
             return ApiResponse(
                 response.status_code,
                 message='Unauthorized request',
-                headers=response.headers,
-                responseText=response.text)
+                raw=response)
 
         if response.status_code == 403:
 
@@ -788,29 +734,25 @@ class OnspringClient:
             return ApiResponse(
                 response.status_code,
                 message=jsonResponse.get('message'),
-                headers=response.headers,
-                responseText=response.text)
+                raw=response)
 
         if response.status_code == 404:
             
             return ApiResponse(
                 response.status_code,
                 message='List/item could not be found',
-                headers=response.headers,
-                responseText=response.text)
+                raw=response)
 
         if response.status_code == 204:
             
             return ApiResponse(
                 response.status_code,
                 message='Item deleted successfully',
-                headers=response.headers,
-                responseText=response.text)
+                raw=response)
 
         return ApiResponse(
             response.status_code,
-            headers=response.headers,
-            responseText=response.text)
+            raw=response)
 
     # record methods
 
@@ -818,13 +760,8 @@ class OnspringClient:
 
         endpoint = GetRecordsByAppIdEndpoint(self.baseUrl, getRecordsByAppRequest.appId)
 
-        # use request object as key-value pairs for params
         params = getRecordsByAppRequest.__dict__
-        
-        # remove appId from params
         del params['appId']
-
-        # convert list of fieldIds to string of comma separated values
         params['fieldIds'] = ",".join([str(i) for i in params['fieldIds']])
 
         response = requests.request(
@@ -832,6 +769,29 @@ class OnspringClient:
             endpoint,
             headers=self.headers,
             params=params)
+
+        if response.status_code == 400:
+            
+            return ApiResponse(
+                response.status_code,
+                message='Invalid paging information/size of the data requested was too large.',
+                raw=response)
+
+        if response.status_code == 401:
+            
+            return ApiResponse(
+                response.status_code,
+                message='Unauthorized request',
+                raw=response)
+
+        if response.status_code == 403:
+
+            jsonResponse = dict(response.json())
+
+            return ApiResponse(
+                response.status_code,
+                message=jsonResponse.get('message'),
+                raw=response)
 
         if response.status_code == 200:
 
@@ -847,17 +807,17 @@ class OnspringClient:
 
                 record = Record(
                     item.get('appId'),
-                    item.get('recordId'),
-                    fields)
+                    fields,
+                    item.get('recordId'))
 
                 for field in item.get('fieldData'):
                     
                     field = dict(field)
 
                     field = RecordFieldValue(
-                        field.get('type'),
                         field.get('fieldId'),
-                        field.get('value'))
+                        field.get('value'),
+                        field.get('type'))
                     
                     fields.append(field)
             
@@ -865,7 +825,293 @@ class OnspringClient:
 
                 records.append(record)
 
-            data = GetRecordsByAppResponse(
+            data = GetRecordsResponse(
+                jsonResponse.get('pageNumber'),
+                jsonResponse.get('pageSize'),
+                jsonResponse.get('totalPages'),
+                jsonResponse.get('totalRecords'),
+                records)
+
+            return ApiResponse(
+                response.status_code,
+                data,
+                raw=response)
+
+        return ApiResponse(
+            response.status_code,
+            raw=response)
+    
+    def GetRecordById(self, getRecordByIdRequest: GetRecordByIdRequest):
+        
+        endpoint = GetRecordByIdEndpoint(self.baseUrl, getRecordByIdRequest.appId, getRecordByIdRequest.recordId)
+
+        params = getRecordByIdRequest.__dict__
+        del params['appId']
+        del params['recordId']
+        params['fieldIds'] = ",".join([str(i) for i in params['fieldIds']])
+
+        response = requests.request(
+            'GET', 
+            endpoint,
+            headers=self.headers, 
+            params=params)
+
+        if response.status_code == 401:
+            
+            return ApiResponse(
+                response.status_code,
+                message='Unauthorized request',
+                raw=response)
+
+        if response.status_code == 403:
+
+            jsonResponse = dict(response.json())
+
+            return ApiResponse(
+                response.status_code,
+                message=jsonResponse.get('message'),
+                raw=response)
+
+        if response.status_code == 404:
+            
+            return ApiResponse(
+                response.status_code,
+                message='Record could not be found',
+                raw=response)
+
+        if response.status_code == 200:
+
+            jsonResponse = dict(response.json())
+
+            fields = []
+
+            for field in jsonResponse.get('fieldData'):
+                    
+                field = dict(field)
+
+                field = RecordFieldValue(
+                    field.get('fieldId'),
+                    field.get('value'),
+                    field.get('type'))
+                    
+                fields.append(field)
+
+            data = Record(
+                jsonResponse.get('appId'),
+                fields,
+                jsonResponse.get('recordId'))
+
+            return ApiResponse(
+                response.status_code,
+                data,
+                raw=response)
+
+        return ApiResponse(
+            response.status_code,
+            raw=response)
+
+    def DeleteRecordById(self, appId: int, recordId: int):
+
+        endpoint = DeleteRecordByIdEndpoint(self.baseUrl, appId, recordId)
+
+        response = requests.request(
+            'DELETE',
+            endpoint,
+            headers=self.headers)
+
+        if response.status_code == 401:
+            
+            return ApiResponse(
+                response.status_code,
+                message='Unauthorized request',
+                raw=response)
+
+        if response.status_code == 403:
+
+            jsonResponse = dict(response.json())
+
+            return ApiResponse(
+                response.status_code,
+                message=jsonResponse.get('message'),
+                raw=response)
+
+        if response.status_code == 404:
+            
+            return ApiResponse(
+                response.status_code,
+                message='Record could not be found',
+                raw=response)
+
+        if response.status_code == 204:
+            
+            return ApiResponse(
+                response.status_code,
+                message='Record deleted successfully',
+                raw=response)
+
+        return ApiResponse(
+            response.status_code,
+            raw=response)
+        
+    def GetRecordsByIds(self, getBatchRecordsRequest: GetBatchRecordsRequest):
+
+        endpoint = GetRecordsByIdsEndpoint(self.baseUrl)
+
+        self.headers['Content-Type'] = 'application/json'
+
+        requestData = json.dumps(getBatchRecordsRequest.__dict__)
+
+        response = requests.request(
+            'POST',
+            endpoint,
+            headers=self.headers,
+            data=requestData)
+
+        if response.status_code == 400:
+            
+            return ApiResponse(
+                response.status_code,
+                message='Batch request is invalid/size of the data requested was too large.',
+                raw=response)
+
+        if response.status_code == 401:
+            
+            return ApiResponse(
+                response.status_code,
+                message='Unauthorized request',
+                raw=response)
+
+        if response.status_code == 403:
+
+            jsonResponse = dict(response.json())
+
+            return ApiResponse(
+                response.status_code,
+                message=jsonResponse.get('message'),
+                raw=response)
+
+        if response.status_code == 200:
+
+            jsonResponse = dict(response.json())
+
+            records = []
+
+            for item in jsonResponse.get('items'):
+                
+                item = dict(item)
+
+                fields = []
+
+                record = Record(
+                    item.get('appId'),
+                    fields,
+                    item.get('recordId'),)
+
+                for field in item.get('fieldData'):
+                    
+                    field = dict(field)
+
+                    field = RecordFieldValue(
+                        field.get('fieldId'),
+                        field.get('value'),
+                        field.get('type'))
+                    
+                    fields.append(field)
+            
+                record.fields = fields
+
+                records.append(record)
+
+            data = GetBatchRecordsResponse(
+                jsonResponse.get('count'),
+                records)
+
+            return ApiResponse(
+                response.status_code,
+                data,
+                raw=response)
+
+        return ApiResponse(
+            response.status_code,
+            raw=response)
+
+    def QueryRecords(self, queryRecordsRequest: QueryRecordsRequest):
+
+        endpoint = QueryRecordsEndpoint(self.baseUrl)
+        
+        self.headers['Content-Type'] = 'application/json'
+
+        requestData = queryRecordsRequest.__dict__
+
+        params = requestData.get('pagingRequest').__dict__
+
+        del requestData['pagingRequest']
+
+        requestData = json.dumps(requestData)
+
+        response = requests.request(
+            'POST',
+            endpoint,
+            headers=self.headers,
+            data=requestData,
+            params=params)
+
+        if response.status_code == 400:
+            
+            return ApiResponse(
+                response.status_code,
+                message='Query request is invalid/size of the data requested was too large.',
+                raw=response)
+
+        if response.status_code == 401:
+            
+            return ApiResponse(
+                response.status_code,
+                message='Unauthorized request',
+                raw=response)
+
+        if response.status_code == 403:
+
+            jsonResponse = dict(response.json())
+
+            return ApiResponse(
+                response.status_code,
+                message=jsonResponse.get('message'),
+                raw=response)
+
+        if response.status_code == 200:
+
+            jsonResponse = dict(response.json())
+
+            records = []
+
+            for item in jsonResponse.get('items'):
+                
+                item = dict(item)
+
+                fields = []
+
+                record = Record(
+                    item.get('appId'),
+                    fields,
+                    item.get('recordId'))
+
+                for field in item.get('fieldData'):
+                    
+                    field = dict(field)
+
+                    field = RecordFieldValue(
+                        field.get('fieldId'),
+                        field.get('value'),
+                        field.get('type'))
+                    
+                    fields.append(field)
+            
+                record.fields = fields
+
+                records.append(record)
+
+            data = GetRecordsResponse(
                 jsonResponse.get('pageNumber'),
                 jsonResponse.get('pageSize'),
                 jsonResponse.get('totalPages'),
@@ -877,36 +1123,35 @@ class OnspringClient:
                 data,
                 headers=response.headers,
                 responseText=response.text)
-    
-    def GetRecordById(self, appId: int, recordId: int):
 
-        endpoint = GetRecordByIdEndpoint(self.baseUrl, appId, recordId)
+        return ApiResponse(
+            response.status_code,
+            raw=response)
 
-        return
-
-    def DeleteRecordById(self, appId: int, recordId: int):
-
-        endpoint = DeleteRecordByIdEndpoint(self.baseUrl, appId, recordId)
-
-        return
-
-    def GetRecordsByIds(self):
-
-        endpoint = GetRecordsByIdsEndpoint(self.baseUrl)
-
-        return
-
-    def QueryRecords(self):
-
-        endpoint = GetRecordsByIdsEndpoint(self.baseUrl)
-
-        return
-
-    def AddOrUpdateRecord(self):
+    def AddOrUpdateRecord(self, record: Record):
 
         endpoint = AddOrUpdateRecordEndpoint(self.baseUrl)
 
-        return
+        self.headers['Content-Type'] = 'application/json'
+
+        dictFields = []
+
+        for field in record.fields:
+            field = field.__dict__
+            del field['type']
+            dictFields.append(field)
+
+        record.fields = dictFields
+
+        requestData = json.dumps(record.__dict__)
+
+        response = requests.request(
+            'PUT',
+            endpoint,
+            headers=self.headers,
+            data=requestData)
+
+        return response
 
     def DeleteRecordsByIds(self):
 

@@ -1,6 +1,8 @@
 import datetime
 import uuid
 
+from requests import Response
+
 from Enums import *
 from decimal import Decimal
 from datetime import datetime
@@ -9,13 +11,12 @@ from Helpers import parseDate
 # generic
 
 class ApiResponse:
-    def __init__(self, statusCode=None, data=None, message=None, headers=None, responseText=None):
+    def __init__(self, statusCode=None, data=None, message=None, raw=None):
         self.statusCode = statusCode
         self.isSuccessful = int(statusCode) < 400
         self.data = data
         self.message = message
-        self.headers=None
-        self.responseText = responseText
+        self.raw = raw
 
 class PagingRequest:
     def __init__(self, pageNumber: int, pageSize: int):
@@ -218,7 +219,7 @@ class ScoringGroupListValue:
 # record specific
 
 class RecordFieldValue:
-    def __init__(self, type: str, fieldId: int, value: str):
+    def __init__(self, fieldId: int, value: str, type: str=None):
         self.type = type
         self.fieldId = fieldId
         self.value = value
@@ -389,7 +390,7 @@ class RecordFieldValue:
             return None
 
 class Record:
-    def __init__(self, appId: int, recordId: int, fields: list[RecordFieldValue]):
+    def __init__(self, appId: int, fields: list[RecordFieldValue], recordId: int=None):
         self.appId = appId
         self.recordId = recordId
         self.fields = fields
@@ -402,10 +403,42 @@ class GetRecordsByAppRequest:
         self.pageSize = pagingRequest.pageSize
         self.pageNumber = pagingRequest.pageNumber
 
-class GetRecordsByAppResponse:
+class QueryRecordsRequest:
+    def __init__(self, appId: int, filter: str, fieldIds: list[int]=[], dataFormat: str=DataFormat.Raw.name, pagingRequest: PagingRequest=PagingRequest(1,50)):
+        self.appId = appId
+        self.filter = filter
+        self.fieldIds = fieldIds
+        self.dataFormat = dataFormat
+        self.pagingRequest = pagingRequest
+
+class GetRecordsResponse:
     def __init__(self, pageNumber: int, pageSize: int, totalPages: int, totalRecords: int, records: list[Record]):
         self.pageNumber = pageNumber
         self.pageSize = pageSize
         self.totalPages = totalPages
         self.totalRecords = totalRecords
         self.records = records
+
+class GetRecordByIdRequest:
+    def __init__(self, appId: int, recordId: int, fieldIds: list[int]=[], dataFormat: str=DataFormat.Raw.name):
+        self.appId = appId
+        self.recordId = recordId
+        self.fieldIds = fieldIds
+        self.dataFormat = dataFormat
+
+class GetBatchRecordsRequest:
+    def __init__(self, appId: int, recordIds: list[int], fieldIds: list[int]=[], dataFormat: str=DataFormat.Raw.name):
+        self.appId = appId
+        self.recordIds = recordIds
+        self.fieldIds = fieldIds
+        self.dataFormat = dataFormat
+
+class GetBatchRecordsResponse:
+    def __init__(self, count: int, records: list[Record]):
+        self.count = count
+        self.records = records
+
+class AddOrUpdateRecordResponse:
+    def __init__(self, id: int, warnings: list[str]=[]):
+        self.id = id
+        self.warnings = warnings
