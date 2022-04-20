@@ -19,13 +19,13 @@ class ResultValueType(Enum):
     FileList = 11
 
 class Increment(Enum):
-    Seconds = 0
-    Minutes = 1
-    Hours = 2
-    Days = 3
-    Weeks = 4
-    Months = 5
-    Years = 6
+    Seconds = "Second(s)"
+    Minutes = "Minute(s)"
+    Hours = "Hour(s)"
+    Days = "Day(s)"
+    Weeks = "Week(s)"
+    Months = "Month(s)"
+    Years = "Year(s)"
 
 class Recurrence(Enum):
     Empty = "None"

@@ -1,3 +1,4 @@
+from dataclasses import field
 import datetime
 import uuid
 
@@ -132,89 +133,7 @@ class AddOrUpdateListItemResponse:
     def __init__(self, id: uuid):
         self.id = id
 
-# field types
 
-class StringFieldValue:
-    def __init__(self, value: str, fieldId: int):
-        self.fieldId = fieldId
-        self.value = value
-
-class IntegerFieldValue:
-    def __init__(self, value: int, fieldId: int):
-        self.value = value
-        self.fieldId = fieldId
-
-class DecimalFieldValue:
-    def __init__(self, value: Decimal, fieldId: int):
-        self.value = value
-        self.fieldId = fieldId
-
-class DateFieldValue:
-    def __init__(self, value: datetime, fieldId: int):
-        self.value = value
-        self.fieldId = fieldId
-
-class GuidFieldValue:
-    def __init__(self, value: uuid.UUID, fieldId: int):
-        self.value = value
-        self.fieldId = fieldId
-
-class TimeSpanData:
-    def __init__(self, quantity: Decimal, increment: str, recurrence: str=None, endByDate: datetime=None, endAfterOccurrences: int=None):
-        self.quantity = quantity
-        self.increment = increment
-        self.recurrence = recurrence
-        self.endByDate = endByDate
-        self.endAfterOccurrences = endAfterOccurrences
-
-class TimeSpanValue:
-    def __init__(self, value: TimeSpanData, fieldId: int):
-        self.value = value
-        self.fieldId = fieldId
-
-class StringListValue:
-    def __init__(self, value: list[str], fieldId: int):
-        self.value = value
-        self.fieldId = fieldId
-
-class IntegerListValue:
-    def __init__(self, value: list[int], fieldId: int):
-        self.value = value
-        self.fieldId = fieldId
-
-class GuidListValue:
-    def __init__(self, value: list[uuid.UUID], fieldId: int):
-        self.value = value
-        self.fieldId = fieldId
-
-class Attachment:
-    def __init__(self, fileId: int, fileName: str, notes: str, storageLocation: str):
-        self.fileId = fileId
-        self.fileName = fileName
-        self.notes = notes
-        self.storageLocation = storageLocation
-
-class AttachmentListValue:
-    def __init__(self, value: list[Attachment], fieldId: int):
-        self.value = value
-        self.fieldId = fieldId
-
-class FileListValue:
-    def __init__(self, value: list[int], fieldId: int):
-        self.value = value
-        self.fieldId = fieldId
-
-class ScoringGroup:
-    def __init__(self, listValueId: uuid.UUID, name: str, score: Decimal, maximumScore: Decimal):
-        self.listValueId = listValueId
-        self.name = name
-        self.score = score
-        self.maximumScore = maximumScore
-
-class ScoringGroupListValue:
-    def __init__(self, value: list[ScoringGroup], fieldId: int):
-        self.value = value
-        self.fieldId = fieldId
 
 # record specific
 
@@ -229,7 +148,7 @@ class RecordFieldValue:
         if self.type != ResultValueType.String.name:
             return None
 
-        return StringFieldValue(self.value, self.fieldId).value
+        return StringFieldValue(self.fieldId, self.value).value
 
     def AsInteger(self):
         
@@ -442,3 +361,107 @@ class AddOrUpdateRecordResponse:
     def __init__(self, id: int, warnings: list[str]=[]):
         self.id = id
         self.warnings = warnings
+
+# field types
+
+class StringFieldValue(RecordFieldValue):
+    def __init__(self, fieldId: int, value):
+        self.type = ResultValueType.String.name
+        RecordFieldValue.__init__(self, fieldId, value, self.type)
+
+class IntegerFieldValue:
+    def __init__(self, value: int, fieldId: int):
+        self.value = value
+        self.fieldId = fieldId
+        self.type = ResultValueType.Integer.name
+
+class DecimalFieldValue:
+    def __init__(self, value: Decimal, fieldId: int):
+        self.value = value
+        self.fieldId = fieldId
+        self.type = ResultValueType.Decimal.name
+
+class DateFieldValue:
+    def __init__(self, value: datetime, fieldId: int):
+        self.value = value
+        self.fieldId = fieldId
+        self.type = ResultValueType.Date.name
+
+class GuidFieldValue:
+    def __init__(self, value: uuid.UUID, fieldId: int):
+        self.value = value
+        self.fieldId = fieldId
+        self.type = ResultValueType.Guid.name
+
+class TimeSpanData:
+    def __init__(self, quantity: Decimal, increment: Increment, recurrence: Recurrence=None, endByDate: datetime=None, endAfterOccurrences: int=None):
+        self.quantity = quantity
+        self.increment = increment
+        self.recurrence = recurrence
+        self.endByDate = endByDate
+        self.endAfterOccurrences = endAfterOccurrences
+
+    def AsString(self):
+        if self.endByDate != None:
+            formattedDate = self.endByDate.strftime("%m/%d/%Y %I:%M %p")
+            return f'Every {self.quantity} {self.increment} End By {formattedDate}'
+        elif self.endAfterOccurrences != None:
+            return f'Every {self.quantity} {self.increment} End After {self.endAfterOccurrences}'
+        else:
+            return f'{self.quantity} {self.increment}'
+
+class TimeSpanValue:
+    def __init__(self, value: TimeSpanData, fieldId: int):
+        self.value = value
+        self.fieldId = fieldId
+        self.type = ResultValueType.TimeSpan.name
+
+class StringListValue:
+    def __init__(self, value: list[str], fieldId: int):
+        self.value = value
+        self.fieldId = fieldId
+        self.type = ResultValueType.StringList.name
+
+class IntegerListValue:
+    def __init__(self, value: list[int], fieldId: int):
+        self.value = value
+        self.fieldId = fieldId
+        self.type = ResultValueType.IntegerList.name
+
+class GuidListValue:
+    def __init__(self, value: list[uuid.UUID], fieldId: int):
+        self.value = value
+        self.fieldId = fieldId
+        self.type = ResultValueType.GuidList.name
+
+class Attachment:
+    def __init__(self, fileId: int, fileName: str, notes: str, storageLocation: str):
+        self.fileId = fileId
+        self.fileName = fileName
+        self.notes = notes
+        self.storageLocation = storageLocation
+
+class AttachmentListValue:
+    def __init__(self, value: list[Attachment], fieldId: int):
+        self.value = value
+        self.fieldId = fieldId
+        self.type = ResultValueType.AttachmentList.name
+
+class FileListValue:
+    def __init__(self, value: list[int], fieldId: int):
+        self.value = value
+        self.fieldId = fieldId
+        self.type = ResultValueType.FileList.name
+
+class ScoringGroup:
+    def __init__(self, listValueId: uuid.UUID, name: str, score: Decimal, maximumScore: Decimal):
+        self.listValueId = listValueId
+        self.name = name
+        self.score = score
+        self.maximumScore = maximumScore
+
+class ScoringGroupListValue:
+    def __init__(self, value: list[ScoringGroup], fieldId: int):
+        self.value = value
+        self.fieldId = fieldId
+        self.type = ResultValueType.ScoringGroupList.name

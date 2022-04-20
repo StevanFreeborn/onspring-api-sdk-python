@@ -1,4 +1,3 @@
-from urllib import response
 import requests
 import json
 import re
@@ -1134,14 +1133,12 @@ class OnspringClient:
 
         self.headers['Content-Type'] = 'application/json'
 
-        dictFields = []
+        fieldsDict = {}
 
         for field in record.fields:
-            field = field.__dict__
-            del field['type']
-            dictFields.append(field)
+            fieldsDict[field.fieldId] = field.value
 
-        record.fields = dictFields
+        record.fields = fieldsDict
 
         requestData = json.dumps(record.__dict__)
 

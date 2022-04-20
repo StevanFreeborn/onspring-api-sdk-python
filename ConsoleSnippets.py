@@ -50,7 +50,7 @@ def main():
         return
     
     if command == 'getrecordbyid':
-        PrintGetRecordById(onspring, 195, 5)
+        PrintGetRecordById(onspring, 195, 3,dataFormat=DataFormat.Raw.name)
         return
     
     if command == 'deleterecord':
@@ -71,8 +71,8 @@ def main():
     if command == 'addrecord':
 
         fields = [
-            RecordFieldValue(6983, 'A New Test Task'),
-            RecordFieldValue(6984, 'This is a test task.')
+            StringFieldValue(6983, 'A New Test Task'),
+            StringFieldValue(6984, 'This is a test task.')
         ]
 
         PrintAddOrUpdateRecord(onspring, 195, fields)
@@ -81,8 +81,8 @@ def main():
     if command == 'updaterecord':
 
         fields = [
-            RecordFieldValue(6983, 'Updated'),
-            RecordFieldValue(6984, 'Updated')
+            StringFieldValue(6983, 'Updated'),
+            StringFieldValue(6984, 'Updated')
         ]
 
         PrintAddOrUpdateRecord(onspring, 195, fields, 60)
