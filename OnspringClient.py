@@ -1120,8 +1120,7 @@ class OnspringClient:
             return ApiResponse(
                 response.status_code,
                 data,
-                headers=response.headers,
-                responseText=response.text)
+                raw=response)
 
         return ApiResponse(
             response.status_code,
@@ -1148,7 +1147,51 @@ class OnspringClient:
             headers=self.headers,
             data=requestData)
 
-        return response
+        if response.status_code == 400:
+            
+            return ApiResponse(
+                response.status_code,
+                message='Request is data is invalid',
+                raw=response)
+
+        if response.status_code == 401:
+            
+            return ApiResponse(
+                response.status_code,
+                message='Unauthorized request',
+                raw=response)
+
+        if response.status_code in [403, 404]:
+
+            jsonResponse = dict(response.json())
+
+            return ApiResponse(
+                response.status_code,
+                message=jsonResponse.get('message'),
+                raw=response)
+
+        if response.status_code in [200, 201]:
+
+            jsonResponse = dict(response.json())
+
+            data = AddOrUpdateRecordResponse(
+                jsonResponse.get('id'),
+                jsonResponse.get('warnings'))
+
+            if response.status_code == 200:
+                message = 'Record updated successfully'
+            else:
+                message = 'Record created successfully'
+
+            return ApiResponse(
+                response.status_code,
+                data,
+                message=message,
+                raw=response)
+
+        return ApiResponse(
+                response.status_code,
+                raw=response)
 
     def DeleteRecordsByIds(self):
 

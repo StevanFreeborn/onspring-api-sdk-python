@@ -4,7 +4,6 @@ import sys
 
 from OnspringClient import OnspringClient
 from configparser import ConfigParser
-from Helpers import GetResultValueString
 
 from Models import *
 from Enums import *
@@ -69,7 +68,7 @@ def main():
         return
 
     if command == 'addrecord':
-
+        
         fields = [
             StringFieldValue(6983, 'A New Test Task'),
             StringFieldValue(6984, 'This is a test task.')
@@ -166,7 +165,7 @@ def PrintGetRecordsByAppId(client: OnspringClient, appId: int):
         for field in record.fields:
             print(f'Type: {field.type}')
             print(f'FieldId: {field.fieldId}')
-            print(f'Value: {GetResultValueString(field)}')
+            print(f'Value: {field.GetResultValueString()}')
             print('--')
         
         print('----')
@@ -190,7 +189,7 @@ def PrintGetRecordById(client: OnspringClient, appId: int, recordId: int, fieldI
     for field in response.data.fields:
         print(f'Type: {field.type}')
         print(f'FieldId: {field.fieldId}')
-        print(f'Value: {GetResultValueString(field)}')
+        print(f'Value: {field.GetResultValueString()}')
         print('--')
     
     print('----')
@@ -224,7 +223,7 @@ def PrintGetRecordsByIds(client: OnspringClient, appId: int, recordIds: list[int
         for field in record.fields:
             print(f'Type: {field.type}')
             print(f'FieldId: {field.fieldId}')
-            print(f'Value: {GetResultValueString(field)}')
+            print(f'Value: {field.GetResultValueString()}')
             print('--')
         
         print('----')
@@ -256,7 +255,7 @@ def PrintQueryRecords(client: OnspringClient, appId: int, filter: str, fieldIds:
         for field in record.fields:
             print(f'Type: {field.type}')
             print(f'FieldId: {field.fieldId}')
-            print(f'Value: {GetResultValueString(field)}')
+            print(f'Value: {field.GetResultValueString()}')
             print('--')
         
         print('----')
@@ -270,11 +269,11 @@ def PrintAddOrUpdateRecord(client: OnspringClient, appId: int, fields: list[Reco
 
     response = client.AddOrUpdateRecord(record)
 
-    print(response.status_code)
-    print(response.text)
-    print(response.request.body)
+    print(f'Status Code: {response.statusCode}')
+    print(f'Id: {response.data.id}')
+    for warning in response.data.warnings:
+        print(f'Warning: {warning}')
     
-
 # files
 
 def PrintSaveFile(client: OnspringClient, filePath: str, recordId: int, fieldId: int, notes: str=None, modifiedDate: datetime=None):
