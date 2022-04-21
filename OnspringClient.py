@@ -235,6 +235,25 @@ class OnspringClient:
 
             jsonResponse = dict(response.json())
 
+            values = jsonResponse.get('values')
+
+            if values != None:
+
+                listValues = []
+
+                for value in values:
+                    
+                    value = dict(value)
+
+                    value = ListValue(
+                        value.get('id'),
+                        value.get('name'),
+                        value.get('sortOrder'),
+                        value.get('numericValue'),
+                        value.get('color'))
+
+                    listValues.append(value)
+
             field = Field(
                 jsonResponse.get('id'),
                 jsonResponse.get('appId'),
@@ -242,7 +261,11 @@ class OnspringClient:
                 jsonResponse.get('type'),
                 jsonResponse.get('status'),
                 jsonResponse.get('isRequired'),
-                jsonResponse.get('isUnique'))
+                jsonResponse.get('isUnique'),
+                jsonResponse.get("listId"),
+                listValues,
+                jsonResponse.get('multiplicity'),
+                jsonResponse.get('outputType'))
 
             data = GetFieldByIdResponse(field)
 
@@ -1193,22 +1216,198 @@ class OnspringClient:
                 response.status_code,
                 raw=response)
 
-    def DeleteRecordsByIds(self):
+    def DeleteRecordsByIds(self, deleteBatchRecordsRequest: DeleteBatchRecordsRequest):
 
         endpoint = DeleteRecordsByIds(self.baseUrl)
 
-        return
+        self.headers['Content-Type'] = 'application/json'
+
+        requestData = json.dumps(deleteBatchRecordsRequest.__dict__)
+
+        response = requests.request(
+            'POST',
+            endpoint,
+            headers=self.headers,
+            data=requestData)
+
+        if response.status_code == 400:
+            
+            return ApiResponse(
+                response.status_code,
+                message='Invalid request provided',
+                raw=response)
+
+        if response.status_code == 401:
+            
+            return ApiResponse(
+                response.status_code,
+                message='Unauthorized request',
+                raw=response)
+
+        if response.status_code == 403:
+
+            jsonResponse = dict(response.json())
+
+            return ApiResponse(
+                response.status_code,
+                message=jsonResponse.get('message'),
+                raw=response)
+
+        if response.status_code == 404:
+            
+            return ApiResponse(
+                response.status_code,
+                message='Records could not be found',
+                raw=response)
+
+        if response.status_code == 204:
+            
+            return ApiResponse(
+                response.status_code,
+                message='Record(s) deleted successfully',
+                raw=response)
+
+        return ApiResponse(
+            response.status_code,
+            raw=response)
 
     # report methods
 
-    def GetReportById(self, reportId: int):
+    def GetReportById(self, getReportByIdRequest: GetReportByIdRequest):
 
-        endpoint = GetReportByIdEndpoint(self.baseUrl, reportId)
+        endpoint = GetReportByIdEndpoint(self.baseUrl, getReportByIdRequest.reportId)
 
-        return
+        params = getReportByIdRequest.__dict__
+        del params['reportId']
 
-    def GetReportsByAppId(self, appId: int):
+        response = requests.request(
+            'GET',
+            endpoint,
+            headers=self.headers,
+            params=params)
+        
+        if response.status_code == 400:
+            
+            return ApiResponse(
+                response.status_code,
+                message='Invalid request based on underlying data',
+                raw=response)
+
+        if response.status_code == 401:
+            
+            return ApiResponse(
+                response.status_code,
+                message='Unauthorized request',
+                raw=response)
+
+        if response.status_code == 403:
+
+            jsonResponse = dict(response.json())
+
+            return ApiResponse(
+                response.status_code,
+                message=jsonResponse.get('message'),
+                raw=response)
+
+        if response.status_code == 404:
+            
+            return ApiResponse(
+                response.status_code,
+                message='Report could not be found',
+                raw=response)
+
+        if response.status_code == 200:
+
+            jsonResponse = dict(response.json())
+            
+            rows = []
+
+            for row in jsonResponse.get('rows'):
+                
+                row = dict(row)
+                
+                row = Row(
+                    row.get('recordId'),
+                    row.get('cells'))
+                
+                rows.append(row)
+            
+            data = GetReportByIdResponse(
+                jsonResponse.get('columns'),
+                rows)
+
+            return ApiResponse(
+                response.status_code,
+                data=data,
+                raw=response)
+
+        return ApiResponse(
+            response.status_code,
+            raw=response)
+
+    def GetReportsByAppId(self, appId: int, pagingRequest: PagingRequest=PagingRequest(1,50)):
 
         endpoint = GetReportsByAppIdEndpoint(self.baseUrl, appId)
 
-        return
+        params = pagingRequest.__dict__
+
+        response = requests.request(
+            'GET',
+            endpoint,
+            headers=self.headers,
+            params=params)
+
+        if response.status_code == 400:
+            return ApiResponse(
+                response.status_code,
+                message='Client does not have read access to the app.',
+                raw=response)
+
+        if response.status_code == 401:
+            return ApiResponse(
+                response.status_code,
+                message='Unauthorized request',
+                raw=response)
+
+        if response.status_code == 403:
+
+            jsonResponse = dict(response.json())
+
+            return ApiResponse(
+                response.status_code,
+                message=jsonResponse.get('message'),
+                raw=response)
+
+        if response.status_code == 200:
+
+            responseJson = dict(response.json())
+
+            reports = []
+
+            for item in responseJson.get('items'):
+
+                item = dict(item)
+
+                report = Report(
+                    item.get('appId'),
+                    item.get('id'),
+                    item.get('name'),
+                    item.get('description'))
+
+                reports.append(report)
+
+            data = GetReportsByAppIdResponse(
+                responseJson.get('pageNumber'),
+                responseJson.get('pageSize'),
+                responseJson.get('totalPages'),
+                responseJson.get('totalRecords'),
+                reports)
+
+            return ApiResponse(
+                response.status_code,
+                data,
+                raw=response)
+
+        return ApiResponse(
+            response.status_code,
+            raw=response)

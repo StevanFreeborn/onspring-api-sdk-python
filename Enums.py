@@ -4,6 +4,10 @@ class DataFormat(Enum):
     Raw = 0
     Formatted = 1
 
+class ReportDataType(Enum):
+    ReportData = 0
+    ChartData = 1
+
 class ResultValueType(Enum):
     String = 0
     Integer = 1

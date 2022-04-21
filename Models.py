@@ -1,3 +1,4 @@
+from audioop import mul
 import datetime
 import uuid
 
@@ -50,8 +51,37 @@ class GetAppsByIdsResponse:
 
 # field specific
 
+class ListValue:
+    def __init__(self, id: int, name: str, sortOrder: int, numericValue: Decimal, color: str):
+        self.id = id
+        self.name = name
+        self.sortOrder = sortOrder
+
+        if numericValue != None:
+            self.numericValue = Decimal(numericValue)
+        else:
+            self.numericValue = numericValue
+        
+        self.color = color
+
+    def AsString(self):
+        return f'Id: {self.id}, Name: {self.name}, Value: {self.numericValue}, Sort Order: {self.sortOrder}, Color: {self.color}'
+
 class Field:
-    def __init__(self, id: int, appId: int, name: str, type: str, status: str, isRequired: bool, isUnique: bool):
+    def __init__(
+        self, id: int, 
+        appId: int, 
+        name: str, 
+        type: str, 
+        status: str, 
+        isRequired: bool, 
+        isUnique: bool, 
+        listId: int=None, 
+        values: list[ListValue]=None, 
+        multiplicity: str=None,
+        outputType: str=None
+        ):
+
         self.id = id
         self.appId = appId
         self.name = name
@@ -59,6 +89,10 @@ class Field:
         self.status = status
         self.isRequired = isRequired
         self.isUnique = isUnique
+        self.listId = listId
+        self.values = values
+        self.outputType = outputType
+        self.multiplicity = multiplicity
 
 class GetFieldByIdResponse:
     def __init__(self, field: Field):
@@ -426,7 +460,7 @@ class AddOrUpdateRecordResponse:
 
 class DeleteBatchRecordsRequest:
     def __init__(self, appId: int, recordIds: list[int]):
-        self.id = id
+        self.appId = appId
         self.recordIds = recordIds
 
 # field types
@@ -521,3 +555,36 @@ class ScoringGroupListValue(RecordFieldValue):
     def __init__(self, fieldId: int, value: list[ScoringGroup]):
         self.type = ResultValueType.ScoringGroupList.name
         RecordFieldValue.__init__(self, fieldId, value, self.type)
+
+# report specific
+
+class GetReportByIdRequest:
+    def __init__(self, reportId: int, apiDataFormat: str=DataFormat.Raw.name, dataType: str=ReportDataType.ReportData.name):
+        self.reportId = reportId
+        self.apiDataFormat = apiDataFormat
+        self.dataType = dataType
+
+class Row:
+    def __init__(self, recordId: int, cells: list[str]):
+        self.recordId = recordId
+        self.cells = cells
+
+class GetReportByIdResponse:
+    def __init__(self, columns: list[str], rows: list[Row]):
+        self.columns = columns
+        self.rows = rows
+
+class Report:
+    def __init__(self, appId: int, id: int, name: str, description: str):
+        self.appId = appId
+        self.id = id
+        self.name = name
+        self.description = description
+
+class GetReportsByAppIdResponse:
+    def __init__(self, pageNumber: int, pageSize: int, totalPages: int, totalRecords: int, reports: list[Report]):
+        self.pageNumber = pageNumber
+        self.pageSize = pageSize
+        self.totalPages = totalPages
+        self.totalRecords = totalRecords
+        self.reports = reports
