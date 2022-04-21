@@ -16,7 +16,16 @@ class OnspringClient:
     # connectivity methods
 
     def CanConnect(self):
+        """
+        Description:
+            Verifies if the API is reachable by calling the ping endpoint.
 
+        Parameters:
+            None
+
+        Returns:
+            A `bool` value indicating if the API is responsive.
+        """
         endpoint = GetPingEndpoint(self.baseUrl)
 
         response = requests.request(
@@ -29,6 +38,16 @@ class OnspringClient:
     # app methods
 
     def GetApps(self, pagingRequest=PagingRequest(1, 50)):
+        """
+        Description:
+            Gets all accessible apps.
+
+        Parameters:
+            pagingRequest (`Models.PagingRequest`): Used to set the page number and page size of the request. By default the these will be 1 and 50 respectively.
+
+        Returns:
+            An ApiResponse (`Models.ApiResponse`) containing the results of the request.
+        """
 
         endpoint = GetAppsEndpoint(self.baseUrl)
 
