@@ -45,7 +45,7 @@ class OnspringClient:
 
     def GetApps(self, pagingRequest=PagingRequest(1, 50)):
         """
-        Gets all accessible apps.
+        Gets all accessible apps for client.
 
         Parameters:
             pagingRequest (`Models.PagingRequest`): Used to set the page number and page size of the request. By default the these will be 1 and 50 respectively.
@@ -110,6 +110,15 @@ class OnspringClient:
             raw=response)
 
     def GetAppById(self, appId: int):
+        """
+        Get an app by it's id.
+
+        Parameters:
+            appId (`int`): The unique id of the app being requested.
+
+        Returns:
+            An ApiResponse (`Models.ApiResponse`) containing the results of the request.
+        """
 
         endpoint = GetAppByIdEndpoint(self.baseUrl, appId)
 
@@ -160,6 +169,15 @@ class OnspringClient:
             raw=response)
 
     def GetAppsByIds(self, appIds: list):
+        """
+        Get a set of apps by their ids.
+
+        Parameters:
+            appIds (`list[int]`): A list of unique ids for the apps being requested.
+
+        Returns:
+            An ApiResponse (`Models.ApiResponse`) containing the results of the request.
+        """
 
         endpoint = GetAppByIdsEndpoint(self.baseUrl)
 
@@ -226,6 +244,15 @@ class OnspringClient:
     # field methods
 
     def GetFieldById(self, fieldId: int):
+        """
+        Get a field by it's id.
+
+        Parameters:
+            fieldId (`int`): The unique id of the field being requested.
+
+        Returns:
+            An ApiResponse (`Models.ApiResponse`) containing the results of the request.
+        """
 
         endpoint = GetFieldByIdEndpoint(self.baseUrl, fieldId)
 
@@ -303,6 +330,15 @@ class OnspringClient:
             raw=response)
 
     def GetFieldsByIds(self, fieldIds: list):
+        """
+        Get a set of fields by their ids.
+
+        Parameters:
+            fieldIds (`list[int]`): A list of unique ids for the fields being requested.
+
+        Returns:
+            An ApiResponse (`Models.ApiResponse`) containing the results of the request.
+        """
 
         endpoint = GetFieldsByIdsEndpoint(self.baseUrl)
 
@@ -378,6 +414,16 @@ class OnspringClient:
             raw=response)
 
     def GetFieldsByAppId(self, appId: int, pagingRequest=PagingRequest(1, 50)):
+        """
+        Get all fields for an app.
+
+        Parameters:
+            appId (`int`): The unique id of the app whose fields are being requested.
+            pagingRequest (`Models.PagingRequest`): Used to set the page number and page size of the request. By default the these will be 1 and 50 respectively.
+
+        Returns:
+            An ApiResponse (`Models.ApiResponse`) containing the results of the request.
+        """
 
         endpoint = GetFieldsByAppIdEndpoint(self.baseUrl, appId)
 
@@ -443,6 +489,17 @@ class OnspringClient:
     # file methods
 
     def GetFileInfoById(self, recordId: int, fieldId: int, fileId: int):
+        """
+        Get the metadata information for a file.
+
+        Parameters:
+            recordId (`int`): The unique id of the record that contains the file you want to retrieve.
+            fieldId (`int`): The unique id of the field that contains the file you want to retrieve.
+            fileId (`int`): The unique id of the file whose metadata you want to retrieve.
+
+        Returns:
+            An ApiResponse (`Models.ApiResponse`) containing the results of the request.
+        """
 
         endpoint = GetFileInfoByIdEndpoint(
             self.baseUrl,
@@ -511,6 +568,17 @@ class OnspringClient:
             raw=response)
 
     def DeleteFileById(self, recordId: int, fieldId: int, fileId: int):
+        """
+        Delete a file by its id.
+
+        Parameters:
+            recordId (`int`): The unique id of the record that contains the file you want to delete.
+            fieldId (`int`): The unique id of the field that contains the file you want to delete.
+            fileId (`int`): The unique id of the file you want to delete.
+            
+        Returns:
+            An ApiResponse (`Models.ApiResponse`) containing the results of the request.
+        """
 
         endpoint = DeleteFileByIdEndpoint(
             self.baseUrl,
@@ -565,6 +633,17 @@ class OnspringClient:
             raw=response)
 
     def GetFileById(self, recordId: int, fieldId: int, fileId: int):
+        """
+        Get a file by its id.
+
+        Parameters:
+            recordId (`int`): The unique id of the record that contains the file you want to retrieve.
+            fieldId (`int`): The unique id of the field that contains the file you want to retrieve.
+            fileId (`int`): The unique id of the file you want to retrieve.
+            
+        Returns:
+            An ApiResponse (`Models.ApiResponse`) containing the results of the request.
+        """
 
         endpoint = GetFileByIdEndpoint(
             self.baseUrl,
@@ -633,6 +712,15 @@ class OnspringClient:
             raw=response)
 
     def SaveFile(self,  saveFileRequest: SaveFileRequest):
+        """
+        Delete a file by its id.
+
+        Parameters:
+            saveFileRequest (`Model.SaveFileRequest`): An object representing all the necessary information to make a successful request.
+            
+        Returns:
+            An ApiResponse (`Models.ApiResponse`) containing the results of the request.
+        """
 
         endpoint = SaveFileEndpoint(self.baseUrl)
 
@@ -698,6 +786,15 @@ class OnspringClient:
     # list methods
 
     def AddOrUpdateListItem(self, listItemRequest: ListItemRequest):
+        """
+        Add or update a list value by its id.
+
+        Parameters:
+            listItemRequest (`Model.ListItemRequest`): An object representing all the necessary information to make a successful request.
+            
+        Returns:
+            An ApiResponse (`Models.ApiResponse`) containing the results of the request.
+        """
 
         endpoint = AddOrUpdateListItemEndpoint(self.baseUrl, listItemRequest.listId)
 
@@ -758,6 +855,16 @@ class OnspringClient:
             raw=response)
 
     def DeleteListItem(self, listId: int, itemId: uuid):
+        """
+        Delete a list value by its id and it's parent list id.
+
+        Parameters:
+            listId (`int`): The unique id of the list values parent list.
+            itemId (`int`): The unique id of the list value to be deleted.
+            
+        Returns:
+            An ApiResponse (`Models.ApiResponse`) containing the results of the request.
+        """
 
         endpoint = DeleteListItemEndpoint(self.baseUrl, listId, itemId)
 

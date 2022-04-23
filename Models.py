@@ -139,6 +139,18 @@ class GetFileByIdResponse:
         self.file = file
 
 class SaveFileRequest:
+    """
+    An object to represent all the necessary information needed to make a successful 'OnspringClient.SaveFile' request.
+
+    Attributes:
+        recordId (`int`): The unique id of the record where you want to save the file.
+        fieldId (`int`): The unique id of the field where you want to save the file.
+        fileName (`str`): The name of the file you want to save.
+        filePath (`str`): The path to the file you want to save.
+        contentType (`str`): The content type of the file you want to save.
+        notes (`str`): An option note about the file.
+        notes (`datetime`): An optional date noting when the file was modified.
+    """
     def __init__(self, recordId: int, fieldId: int, fileName: str, filePath: str, contentType: str, notes: str=None, modifiedDate: datetime=None):
         self.recordId = recordId
         self.fieldId = fieldId
