@@ -11,7 +11,7 @@ class OnspringClient:
     
     Attributes:
         baseUrl (`str`): The url that should be used as the base for all requests made by the client.
-        headers (`dict`): Contains key value pairs of the headers necessary for all requests made by the client.
+        headers (`dict`): Contains key value pairs of the headers necessary for all requests made by the client including the necessary api key.
     """
     def __init__(self, url: str, key: str):
         self.baseUrl = url
@@ -716,7 +716,7 @@ class OnspringClient:
         Delete a file by its id.
 
         Parameters:
-            saveFileRequest (`Model.SaveFileRequest`): An object representing all the necessary information to make a successful request.
+            saveFileRequest (`Models.SaveFileRequest`): An object representing all the necessary information to make a successful request.
             
         Returns:
             An ApiResponse (`Models.ApiResponse`) containing the results of the request.
@@ -790,7 +790,7 @@ class OnspringClient:
         Add or update a list value by its id.
 
         Parameters:
-            listItemRequest (`Model.ListItemRequest`): An object representing all the necessary information to make a successful request.
+            listItemRequest (`Models.ListItemRequest`): An object representing all the necessary information to make a successful request.
             
         Returns:
             An ApiResponse (`Models.ApiResponse`) containing the results of the request.
@@ -910,6 +910,15 @@ class OnspringClient:
     # record methods
 
     def GetRecordsByAppId(self, getRecordsByAppRequest: GetRecordsByAppRequest):
+        """
+        Get all the records for an app by its id.
+
+        Parameters:
+            getRecordsByAppRequest (`Models.GetRecordsByAppRequest`): The unique id of the list values parent list.
+            
+        Returns:
+            An ApiResponse (`Models.ApiResponse`) containing the results of the request.
+        """
 
         endpoint = GetRecordsByAppIdEndpoint(self.baseUrl, getRecordsByAppRequest.appId)
 
@@ -995,7 +1004,16 @@ class OnspringClient:
             raw=response)
     
     def GetRecordById(self, getRecordByIdRequest: GetRecordByIdRequest):
-        
+        """
+        Get a record by its id.
+
+        Parameters:
+            getRecordByIdRequest (`Models.GetRecordByIdRequest`): An object that contains all the necessary information for making a successful request.
+            
+        Returns:
+            An ApiResponse (`Models.ApiResponse`) containing the results of the request.
+        """
+
         endpoint = GetRecordByIdEndpoint(self.baseUrl, getRecordByIdRequest.appId, getRecordByIdRequest.recordId)
 
         params = getRecordByIdRequest.__dict__
@@ -1064,6 +1082,16 @@ class OnspringClient:
             raw=response)
 
     def DeleteRecordById(self, appId: int, recordId: int):
+        """
+        Delete a record by its id.
+
+        Parameters:
+            appId (`int`): The id value of the app where the record you want to delete resides.
+            recordId (`int`): The id value of the record you want to delete.
+            
+        Returns:
+            An ApiResponse (`Models.ApiResponse`) containing the results of the request.
+        """
 
         endpoint = DeleteRecordByIdEndpoint(self.baseUrl, appId, recordId)
 
@@ -1107,6 +1135,15 @@ class OnspringClient:
             raw=response)
         
     def GetRecordsByIds(self, getBatchRecordsRequest: GetBatchRecordsRequest):
+        """
+        Get records by their id.
+
+        Parameters:
+            GetBatchRecordsRequest (`Models.GetBatchRecordsRequest`): An object that contains all the necessary information for making a successful request.
+            
+        Returns:
+            An ApiResponse (`Models.ApiResponse`) containing the results of the request.
+        """
 
         endpoint = GetRecordsByIdsEndpoint(self.baseUrl)
 
@@ -1189,6 +1226,15 @@ class OnspringClient:
             raw=response)
 
     def QueryRecords(self, queryRecordsRequest: QueryRecordsRequest):
+        """
+        Get records based on a criteria.
+
+        Parameters:
+            queryRecordsRequest (`Models.QueryRecordsRequest`): An object that contains all the necessary information for making a successful request.
+            
+        Returns:
+            An ApiResponse (`Models.ApiResponse`) containing the results of the request.
+        """
 
         endpoint = QueryRecordsEndpoint(self.baseUrl)
         
@@ -1281,6 +1327,15 @@ class OnspringClient:
             raw=response)
 
     def AddOrUpdateRecord(self, record: Record):
+        """
+        Add a new record or update a record by its id. Not including an id adds a new record.
+
+        Parameters:
+            record (`Models.Record`): An object that contains all the information for making a successful request.
+            
+        Returns:
+            An ApiResponse (`Models.ApiResponse`) containing the results of the request.
+        """
 
         endpoint = AddOrUpdateRecordEndpoint(self.baseUrl)
 
@@ -1348,6 +1403,15 @@ class OnspringClient:
                 raw=response)
 
     def DeleteRecordsByIds(self, deleteBatchRecordsRequest: DeleteBatchRecordsRequest):
+        """
+        Delete records by their ids.
+
+        Parameters:
+            deleteBatchRecordsRequest (`Models.DeleteBatchRecordsRequest`): An object that contains all the necessary information for making a successful request.
+            
+        Returns:
+            An ApiResponse (`Models.ApiResponse`) containing the results of the request.
+        """
 
         endpoint = DeleteRecordsByIds(self.baseUrl)
 
@@ -1405,6 +1469,15 @@ class OnspringClient:
     # report methods
 
     def GetReportById(self, getReportByIdRequest: GetReportByIdRequest):
+        """
+        Get a report by its id.
+
+        Parameters:
+            getReportByIdRequest (`Models.GetReportByIdRequest`): An object that contains all the necessary information for making a successful request.
+            
+        Returns:
+            An ApiResponse (`Models.ApiResponse`) containing the results of the request.
+        """
 
         endpoint = GetReportByIdEndpoint(self.baseUrl, getReportByIdRequest.reportId)
 
@@ -1477,6 +1550,16 @@ class OnspringClient:
             raw=response)
 
     def GetReportsByAppId(self, appId: int, pagingRequest: PagingRequest=PagingRequest(1,50)):
+        """
+        Get reports for an app by its id..
+
+        Parameters:
+            appId (`int`): The unique id of the app whose reports are being requested.
+            pagingRequest (`Models.PagingRequest`): Used to set the page number and page size of the request. By default the these will be 1 and 50 respectively.
+
+        Returns:
+            An ApiResponse (`Models.ApiResponse`) containing the results of the request.
+        """
 
         endpoint = GetReportsByAppIdEndpoint(self.baseUrl, appId)
 

@@ -12,6 +12,16 @@ from Helpers import parseDate
 # generic
 
 class ApiResponse:
+    """
+    An object to represent a response to a request made by an `OnspringClient`.
+
+    Attributes:
+        statusCode (`int`): The http status code of the response.
+        data: If the success was successful will contain the response data deserialized to custom python objects.
+        message (`str`): A message that may provide more detail about the requests success or failure.
+        raw (`requests.Response`): Exposes the raw response object of the request if you'd like to handle it directly.
+    """
+
     def __init__(self, statusCode=None, data=None, message=None, raw=None):
         self.statusCode = statusCode
         self.isSuccessful = int(statusCode) < 400
@@ -20,6 +30,14 @@ class ApiResponse:
         self.raw = raw
 
 class PagingRequest:
+    """
+    An object to represent the page number and page size of a paginated request made by an `OnspringClient`.
+
+    Attributes:
+        pageNumber (`int`): The page number that will be requested.
+        pageSize (`int`): The size of the page that will be requested.
+    """
+
     def __init__(self, pageNumber: int, pageSize: int):
         self.pageNumber = pageNumber
         self.pageSize = pageSize
@@ -27,12 +45,32 @@ class PagingRequest:
 #app specific
 
 class App:
+    """
+    An object to represent an Onspring app.
+
+    Attributes:
+        href (`str`): The href for the Onspring app.
+        id (`int`): The id of the Onspring app.
+        name (`str`): The name of the Onspring app.
+    """
+
     def __init__(self, href: str, id: int, name: str):
         self.href = href
         self.id = id
         self.name = name
 
 class GetAppsResponse:
+    """
+    An object to represent a paginated response to a request made by an `OnspringClient` to request a collection of `Models.App`s.
+
+    Attributes:
+        pageNumber (`int`):
+        pageSize (`int`):
+        totalPages (`int`):
+        totalRecords (`int`):
+        apps (`list[Models.App]`):
+    """
+
     def __init__(self, pageNumber: int, pageSize: int, totalPages:int , totalRecords: int, apps: list[App]):
         self.pageNumber = pageNumber
         self.pageSize = pageSize
