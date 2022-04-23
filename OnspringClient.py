@@ -6,7 +6,14 @@ from Endpoints import *
 from Models import *
 
 class OnspringClient:
-    def __init__(self, url, key):
+    """
+    A class that represents a client that can interact with the api.
+    
+    Attributes:
+        baseUrl (`str`): The url that should be used as the base for all requests made by the client.
+        headers (`dict`): Contains key value pairs of the headers necessary for all requests made by the client.
+    """
+    def __init__(self, url: str, key: str):
         self.baseUrl = url
         self.headers = {
             'x-apikey': key,
@@ -17,10 +24,9 @@ class OnspringClient:
 
     def CanConnect(self):
         """
-        Description:
-            Verifies if the API is reachable by calling the ping endpoint.
+        Verifies if the API is reachable by calling the ping endpoint.
 
-        Parameters:
+        Args:
             None
 
         Returns:
@@ -39,8 +45,7 @@ class OnspringClient:
 
     def GetApps(self, pagingRequest=PagingRequest(1, 50)):
         """
-        Description:
-            Gets all accessible apps.
+        Gets all accessible apps.
 
         Parameters:
             pagingRequest (`Models.PagingRequest`): Used to set the page number and page size of the request. By default the these will be 1 and 50 respectively.
