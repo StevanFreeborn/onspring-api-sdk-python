@@ -64,11 +64,11 @@ class GetAppsResponse:
     An object to represent a paginated response to a request made by an `OnspringClient` to request a collection of `Models.App`s.
 
     Attributes:
-        pageNumber (`int`):
-        pageSize (`int`):
-        totalPages (`int`):
-        totalRecords (`int`):
-        apps (`list[Models.App]`):
+        pageNumber (`int`): The page number returned.
+        pageSize (`int`): The size of the page returned.
+        totalPages (`int`): The total number of pages for the request.
+        totalRecords (`int`): The total records for the request.
+        apps (`list[Models.App]`): The apps requested.
     """
 
     def __init__(self, pageNumber: int, pageSize: int, totalPages:int , totalRecords: int, apps: list[App]):
@@ -79,10 +79,25 @@ class GetAppsResponse:
         self.apps = apps
 
 class GetAppByIdResponse:
+    """
+    An object to represent a response to a request made by an `OnspringClient` to request a `Models.App`.
+
+    Attributes:
+        app (`Models.App`): The requested app.
+    """
+
     def __init__(self, app: App):
         self.app = app
 
 class GetAppsByIdsResponse:
+    """
+    An object to represent a response to a request made by an `OnspringClient` to request a collection of `Models.App`s.
+
+    Attributes:
+        count (`int`): The number of apps requested.
+        apps (`list[Models.App]`): The apps requested.
+    """
+
     def __init__(self, count: int, apps: list[App]):
         self.count = count
         self.apps = apps
