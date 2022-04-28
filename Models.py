@@ -105,6 +105,17 @@ class GetAppsByIdsResponse:
 # field specific
 
 class ListValue:
+    """
+    An object to represent an Onspring list value.
+
+    Attributes:
+        id (`int`): The id of the Onspring list value.
+        name (`str`): The list value's name.
+        sortOrder (`int`): The list value's sort order in respect to other values in the same list.
+        numericalValue (`Decimal`): The numeric value assigned to the list value.
+        color (`str`): The color assigned to the list value.
+    """
+
     def __init__(self, id: int, name: str, sortOrder: int, numericValue: Decimal, color: str):
         self.id = id
         self.name = name
@@ -118,9 +129,36 @@ class ListValue:
         self.color = color
 
     def AsString(self):
+        """
+        Gets the list value as a comma separated string of it's properties and their values.
+
+        Args:
+            None
+
+        Returns:
+            A `str` representation of the list value object.
+        """
+
         return f'Id: {self.id}, Name: {self.name}, Value: {self.numericValue}, Sort Order: {self.sortOrder}, Color: {self.color}'
 
 class Field:
+    """
+    An object to represent an Onspring field.
+
+    Attributes:
+        id (`int`): The id of the Onspring field.
+        appId ('int'): The id of the Onspring app where the field resides.
+        name (`str`): The name of the field.
+        type (`str`): The type of the field.
+        status (`str`): The stuat of the field.
+        isRequired (`bool`): Indicates whether the field is required in Onspring or not.
+        isUnique (`bool`): Indicates whether the field requires unique values in Onspring or not.
+        listId (`int`): The id of the fields list if applicable. Used for list fields and formula fields with list output type.
+        values (`list[Models.ListValue]`): The values of the fields list if applicable. Used for list fields and formula fields with list output type.
+        multiplicity (`str`): The multiplicity of the field if applicable. Used for list fields, reference fields, and formula fields with a list output type.
+        outputType (`str`): The output type of the field if applicable. Used for formula fields.
+    """
+
     def __init__(
         self, id: int, 
         appId: int, 
@@ -148,15 +186,41 @@ class Field:
         self.multiplicity = multiplicity
 
 class GetFieldByIdResponse:
+    """
+    An object to represent a response to a request made by an `OnspringClient` to request a `Models.Field`.
+
+    Attributes:
+        field (`Models.Field`): The requested field.
+    """
+
     def __init__(self, field: Field):
         self.field = field
 
 class GetFieldsByIdsResponse:
+    """
+    An object to represent a response to a request made by an `OnspringClient` to request a collection of `Models.App`s.
+
+    Attributes:
+        count (`int`): The number of fields requested.
+        fields (`list[Models.Field]`): The fields requested.
+    """
+
     def __init__(self, count: int, fields: list[Field]):
         self.count = count
         self.fields = fields
 
 class GetFieldsByAppIdResponse:
+    """
+    An object to represent a paginated response to a request made by an `OnspringClient` to request a collection of `Models.Field`s.
+
+    Attributes:
+        pageNumber (`int`): The page number returned.
+        pageSize (`int`): The size of the page returned.
+        totalPages (`int`): The total number of pages for the request.
+        totalRecords (`int`): The total records for the request.
+        fields (`list[Models.Field]`): The fields requested.
+    """
+
     def __init__(self, pageNumber: int, pageSize: int, totalPages: int, totalRecords: int, fields: list[Field]):
         self.pageNumber = pageNumber
         self.pageSize = pageSize
