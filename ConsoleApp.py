@@ -40,6 +40,22 @@ def main():
     if command == 'getfieldbyid':
         PrintGetFieldById(onspring, 9686 )
         return
+    
+    if command == 'getfileinfobyid':
+
+        if not argsLength > 4:
+            print('Please provide record id, fieldId, and fileId values')
+            return
+
+        recordId = sys.argv[2]
+        fieldId = sys.argv[3]
+        fileId = sys.argv[4]
+
+        PrintGetFileInfoById(onspring, recordId, fieldId, fileId)
+        return
+
+        PrintGetFileById(onspring, )
+        return
 
     if command == 'savefile':
         PrintSaveFile(

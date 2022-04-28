@@ -102,6 +102,28 @@ def PrintGetFieldById(client: OnspringClient, fieldId: int):
 
 # files
 
+def PrintGetFileById(client: OnspringClient, recordId: int, fieldId: int, fileId: int):
+
+    response = client.GetFileById(recordId, fieldId, fileId)
+
+    print(f'Status Code: {response.statusCode}')
+    print(f'Name: {response.data.file.name}')
+    print(f'Content Type: {response.data.file.contentType}')
+    print(f'Content Length: {response.data.file.contentLength}')
+
+def PrintGetFileInfoById(client: OnspringClient, recordId: int, fieldId: int, fileId: int):
+
+    response = client.GetFileInfoById(recordId, fieldId, fileId)
+
+    print(f'Status Code: {response.statusCode}')
+    print(f'Name: {response.data.fileInfo.name}')
+    print(f'Type: {response.data.fileInfo.type}')
+    print(f'Owner: {response.data.fileInfo.owner}')
+    print(f'Content Type: {response.data.fileInfo.contentType}')
+    print(f'Created Date: {response.data.fileInfo.createdDate}')
+    print(f'Modified Date: {response.data.fileInfo.modifiedDate}')
+    print(f'File Href: {response.data.fileInfo.fileHref}')
+
 def PrintSaveFile(client: OnspringClient, filePath: str, recordId: int, fieldId: int, notes: str=None, modifiedDate: datetime=None):
 
     filePath = filePath

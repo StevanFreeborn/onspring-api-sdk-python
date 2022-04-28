@@ -61,7 +61,7 @@ class App:
 
 class GetAppsResponse:
     """
-    An object to represent a paginated response to a request made by an `OnspringClient` to request a collection of `Models.App`s.
+    An object to represent a paginated response to a request made by an `OnspringClient` to request a collection of Onspring apps.
 
     Attributes:
         pageNumber (`int`): The page number returned.
@@ -80,7 +80,7 @@ class GetAppsResponse:
 
 class GetAppByIdResponse:
     """
-    An object to represent a response to a request made by an `OnspringClient` to request a `Models.App`.
+    An object to represent a response to a request made by an `OnspringClient` to request an Onspring app.
 
     Attributes:
         app (`Models.App`): The requested app.
@@ -91,7 +91,7 @@ class GetAppByIdResponse:
 
 class GetAppsByIdsResponse:
     """
-    An object to represent a response to a request made by an `OnspringClient` to request a collection of `Models.App`s.
+    An object to represent a response to a request made by an `OnspringClient` to request a collection of Onspring apps.
 
     Attributes:
         count (`int`): The number of apps requested.
@@ -187,7 +187,7 @@ class Field:
 
 class GetFieldByIdResponse:
     """
-    An object to represent a response to a request made by an `OnspringClient` to request a `Models.Field`.
+    An object to represent a response to a request made by an `OnspringClient` to request an Onspring field.
 
     Attributes:
         field (`Models.Field`): The requested field.
@@ -198,7 +198,7 @@ class GetFieldByIdResponse:
 
 class GetFieldsByIdsResponse:
     """
-    An object to represent a response to a request made by an `OnspringClient` to request a collection of `Models.App`s.
+    An object to represent a response to a request made by an `OnspringClient` to request a collection of Onspring fields.
 
     Attributes:
         count (`int`): The number of fields requested.
@@ -211,7 +211,7 @@ class GetFieldsByIdsResponse:
 
 class GetFieldsByAppIdResponse:
     """
-    An object to represent a paginated response to a request made by an `OnspringClient` to request a collection of `Models.Field`s.
+    An object to represent a paginated response to a request made by an `OnspringClient` to request a collection of Onspring fields.
 
     Attributes:
         pageNumber (`int`): The page number returned.
@@ -231,6 +231,16 @@ class GetFieldsByAppIdResponse:
 # file specific
 
 class File:
+    """
+    An object to represent a file stored in Onsprng.
+
+    Attributes:
+        name (`str`): The name of the file.
+        contentType (`str`): The content type of the file.
+        contentLength (`int`): The length of the file's content.
+        content (`bytes`): The content of the file.
+    """
+
     def __init__(self, name: str, contentType: str, contentLength: int, content: bytes):
         self.name = name
         self.contentType = contentType
@@ -238,6 +248,19 @@ class File:
         self.content = content
 
 class FileInfo:
+    """
+    An object to represent the metadata for a file stored in Onspring.
+
+    Attributes:
+        type (`str`): The type of file as stored in Onspring Attachment or Image.
+        contentType (`str`): The content type of the file itself.
+        name (`str`): The name of the file
+        createdDate (`datetime`): The created date of the file.
+        modifiedDate (`datetime`): The modified date of the file.
+        owner (`str`): The owner of the file.
+        fileHref (`str`): The href for the file.
+    """
+
     def __init__(self, type: str, contentType: str, name: str, createdDate: datetime, modifiedDate: datetime, owner: str, fileHref: str):
         self.type = type
         self.contentType = contentType
@@ -248,10 +271,24 @@ class FileInfo:
         self.fileHref = fileHref
 
 class GetFileInfoByIdResponse:
+    """
+    An object to represent a response to a request made by an `OnspringClient` to request a info for a file in Onspring.
+
+    Attributes:
+        fileInfo (`Models.FileInfo`): The file info requested.
+    """
+
     def __init__(self, fileInfo: FileInfo):
         self.fileInfo = fileInfo
 
 class GetFileByIdResponse:
+    """
+    An object to represent a response to a request made by an `OnspringClient` to request a file in Onspring.
+
+    Attributes:
+        file (`Models.File`): The file requested.
+    """
+
     def __init__(self, file: File):
         self.file = file
 
@@ -278,6 +315,13 @@ class SaveFileRequest:
         self.contentType = contentType
 
 class SaveFileResponse:
+    """
+    An object to represent a response to a request made by an `OnspringClient` to save a file in Onspring.
+
+    Attributes:
+        id (`int`): The id of the file saved in Onspring.
+    """
+
     def __init__(self, id: int):
         self.id = id
 
