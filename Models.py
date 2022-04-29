@@ -88,7 +88,7 @@ class GetAppByIdResponse:
 
 class GetAppsByIdsResponse:
     """
-    An object to represent a response to a request made by an `OnspringClient` to request a collection of Onspring apps.
+    An object to represent a response to a request made by an `OnspringClient` to request a batch of Onspring apps.
 
     Attributes:
         count (`int`): The number of apps requested.
@@ -195,7 +195,7 @@ class GetFieldByIdResponse:
 
 class GetFieldsByIdsResponse:
     """
-    An object to represent a response to a request made by an `OnspringClient` to request a collection of Onspring fields.
+    An object to represent a response to a request made by an `OnspringClient` to request a batch of Onspring fields.
 
     Attributes:
         count (`int`): The number of fields requested.
@@ -794,7 +794,16 @@ class QueryRecordsRequest:
         self.pagingRequest = pagingRequest
 
 class GetRecordsResponse:
+    """
+    An object to represent a paginated response to a request made by an `OnspringClient` to request a collection of Onspring records.
 
+    Attributes:
+        pageNumber (`int`): The page number returned.
+        pageSize (`int`): The size of the page returned.
+        totalPages (`int`): The total number of pages for the request.
+        totalRecords (`int`): The total records for the request.
+        records (`list[Models.Record]`): The records requested.
+    """
 
     def __init__(self, pageNumber: int, pageSize: int, totalPages: int, totalRecords: int, records: list[Record]):
         self.pageNumber = pageNumber
@@ -804,6 +813,15 @@ class GetRecordsResponse:
         self.records = records
 
 class GetRecordByIdRequest:
+    """
+    An object to represent all the necessary information for making a succcessful request to get an Onspring record by its id.
+
+    Attributes:
+        appId (`int`): The id for the Onspring app where the record resides.
+        recordId (`int`): The id for the record being requested.
+        fieldIds (`list[int]`): The ids for the fields in the Onspring app that should be included for each record in the response.
+        dataFormat (`str`): The format of the response data.
+    """
     def __init__(self, appId: int, recordId: int, fieldIds: list[int]=[], dataFormat: str=DataFormat.Raw.name):
         self.appId = appId
         self.recordId = recordId
@@ -811,6 +829,16 @@ class GetRecordByIdRequest:
         self.dataFormat = dataFormat
 
 class GetBatchRecordsRequest:
+    """
+    An object to represent all the necessary information for making a succcessful request to get a batch of Onspring records by their ids.
+
+    Attributes:
+        appId (`int`): The id for the Onspring app where the records reside.
+        recordId (`list[int]`): The ids for the records being requested.
+        fieldIds (`list[int]`): The ids for the fields in the Onspring app that should be included for each record in the response.
+        dataFormat (`str`): The format of the response data.
+    """
+
     def __init__(self, appId: int, recordIds: list[int], fieldIds: list[int]=[], dataFormat: str=DataFormat.Raw.name):
         self.appId = appId
         self.recordIds = recordIds
@@ -818,16 +846,40 @@ class GetBatchRecordsRequest:
         self.dataFormat = dataFormat
 
 class GetBatchRecordsResponse:
+    """
+    An object to represent a response to a request made by an `OnspringClient` to request a batch of Onspring records.
+
+    Attributes:
+        count (`int`): The number of records requested.
+        records (`list[Models.Record]`): The records requested.
+    """
+
     def __init__(self, count: int, records: list[Record]):
         self.count = count
         self.records = records
 
 class AddOrUpdateRecordResponse:
+    """
+    An object to represent a response to a request made by an `OnspringClient` to add or update an Onspring record.
+    
+    Attributes:
+        id (`int`): The id of the Onspring record that was added or updated.
+        warnings ('list[str]'): A list of warnings.
+    """
+
     def __init__(self, id: int, warnings: list[str]=[]):
         self.id = id
         self.warnings = warnings
 
 class DeleteBatchRecordsRequest:
+    """
+    An object to represent all the necessary information for making a succcessful request to delete a batch of Onspring records by their ids.
+
+    Attributes:
+        appId (`int`): The id for the Onspring app where the records reside.
+        recordId (`list[int]`): The ids for the records being deleted.
+    """
+
     def __init__(self, appId: int, recordIds: list[int]):
         self.appId = appId
         self.recordIds = recordIds
