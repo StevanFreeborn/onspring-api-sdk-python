@@ -30,12 +30,15 @@ def main():
         
     if command == 'getapps':
         PrintGetApps(onspring)
+        return
     
     if command == 'getappbyid':
         PrintGetAppById(onspring, 195)
+        return
         
     if command == 'getappsbyids':
         PrintGetAppsByIds(onspring, [195, 240])
+        return
 
     if command == 'getfieldbyid':
         PrintGetFieldById(onspring, 9686 )
@@ -54,9 +57,6 @@ def main():
         PrintGetFileInfoById(onspring, recordId, fieldId, fileId)
         return
 
-        PrintGetFileById(onspring, )
-        return
-
     if command == 'savefile':
         PrintSaveFile(
             onspring,
@@ -64,6 +64,7 @@ def main():
             60,
             6989
         )
+        return
     
     if command == 'getrecordsbyappid':
         PrintGetRecordsByAppId(onspring, 195)
