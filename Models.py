@@ -1,8 +1,5 @@
-from audioop import mul
 import datetime
 import uuid
-
-from requests import Response
 
 from Enums import *
 from decimal import Decimal
@@ -328,6 +325,17 @@ class SaveFileResponse:
 # list specific
 
 class ListItemRequest:
+    """
+    An object to represent the necessary information for adding or updating a list value. If no id is provided the list value will be added. If an id is provided then an attempt will be made to find that list value and update it.
+
+    Attributes:
+        listId (`int`): The id of the parent list that the list value belongs to.
+        name (`str`): The name of the list value.
+        id (`uuid`): The id of the list value.
+        numericValue (`int`): The numeric value assigned to the list value.
+        color (`str`): The color value assigned to the list value.
+    """
+
     def __init__(self, listId: int, name: str, id: uuid=None, numericValue: int=None, color: str=None):
         self.listId = listId
         self.name = name
@@ -336,18 +344,43 @@ class ListItemRequest:
         self.color = color
 
 class AddOrUpdateListItemResponse:
+    """
+    An object to represent a response to a request made by an `OnspringClient` to add or update a list value in Onspring.
+
+    Attributes:
+        id (`int`): The id of the list value updated or added in Onspring.
+    """
+
     def __init__(self, id: uuid):
         self.id = id
 
 # record specific
 
 class RecordFieldValue:
+    """
+    An object to represent the value in a field in an Onspring record.
+
+    Attributes:
+        fieldId (`int`): The id of the field that the value is in.
+        value (`str`): The value of the field.
+        type (`str`): The type of value.
+    """
+
     def __init__(self, fieldId: int, value: str, type: str=None):
-        self.type = type
         self.fieldId = fieldId
         self.value = value
+        self.type = type
 
     def AsString(self):
+        """
+        If the `Models.RecordFieldValue` type is String will return the value property as a `str` otherwise will return `None`.
+
+        Args:
+            None
+
+        Returns:
+            The value of the `Models.RecordFieldValue` as a `str`.
+        """
         
         if self.type != ResultValueType.String.name:
             return None
@@ -355,6 +388,15 @@ class RecordFieldValue:
         return StringFieldValue(self.fieldId, self.value).value
 
     def AsInteger(self):
+        """
+        If the `Models.RecordFieldValue` type is Integer will return the value property as an `int` otherwise will return `None`.
+
+        Args:
+            None
+
+        Returns:
+            The value of the `Models.RecordFieldValue` as an `int`.
+        """
         
         if self.type != ResultValueType.Integer.name:
             return None
@@ -362,6 +404,15 @@ class RecordFieldValue:
         return IntegerFieldValue(self.fieldId, int(self.value)).value
 
     def AsDecimal(self):
+        """
+        If the `Models.RecordFieldValue` type is Decimal will return the value property as a `Decimal` otherwise will return `None`.
+
+        Args:
+            None
+
+        Returns:
+            The value of the `Models.RecordFieldValue` as a `Decimal`.
+        """
         
         if self.type != ResultValueType.Decimal.name:
             return None
@@ -369,6 +420,15 @@ class RecordFieldValue:
         return DecimalFieldValue(self.fieldId, Decimal(self.value)).value
 
     def AsDate(self):
+        """
+        If the `Models.RecordFieldValue` type is Date will return the value property as a `datetime` otherwise will return `None`.
+
+        Args:
+            None
+
+        Returns:
+            The value of the `Models.RecordFieldValue` as a `datetime`.
+        """
         
         if self.type != ResultValueType.Date.name:
             return None
@@ -378,6 +438,15 @@ class RecordFieldValue:
         return DateFieldValue(self.fieldId, date).value
 
     def AsGuid(self):
+        """
+        If the `Models.RecordFieldValue` type is Guid will return the value property as an `UUID` otherwise will return `None`.
+
+        Args:
+            None
+
+        Returns:
+            The value of the `Models.RecordFieldValue` as an `UUID`.
+        """
 
         if self.type != ResultValueType.Guid.name:
             return None
@@ -385,6 +454,15 @@ class RecordFieldValue:
         return GuidFieldValue(self.fieldId, uuid.UUID(self.value)).value
         
     def AsTimeSpan(self):
+        """
+        If the `Models.RecordFieldValue` type is TimeSpan will return the value property as a `Model.TimeSpanData` otherwise will return `None`.
+
+        Args:
+            None
+
+        Returns:
+            The value of the `Models.RecordFieldValue` as a `Model.TimeSpanData`.
+        """
 
         if self.type != ResultValueType.TimeSpan.name:
             return None
@@ -409,6 +487,15 @@ class RecordFieldValue:
         return TimeSpanValue(self.fieldId, data).value
 
     def AsStringList(self):
+        """
+        If the `Models.RecordFieldValue` type is StringList will return the value property as a `list[str]` otherwise will return `None`.
+
+        Args:
+            None
+
+        Returns:
+            The value of the `Models.RecordFieldValue` as a `list[str]`.
+        """
 
         if self.type != ResultValueType.StringList.name:
             return None
@@ -418,6 +505,15 @@ class RecordFieldValue:
         return StringListValue(self.fieldId, strings).value
 
     def AsIntegerList(self):
+        """
+        If the `Models.RecordFieldValue` type is IntegerList will return the value property as a `list[int]` otherwise will return `None`.
+
+        Args:
+            None
+
+        Returns:
+            The value of the `Models.RecordFieldValue` as a `list[int]`.
+        """
         
         if self.type != ResultValueType.IntegerList.name:
             return None
@@ -427,6 +523,15 @@ class RecordFieldValue:
         return IntegerListValue(self.fieldId, integers).value
 
     def AsGuidList(self):
+        """
+        If the `Models.RecordFieldValue` type is GuidList will return the value property as a `list[UUID]` otherwise will return `None`.
+
+        Args:
+            None
+
+        Returns:
+            The value of the `Models.RecordFieldValue` as a `list[UUID]`.
+        """
 
         if self.type != ResultValueType.GuidList.name:
             return None
@@ -439,6 +544,15 @@ class RecordFieldValue:
         return GuidListValue(self.fieldId, guids).value
 
     def AsAttachmentList(self):
+        """
+        If the `Models.RecordFieldValue` type is AttachmentList will return the value property as a `list[Models.Attachment]` otherwise will return `None`.
+
+        Args:
+            None
+
+        Returns:
+            The value of the `Models.RecordFieldValue` as a `list[Models.Attachment]`.
+        """
 
         if self.type != ResultValueType.AttachmentList.name:
             return None
@@ -460,6 +574,15 @@ class RecordFieldValue:
         return AttachmentListValue(self.fieldId, attachments).value
 
     def AsScoringGroupList(self):
+        """
+        If the `Models.RecordFieldValue` type is ScoringGroupList will return the value property as a `list[Models.ScoringGroup]` otherwise will return `None`.
+
+        Args:
+            None
+
+        Returns:
+            The value of the `Models.RecordFieldValue` as a `list[Models.ScoringGroup]`.
+        """
 
         if self.type != ResultValueType.ScoringGroupList.name:
             return
@@ -481,6 +604,15 @@ class RecordFieldValue:
         return ScoringGroupListValue(self.fieldId, scoringGroups).value
 
     def AsFileList(self):
+        """
+        If the `Models.RecordFieldValue` type is FileList will return the value property as a `list[int]` otherwise will return `None`.
+
+        Args:
+            None
+
+        Returns:
+            The value of the `Models.RecordFieldValue` as a `list[int]`.
+        """
         
         if self.type != ResultValueType.FileList.name:
             return None
@@ -490,100 +622,151 @@ class RecordFieldValue:
         return FileListValue(self.fieldId, files).value
 
     def getValue(self):
+        """
+        Will determine the appropriate way to return the fields value based on it's type.
+
+        Args:
+            None
+
+        Returns:
+            The value of the `Models.RecordFieldValue` as the appropriate object.
+        """
 
         if self.type == ResultValueType.String.name:
             return self.AsString()
+
         elif self.type == ResultValueType.Integer.name:
             return self.AsInteger()
+
         elif self.type == ResultValueType.Decimal.name:
             return self.AsDecimal()
+
         elif self.type == ResultValueType.Date.name:
             return self.AsDate()
+
         elif self.type == ResultValueType.TimeSpan.name:
             return self.AsTimeSpan()
+
         elif self.type == ResultValueType.Guid.name:
             return self.AsGuid()
+
         elif self.type == ResultValueType.StringList.name:
             return self.AsStringList()
+
         elif self.type == ResultValueType.IntegerList.name:
             return self.AsIntegerList()
+
         elif self.type == ResultValueType.GuidList.name:
             return self.AsGuidList()
+
         elif self.type == ResultValueType.AttachmentList.name:
             return self.AsAttachmentList()
+
         elif self.type == ResultValueType.ScoringGroupList.name:
             return self.AsScoringGroupList()
+
         elif self.type == ResultValueType.FileList.name:
             return self.AsFileList()
+
         else:
             return None
 
     def GetResultValueString(self):
-        match self.type:
-            case ResultValueType.String.name:
-                return self.AsString()
+        """
+        Will return the value property regardless of the field value's type as a string.
 
-            case ResultValueType.Integer.name:
-                return self.AsInteger()
+        Args:
+            None
 
-            case ResultValueType.Decimal.name:
-                return self.AsDecimal()
+        Returns:
+            The value of the `Models.RecordFieldValue` as a string.
+        """
+        if self.type == ResultValueType.String.name:
+            return self.AsString()
 
-            case ResultValueType.Date.name:
-                return self.AsDate()
+        elif self.type == ResultValueType.Integer.name:
+            return self.AsInteger()
 
-            case ResultValueType.TimeSpan.name:
-                data = self.AsTimeSpan()
-                return f'Quantity: {data.quantity}, Increment: {data.increment}, Recurrence: {data.recurrence}, EndByDate: {data.endByDate}, EndAfterOccurrences: {data.endAfterOccurrences}'
+        elif self.type == ResultValueType.Decimal.name:
+            return self.AsDecimal()
+
+        elif self.type == ResultValueType.Date.name:
+            return self.AsDate()
+
+        elif self.type ==  ResultValueType.TimeSpan.name:
+            data = self.AsTimeSpan()
+            return f'Quantity: {data.quantity}, Increment: {data.increment}, Recurrence: {data.recurrence}, EndByDate: {data.endByDate}, EndAfterOccurrences: {data.endAfterOccurrences}'
             
-            case ResultValueType.Guid.name:
-                return self.AsGuid()
+        elif self.type == ResultValueType.Guid.name:
+            return self.AsGuid()
             
-            case ResultValueType.StringList.name:
-                data = self.AsStringList()
-                return f'{",".join(data)}'
+        elif self.type ==  ResultValueType.StringList.name:
+            data = self.AsStringList()
+            return f'{",".join(data)}'
             
-            case ResultValueType.IntegerList.name:
-                data = self.AsIntegerList()
-                return f'{",".join([str(i) for i in data])}'
+        elif self.type == ResultValueType.IntegerList.name:
+            data = self.AsIntegerList()
+            return f'{",".join([str(i) for i in data])}'
             
-            case ResultValueType.GuidList.name:
-                data = self.AsGuidList()
-                return f'{",".join([str(guid) for guid in data])}'
+        elif self.type == ResultValueType.GuidList.name:
+            data = self.AsGuidList()
+            return f'{",".join([str(guid) for guid in data])}'
             
-            case ResultValueType.AttachmentList.name:
-                data = self.AsAttachmentList()
+        elif self.type == ResultValueType.AttachmentList.name:
+            data = self.AsAttachmentList()
 
-                strings = []
+            strings = []
 
-                for attachment in data:
-                    string = f'FileId: {attachment.fileId}, FileName: {attachment.fileName}, Notes: {attachment.notes}, StorageLocation: {attachment.storageLocation}'
-                    strings.append(string)
-                
-                return f'{"; ".join(strings)}'
+            for attachment in data:
+                string = f'FileId: {attachment.fileId}, FileName: {attachment.fileName}, Notes: {attachment.notes}, StorageLocation: {attachment.storageLocation}'
+                strings.append(string)
             
-            case ResultValueType.ScoringGroupList.name:
-                data = self.AsScoringGroupList()
-
-                strings = []
-
-                for scoringGroup in data:
-                    string = f'ListValueId: {scoringGroup.listValueId}, Name: {scoringGroup.name}, Score: {scoringGroup.score}, Max Score: {scoringGroup.maximumScore}'
-                    strings.append(string)
-
-                return f'{"; ".join(strings)}'
+            return f'{"; ".join(strings)}'
             
-            case ResultValueType.FileList.name:
-                data = self.AsFileList()
-                return f'{",".join([str(i) for i in data])}'
+        elif self.type == ResultValueType.ScoringGroupList.name:
+            data = self.AsScoringGroupList()
+
+            strings = []
+
+            for scoringGroup in data:
+                string = f'ListValueId: {scoringGroup.listValueId}, Name: {scoringGroup.name}, Score: {scoringGroup.score}, Max Score: {scoringGroup.maximumScore}'
+                strings.append(string)
+
+            return f'{"; ".join(strings)}'
+
+        elif self.type == ResultValueType.FileList.name:
+            data = self.AsFileList()
+            return f'{",".join([str(i) for i in data])}'
+
+        else:
+            return None
 
 class Record:
+    """
+    An object to represent an Onspring record.
+
+    Attributes:
+        appId ('int'): The id of the Onspring app where the record resides.
+        recordId (`int`): The id of the Onspring record.
+        fields (`list[Models.RecordFieldValue]`): The record's field values.
+    """
+    
     def __init__(self, appId: int, fields: list[RecordFieldValue], recordId: int=None):
         self.appId = appId
         self.recordId = recordId
         self.fields = fields
 
 class GetRecordsByAppRequest:
+    """
+    An object to represent all the necessary information for making a succcessful request to get a collection of Onspring records.
+
+    Attributes:
+        appId (`int`): The id for the Onspring app where the records reside.
+        fieldIds (`list[int]`): The ids for the fields in the Onspring app that should be included for each record in the response.
+        dataFormat (`str`): The format of the response data.
+        pagingRequest (`Models.PagingRequest`): Used to set the page number and page size of the request. By default the these will be 1 and 50 respectively.
+    """
+
     def __init__(self, appId: int, fieldIds: list[int]=[], dataFormat: str=DataFormat.Raw.name, pagingRequest: PagingRequest=PagingRequest(1,50)):
         self.appId = appId
         self.fieldIds = fieldIds
@@ -592,6 +775,17 @@ class GetRecordsByAppRequest:
         self.pageNumber = pagingRequest.pageNumber
 
 class QueryRecordsRequest:
+    """
+    An object to represent all the necessary information for making a succcessful request to get a collection of Onspring records based on a specific criteria. For more information on constructing a proper filter please refer to the official Onspring API guide: https://shorturl.at/cnsFK.
+
+    Attributes:
+        appId (`int`): The id for the Onspring app where the records reside.
+        filter (`str`): The criteria used to determine what records should be included in the response.
+        fieldIds (`list[int]`): The ids for the fields in the Onspring app that should be included for each record in the response.
+        dataFormat (`str`): The format of the response data.
+        pagingRequest (`Models.PagingRequest`): Used to set the page number and page size of the request. By default the these will be 1 and 50 respectively.
+    """
+
     def __init__(self, appId: int, filter: str, fieldIds: list[int]=[], dataFormat: str=DataFormat.Raw.name, pagingRequest: PagingRequest=PagingRequest(1,50)):
         self.appId = appId
         self.filter = filter
@@ -600,6 +794,8 @@ class QueryRecordsRequest:
         self.pagingRequest = pagingRequest
 
 class GetRecordsResponse:
+
+
     def __init__(self, pageNumber: int, pageSize: int, totalPages: int, totalRecords: int, records: list[Record]):
         self.pageNumber = pageNumber
         self.pageSize = pageSize
