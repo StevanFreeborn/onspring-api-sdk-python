@@ -887,31 +887,87 @@ class DeleteBatchRecordsRequest:
 # field types
 
 class StringFieldValue(RecordFieldValue):
+    """
+    An object to represent an Onspring field value of the String type.
+
+    Attributes:
+        fieldId (`int`): The id of the field that the value is in.
+        value (`str`): The value of the field.
+        type (`str`): The type of value.
+    """
+
     def __init__(self, fieldId: int, value):
         self.type = ResultValueType.String.name
         RecordFieldValue.__init__(self, fieldId, value, self.type)
 
 class IntegerFieldValue(RecordFieldValue):
+    """
+    An object to represent an Onspring field value of the Integer type.
+
+    Attributes:
+        fieldId (`int`): The id of the field that the value is in.
+        value (`int`): The value of the field.
+        type (`str`): The type of value.
+    """
+
     def __init__(self, fieldId: int, value: int):
         self.type = ResultValueType.Integer.name
         RecordFieldValue.__init__(self, fieldId, value, self.type)
 
 class DecimalFieldValue(RecordFieldValue):
+    """
+    An object to represent an Onspring field value of the Decimal type.
+
+    Attributes:
+        fieldId (`int`): The id of the field that the value is in.
+        value (`Decimal`): The value of the field.
+        type (`str`): The type of value.
+    """
+
     def __init__(self, fieldId: int, value: Decimal):
         self.type = ResultValueType.Decimal.name
         RecordFieldValue.__init__(self, fieldId, value, self.type)
 
 class DateFieldValue(RecordFieldValue):
+    """
+    An object to represent an Onspring field value of the Date type.
+
+    Attributes:
+        fieldId (`int`): The id of the field that the value is in.
+        value (`datetime`): The value of the field.
+        type (`str`): The type of value.
+    """
+
     def __init__(self, fieldId: int, value: datetime):
         self.type = ResultValueType.Date.name
         RecordFieldValue.__init__(self, fieldId, value, self.type)
 
 class GuidFieldValue(RecordFieldValue):
+    """
+    An object to represent an Onspring field value of the Guid type.
+
+    Attributes:
+        fieldId (`int`): The id of the field that the value is in.
+        value (`UUID`): The value of the field.
+        type (`str`): The type of value.
+    """
+
     def __init__(self, fieldId: int, value: uuid.UUID):
         self.type = ResultValueType.Guid.name
         RecordFieldValue.__init__(self, fieldId, value, self.type)
 
 class TimeSpanData:
+    """
+    An object to represent the data that makes up an Onspring timespan field.
+
+    Attributes:
+        quantity (`Decimal`):
+        increment (`Enums.Increment`):
+        recurrence (`Enums.Recurrence`):
+        endByDate (`datetime`):
+        endAfterOccurrences (`int`):
+    """
+
     def __init__(self, quantity: Decimal, increment: Increment, recurrence: Recurrence=None, endByDate: datetime=None, endAfterOccurrences: int=None):
         self.quantity = quantity
         self.increment = increment
@@ -929,26 +985,72 @@ class TimeSpanData:
             return f'{self.quantity} {self.increment}'
 
 class TimeSpanValue(RecordFieldValue):
+    """
+    An object to represent an Onspring field value of the TimeSpan type.
+
+    Attributes:
+        fieldId (`int`): The id of the field that the value is in.
+        value (`Models.TimeSpanData`): The value of the field.
+        type (`str`): The type of value.
+    """
+
     def __init__(self, fieldId: int, value: TimeSpanData):
         self.type = ResultValueType.TimeSpan.name
         RecordFieldValue.__init__(self, fieldId, value, self.type)
 
 class StringListValue(RecordFieldValue):
+    """
+    An object to represent an Onspring field value of the StringList type.
+
+    Attributes:
+        fieldId (`int`): The id of the field that the value is in.
+        value (`list[str]`): The value of the field.
+        type (`str`): The type of value.
+    """
+
     def __init__(self, fieldId: int, value: list[str]):
         self.type = ResultValueType.StringList.name
         RecordFieldValue.__init__(self, fieldId, value, self.type)
 
 class IntegerListValue(RecordFieldValue):
+    """
+    An object to represent an Onspring field value of the IntegerList type.
+
+    Attributes:
+        fieldId (`int`): The id of the field that the value is in.
+        value (`list[int]`): The value of the field.
+        type (`str`): The type of value.
+    """
+
     def __init__(self, fieldId: int, value: list[int]):
         self.type = ResultValueType.IntegerList.name
         RecordFieldValue.__init__(self, fieldId, value, self.type)
 
 class GuidListValue(RecordFieldValue):
+    """
+    An object to represent an Onspring field value of the GuidList type.
+
+    Attributes:
+        fieldId (`int`): The id of the field that the value is in.
+        value (`list[UUID]`): The value of the field.
+        type (`str`): The type of value.
+    """
+
     def __init__(self, fieldId: int, value: list[uuid.UUID]):
         self.type = ResultValueType.GuidList.name
         RecordFieldValue.__init__(self, fieldId, value, self.type)
 
 class Attachment:
+    """
+    An object to represent an attachment in Onspring.
+
+    Attributes:
+        fileId (`int`): The id of the file in Onspring.
+        fileName (`str`): The name of the file in Onspring.
+        notes (`str`): The notes for the file in Onspring.
+        storageLocation (`str`): The storage location of the file in Onspring.
+    """
+
     def __init__(self, fileId: int, fileName: str, notes: str, storageLocation: str):
         self.fileId = fileId
         self.fileName = fileName
@@ -956,16 +1058,44 @@ class Attachment:
         self.storageLocation = storageLocation
 
 class AttachmentListValue(RecordFieldValue):
+    """
+    An object to represent an Onspring field value of the AttachmentList type.
+
+    Attributes:
+        fieldId (`int`): The id of the field that the value is in.
+        value (`list[Models.Attachment]`): The value of the field.
+        type (`str`): The type of value.
+    """
+
     def __init__(self, fieldId: int, value: list[Attachment]):
         self.type = ResultValueType.AttachmentList.name
         RecordFieldValue.__init__(self, fieldId, value, self.type)
 
 class FileListValue(RecordFieldValue):
+    """
+    An object to represent an Onspring field value of the FileList type.
+
+    Attributes:
+        fieldId (`int`): The id of the field that the value is in.
+        value (`list[int]`): The value of the field.
+        type (`str`): The type of value.
+    """
+
     def __init__(self, fieldId: int, value: list[int]):
         self.type = ResultValueType.FileList.name
         RecordFieldValue.__init__(self, fieldId, value, self.type)
 
 class ScoringGroup:
+    """
+    An object to represent an Onspring scoring group.
+
+    Attributes:
+        listValueId (`UUID`): The id of the list value.
+        name (`str`): The name of the list value.
+        score (`Decimal`): The score for the list value.
+        maximumScore (`Decimal`): The maximum possible score for the group.
+    """
+
     def __init__(self, listValueId: uuid.UUID, name: str, score: Decimal, maximumScore: Decimal):
         self.listValueId = listValueId
         self.name = name
@@ -973,6 +1103,15 @@ class ScoringGroup:
         self.maximumScore = maximumScore
 
 class ScoringGroupListValue(RecordFieldValue):
+    """
+    An object to represent an Onspring field value of the ScoringGroupList type.
+
+    Attributes:
+        fieldId (`int`): The id of the field that the value is in.
+        value (`list[Models.ScoringGroup]`): The value of the field.
+        type (`str`): The type of value.
+    """
+
     def __init__(self, fieldId: int, value: list[ScoringGroup]):
         self.type = ResultValueType.ScoringGroupList.name
         RecordFieldValue.__init__(self, fieldId, value, self.type)
@@ -980,22 +1119,57 @@ class ScoringGroupListValue(RecordFieldValue):
 # report specific
 
 class GetReportByIdRequest:
+    """
+    An object to represent the necessary information to make a successful request to get a report by it's id.
+
+    Attributes:
+        reportId (`int`): The id of the report.
+        apiDataFormat (`str`): The format of the data in the report.
+        dataType (`str`): The data type for the report.
+    """
+    
     def __init__(self, reportId: int, apiDataFormat: str=DataFormat.Raw.name, dataType: str=ReportDataType.ReportData.name):
         self.reportId = reportId
         self.apiDataFormat = apiDataFormat
         self.dataType = dataType
 
 class Row:
+    """
+    An object to represent a row of an Onspring report.
+    
+    Attributes:
+        recordId (`int`): The id of the record who's data is held in the row.
+        cells (`list[str]`): The record field values held in the row.
+    """
+
     def __init__(self, recordId: int, cells: list[str]):
         self.recordId = recordId
         self.cells = cells
 
 class GetReportByIdResponse:
+    """
+    An object to represent the response to a request made by an `OnspringClient` to get a report by its id.
+
+    Attributes:
+        columns (`list[int]`): Values indicating the columns in the report.
+        rows (`list[Models.Row]`): A collection of rows representing the records in the report.
+    """
+
     def __init__(self, columns: list[str], rows: list[Row]):
         self.columns = columns
         self.rows = rows
 
 class Report:
+    """
+    An object to represent an Onspring report.
+
+    Attributes:
+        appId (`int`): The id of the app the report resides in.
+        id (`int`): The id of the report.
+        name (`str`): The name of the report.
+        description (`str`): The description for the report.
+    """
+
     def __init__(self, appId: int, id: int, name: str, description: str):
         self.appId = appId
         self.id = id
@@ -1003,6 +1177,17 @@ class Report:
         self.description = description
 
 class GetReportsByAppIdResponse:
+    """
+    An object to represent the response to a request made by an `OnspringClient` to get a collection of reports by an app id.
+
+    Attributes:
+        pageNumber (`int`): The page number returned.
+        pageSize (`int`): The size of the page returned.
+        totalPages (`int`): The total number of pages for the request.
+        totalRecords (`int`): The total records for the request.
+        reports (`list[Models.Report]`): The requested reports for the current page.
+    """
+
     def __init__(self, pageNumber: int, pageSize: int, totalPages: int, totalRecords: int, reports: list[Report]):
         self.pageNumber = pageNumber
         self.pageSize = pageSize

@@ -1,14 +1,24 @@
 from enum import Enum
 
 class DataFormat(Enum):
+    """
+    The possible data format types for record field values.
+    """
+
     Raw = 0
     Formatted = 1
 
 class ReportDataType(Enum):
+    """
+    The possible report data types for reports.
+    """
     ReportData = 0
     ChartData = 1
 
 class ResultValueType(Enum):
+    """
+    The possible types for record field values.
+    """
     String = 0
     Integer = 1
     Decimal = 2
@@ -23,6 +33,9 @@ class ResultValueType(Enum):
     FileList = 11
 
 class Increment(Enum):
+    """
+    The possible values for the increment property of timespan data in an Onspring timespan field.
+    """
     Seconds = "Second(s)"
     Minutes = "Minute(s)"
     Hours = "Hour(s)"
@@ -32,6 +45,9 @@ class Increment(Enum):
     Years = "Year(s)"
 
 class Recurrence(Enum):
+    """
+    The possible values for the recurrence property of timespan data in an Onspring timespan field.
+    """
     Empty = "None"
     EndByDate = "EndByDate"
     EndAfterOccurrences = 'EndAfterOccurrences'
