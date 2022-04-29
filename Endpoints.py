@@ -3,28 +3,101 @@ import uuid
 # connectivity endpoints
 
 def GetPingEndpoint(baseUrl: str):
+    """
+    Returns the ping endpoint.
+
+    Args:
+        baseUrl (`str`): The base url for the api.
+
+    Returns:
+        The ping endpoint as a string.
+    """
+    
     return f'{baseUrl}/Ping'
 
 # app endpoints
 
 def GetAppsEndpoint(baseUrl: str):
+    """
+    Returns the get apps endpoint.
+
+    Args:
+        baseUrl (`str`): The base url for the api.
+
+    Returns:
+        The get apps endpoint as a string.
+    """
+
     return f'{baseUrl}/Apps'
 
 def GetAppByIdEndpoint(baseUrl: str, appId: int):
+    """
+    Returns the get app by id endpoint.
+
+    Args:
+        baseUrl (`str`): The base url for the api.
+        appId (`int`): The id of the app being requested.
+
+    Returns:
+        The get app by id endpoint as a string.
+    """
+
     return f'{baseUrl}/Apps/id/{appId}'
 
-def GetAppByIdsEndpoint(baseUrl: str):
+def GetAppsByIdsEndpoint(baseUrl: str):
+    """
+    Returns the get apps by ids endpoint.
+
+    Args:
+        baseUrl (`str`): The base url for the api.
+
+    Returns:
+        The get apps by ids endpoint as a string.
+    """
+
     return f'{baseUrl}/Apps/batch-get'
 
 # field endpoints
 
 def GetFieldByIdEndpoint(baseUrl: str, fieldId: int):
+    """
+    Returns the get field by id endpoint.
+
+    Args:
+        baseUrl (`str`): The base url for the api.
+        fieldId (`int`): The id of the field being requested.
+
+    Returns:
+        The get field by id endpoint as a string.
+    """
+
     return f'{baseUrl}/Fields/id/{fieldId}'
 
 def GetFieldsByIdsEndpoint(baseUrl: str):
+    """
+    Returns the get fields by ids endpoint.
+
+    Args:
+        baseUrl (`str`): The base url for the api.
+
+    Returns:
+        The get fields by ids endpoint as a string.
+    """
+
     return f'{baseUrl}/Fields/batch-get'
 
 def GetFieldsByAppIdEndpoint(baseUrl: str, appId: int):
+    """
+    Returns the get fields by app id endpoint.
+
+    Args:
+        baseUrl (`str`): The base url for the api.
+        appId (`int`): The id of the app whose fields are being requested.
+
+    Returns:
+        The get fields by app id endpoint as a string.
+    """
+
     return f'{baseUrl}/Fields/appId/{appId}'
 
 # file endpoints

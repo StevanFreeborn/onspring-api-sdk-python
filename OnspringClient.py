@@ -179,7 +179,7 @@ class OnspringClient:
             An ApiResponse (`Models.ApiResponse`) containing the results of the request.
         """
 
-        endpoint = GetAppByIdsEndpoint(self.baseUrl)
+        endpoint = GetAppsByIdsEndpoint(self.baseUrl)
 
         self.headers['Content-Type'] = 'application/json'
 
