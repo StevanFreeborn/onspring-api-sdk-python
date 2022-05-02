@@ -27,8 +27,15 @@ The most common way to use the SDK is to create an OnspringClient instance and c
 
 It is best practice to read these values in from a configuration file for both flexibility and security purposes.
 
-For example:
+Example config.ini file:
 
+```py
+[prod]
+key = 000000ffffff000000ffffff/00000000-ffff-0000-ffff-000000000000
+url = https://api.onspring.com
+```
+
+Example constructing `OnspringClient`:
 ```py
 import sys
 from OnspringClient import OnspringClient
