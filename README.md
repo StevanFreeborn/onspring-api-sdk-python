@@ -50,3 +50,14 @@ You may wish to refer to the full [Onspring API documentation](https://software.
 ## Example Code
 
 The examples that follow assume you have created an `OnspringClient` as described in the **Start Coding** section.
+
+### Verify connectivity
+
+```py
+canConnect = client.CanConnect()
+
+if canConnect:
+    print('Connected successfully')
+else:
+    print('Attempt to connect failed')
+```
