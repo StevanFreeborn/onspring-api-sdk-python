@@ -27,7 +27,7 @@ The most common way to use the SDK is to create an OnspringClient instance and c
 
 It is best practice to read these values in from a configuration file for both flexibility and security purposes.
 
-Example config.ini file:
+Example `config.ini` file:
 
 ```ini
 [prod]
