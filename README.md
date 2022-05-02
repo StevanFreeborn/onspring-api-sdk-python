@@ -29,13 +29,14 @@ It is best practice to read these values in from a configuration file for both f
 
 Example config.ini file:
 
-```py
+```ini
 [prod]
 key = 000000ffffff000000ffffff/00000000-ffff-0000-ffff-000000000000
 url = https://api.onspring.com
 ```
 
 Example constructing `OnspringClient`:
+
 ```py
 import sys
 from OnspringClient import OnspringClient
