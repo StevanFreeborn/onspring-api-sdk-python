@@ -53,7 +53,7 @@ client = OnspringClient(url, key)
 
 ## Full API Documentation
 
-You may wish to refer to the full [Onspring API documentation](https://software.onspring.com/hubfs/Training/Admin%20Guide%20-%20v2%20API.pdf) when determining which values to pass parameters to some of the `OnspringClient` methods. There is also a swagger page that you can use for making exploratory requests.
+You may wish to refer to the full [Onspring API documentation](https://software.onspring.com/hubfs/Training/Admin%20Guide%20-%20v2%20API.pdf) when determining which values to pass as parameters to some of the `OnspringClient` methods. There is also a [swagger page](https://api.onspring.com/swagger/index.html) that you can use for making exploratory requests.
 
 ## Example Code
 
