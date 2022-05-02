@@ -69,3 +69,20 @@ if canConnect:
 else:
     print('Attempt to connect failed')
 ```
+
+### Get Apps
+
+```py
+response = client.GetApps()
+  
+print(f'Status Code: {response.statusCode}')
+print(f'Page Size: {response.data.pageSize}')
+print(f'Page Number: {response.data.pageNumber}')
+print(f'Total Pages: {response.data.totalPages}')
+print(f'Total Records: {response.data.totalRecords}')
+
+for app in response.data.apps:
+    print(f'Id: {app.id}')
+    print(f'Name: {app.name}')
+    print(f'href: {app.href}')
+```
