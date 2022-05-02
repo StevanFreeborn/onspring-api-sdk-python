@@ -37,7 +37,7 @@ url = https://api.onspring.com
 
 Example constructing `OnspringClient`:
 
-```py
+```python
 import sys
 from OnspringClient import OnspringClient
 from configparser import ConfigParser
@@ -61,7 +61,7 @@ The examples that follow assume you have created an `OnspringClient` as describe
 
 ### Verify connectivity
 
-```py
+```python
 canConnect = client.CanConnect()
 
 if canConnect:
@@ -72,7 +72,7 @@ else:
 
 ### Get Apps
 
-```py
+```python
 response = client.GetApps()
   
 print(f'Status Code: {response.statusCode}')
