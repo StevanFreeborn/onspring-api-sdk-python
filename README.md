@@ -4,7 +4,7 @@ The python SDK for version of the Onspring API is meant to simplify development 
 
 ## Installation
 
-Install the SDK using PIP:
+Install the SDK using pip:
 
 `pip install onspring-api-sdk-python`
 
