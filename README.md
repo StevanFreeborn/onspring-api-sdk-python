@@ -1,6 +1,6 @@
 # Onspring API Python SDK
 
-The python SDK for version of the Onspring API is meant to simplify development in Python for Onspring customers who want to build integrations with their Onspring instance.
+The python SDK for **version 2** of the Onspring API is meant to simplify development in Python for Onspring customers who want to build integrations with their Onspring instance.
 
 ## Installation
 
