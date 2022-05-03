@@ -563,8 +563,72 @@ for record in response.data.records:
 
 #### Query Records
 
+Returns a paged colletion of records based on a criteria that can be paged through. By default the page size is 50 and page number is 1.
+
 ```python
+from Models import QueryRecordsRequest
+
+fieldId = 6983
+operator = 'eq'
+value = '\'Test Task 5\''
+
+request = QueryRecordsRequest(appId=195, filter=f'{fieldId} {operator} {value}')
+
+response = client.QueryRecords(request)
+
+print(f'Status Code: {response.statusCode}')
+print(f'Page Size: {response.data.pageSize}')
+print(f'Page Number: {response.data.pageNumber}')
+print(f'Total Pages: {response.data.totalPages}')
+print(f'Total Records: {response.data.totalRecords}')
+
+for record in response.data.records:
+    print(f'AppId: {record.appId}')
+    print(f'RecordId: {record.recordId}')
+
+    for field in record.fields:
+        print(f'Type: {field.type}')
+        print(f'FieldId: {field.fieldId}')
+        print(f'Value: {field.GetResultValueString()}')
 ```
+
+You can set your own page size and page number (max is 1,000) as well. In addition to specifying what field values to return and in what format (Raw vs. Formatted) to return them.
+
+```python
+from Models import PagingRequest, QueryRecordsRequest
+from Enums import DataFormat
+
+pagingRequest = PagingRequest(1, 10)
+fieldId = 6983
+operator = 'eq'
+value = '\'Test Task 5\''
+
+request = QueryRecordsRequest(
+    appId=195, 
+    filter=f'{fieldId} {operator} {value}'.
+    fieldIds=[9686],
+    dataFormat=DataFormat.Formatted.name,
+    pagingRequest)
+
+response = client.QueryRecords(request)
+
+print(f'Status Code: {response.statusCode}')
+print(f'Page Size: {response.data.pageSize}')
+print(f'Page Number: {response.data.pageNumber}')
+print(f'Total Pages: {response.data.totalPages}')
+print(f'Total Records: {response.data.totalRecords}')
+
+for record in response.data.records:
+    print(f'AppId: {record.appId}')
+    print(f'RecordId: {record.recordId}')
+
+    for field in record.fields:
+        print(f'Type: {field.type}')
+        print(f'FieldId: {field.fieldId}')
+        print(f'Value: {field.GetResultValueString()}')
+```
+
+For further details on constructing a filter please refer to the [documentation](https://software.onspring.com/hubfs/Training/Admin%20Guide%20-%20v2%20API.pdf) for v2 of the Onspring API.
 
 #### Add or Update A Record
 
