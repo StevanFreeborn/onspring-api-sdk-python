@@ -504,6 +504,10 @@ for field in response.data.fields:
 #### Delete Record By Id
 
 ```python
+response = client.DeleteRecordById(appId=195, recordId=60)
+
+print(f'Status Code: {response.statusCode}')
+print(f'Message: {response.message}')
 ```
 
 #### Get Records By Ids
