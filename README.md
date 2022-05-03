@@ -338,6 +338,10 @@ print(f'File Id: {response.data.id}')
 #### Delete File By Id
 
 ```python
+response = client.DeleteFileById(recordId=60, fieldId=6989, fileId=231)
+
+print(f'Status Code: {response.statusCode}')
+print(f'Message: {response.message}')
 ```
 
 ### Lists
