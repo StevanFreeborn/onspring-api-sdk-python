@@ -7,6 +7,8 @@ This is an unofficial SDK for the Onspring API. It was not built in consultation
 
 This SDK was developed independently using their existing C# SDK as a guide and with the intention of making development of integrations done in Python with an Onspring instance quicker and more convenient.
 
+## Dependencies
+
 ## Installation
 
 Install the SDK using pip:
@@ -24,6 +26,8 @@ In order to successfully interact with the Onspring Api you will need an API key
 5. Copy the **X-ApiKey Header** value from this tab.
 
 ## Start Coding
+
+### `OnspringClient`
 
 The most common way to use the SDK is to create an OnspringClient instance and call its methods. Its constructor requires two parameters:
 
@@ -54,6 +58,8 @@ url = cfg['prod']['url']
 
 client = OnspringClient(url, key)
 ```
+
+### `ApiResponse`
 
 ## Full API Documentation
 
