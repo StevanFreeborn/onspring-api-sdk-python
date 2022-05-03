@@ -353,6 +353,9 @@ print(f'Message: {response.message}')
 
 #### Delete List Value
 
+```python
+```
+
 ### Records
 
 #### Get Records By App Id
