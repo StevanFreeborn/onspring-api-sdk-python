@@ -274,19 +274,43 @@ response = client.GetFieldsByAppId(195, pagingRequest)
 #### Get File Info By Id
 
 ```python
-```
+response = client.GetFileInfoById(1, 6990, 274)
 
-#### Delete File By Id
-
-```python
+print(f'Status Code: {response.statusCode}')
+print(f'Name: {response.data.fileInfo.name}')
+print(f'Type: {response.data.fileInfo.type}')
+print(f'Owner: {response.data.fileInfo.owner}')
+print(f'Content Type: {response.data.fileInfo.contentType}')
+print(f'Created Date: {response.data.fileInfo.createdDate}')
+print(f'Modified Date: {response.data.fileInfo.modifiedDate}')
+print(f'File Href: {response.data.fileInfo.fileHref}')
 ```
 
 #### Get File By Id
 
 ```python
+response = client.GetFileById(1, 6990, 274)
+
+print(f'Status Code: {response.statusCode}')
+print(f'Name: {response.data.file.name}')
+print(f'Content Type: {response.data.file.contentType}')
+print(f'Content Length: {response.data.file.contentLength}')
+
+filePath = f'C:\\Users\\sfree\\Documents\\Temp\\{response.data.file.name}'
+
+with open(filePath, "wb") as file:
+    
+    file.write(response.data.file.content)
+
+print(f'File Location: {filePath}')
 ```
 
 #### Save File
+
+```python
+```
+
+#### Delete File By Id
 
 ```python
 ```
