@@ -14,7 +14,7 @@ class ApiResponse:
 
     Attributes:
         statusCode (`int`): The http status code of the response.
-        data: If the success was successful will contain the response data deserialized to custom python objects.
+        data: If the request was successful will contain the response data deserialized to custom python objects.
         message (`str`): A message that may provide more detail about the requests success or failure.
         raw (`requests.Response`): Exposes the raw response object of the request if you'd like to handle it directly.
     """

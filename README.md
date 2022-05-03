@@ -69,6 +69,17 @@ client = OnspringClient(url, key)
 
 ### `ApiResponse`
 
+Each `OnspringClient` method - aside from `CanConnect` - returns an `ApiResponse` object which will have the following properties:
+
+- `statusCode` - The http status code of the response.
+- `data` - If the request was successful will contain the response data deserialized to custom python objects.
+- `message` - A message that may provide more detail about the requests success or failure.
+- `raw` - Exposes the raw response object of the request if you'd like to handle it directly.
+
+The goal with this `ApiResponse` object is to provide the flexibility to do with the response what you'd like as well as already having the raw JSON response deserialized to python objects.
+
+If you do want to handle and/or manipulate the response object yourself you will want to use the value of the 'ApiResponse''s `raw` property which will be a [`Response` object](https://docs.python-requests.org/en/latest/user/advanced/#request-and-response-objects) from the Requests library.
+
 ## Full API Documentation
 
 You may wish to refer to the full [Onspring API documentation](https://software.onspring.com/hubfs/Training/Admin%20Guide%20-%20v2%20API.pdf) when determining which values to pass as parameters to some of the `OnspringClient` methods. There is also a [swagger page](https://api.onspring.com/swagger/index.html) that you can use for making exploratory requests.
