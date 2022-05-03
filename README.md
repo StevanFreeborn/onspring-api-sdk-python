@@ -29,7 +29,7 @@ In order to successfully interact with the Onspring Api you will need an API key
 
 ### `OnspringClient`
 
-The most common way to use the SDK is to create an OnspringClient instance and call its methods. Its constructor requires two parameters:
+The most common way to use the SDK is to create an `OnspringClient` instance and call its methods. Its constructor requires two parameters:
 
 - `baseUrl` - currently this should always be: `https://api.onspring.com`
 - `apiKey` - the value obtained by following the steps in the **API Key** section
