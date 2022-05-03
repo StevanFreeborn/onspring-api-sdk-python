@@ -512,7 +512,53 @@ print(f'Message: {response.message}')
 
 #### Get Records By Ids
 
+Returns a collection of Onspring records based on the provided appId and recordIds.
+
 ```python
+from Models import GetBatchRecordsRequest
+
+request = GetBatchRecordsRequest(appId=195, recordIds=[1, 2, 3])
+
+response = client.GetRecordsByIds(request)
+
+print(f'Status Code: {response.statusCode}')
+print(f'Count: {response.data.count}')
+
+for record in response.data.records:
+    print(f'AppId: {record.appId}')
+    print(f'RecordId: {record.recordId}')
+
+    for field in record.fields:
+        print(f'Type: {field.type}')
+        print(f'FieldId: {field.fieldId}')
+        print(f'Value: {field.GetResultValueString()}')
+```
+
+You can also specify what field values to return and in what format (Raw vs. Formatted) to return them.
+
+```python
+from Models import GetBatchRecordsRequest
+from Enums import DataFormat
+
+request = GetBatchRecordsRequest(
+    appId=195, 
+    recordIds=[1, 2, 3],
+    fieldIds=[9686],
+    dataFormat=DataFormat.Formatted.name)
+
+response = client.GetRecordsByIds(request)
+
+print(f'Status Code: {response.statusCode}')
+print(f'Count: {response.data.count}')
+
+for record in response.data.records:
+    print(f'AppId: {record.appId}')
+    print(f'RecordId: {record.recordId}')
+
+    for field in record.fields:
+        print(f'Type: {field.type}')
+        print(f'FieldId: {field.fieldId}')
+        print(f'Value: {field.GetResultValueString()}')
 ```
 
 #### Query Records
