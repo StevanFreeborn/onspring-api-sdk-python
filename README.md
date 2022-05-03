@@ -317,12 +317,13 @@ fileName = os.path.basename(filePath)
 contentType = mimetypes.guess_type(filePath)
 
 request = SaveFileRequest(
-    60, 
-    6989, 
+    recordId=60, 
+    fieldId=6989, 
     fileName,
     filePath, 
     contentType, 
-    'Initial revision')
+    notes='Initial revision',
+    modifiedDate=datetime.now())
 
 response = client.SaveFile(request)
 
