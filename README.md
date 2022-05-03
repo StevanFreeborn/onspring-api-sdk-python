@@ -632,7 +632,59 @@ For further details on constructing the `filter` parameter please refer to the [
 
 #### Add or Update A Record
 
+You can add a record by not providing a record id value. If successful will return the id of the added record.
+
 ```python
+from Models import StringFieldValue, GuidFieldValue, DateFieldValue, IntegerListValue, Record
+
+fields = []
+
+status = uuid.UUID('4118d53a-9121-4345-8682-07f23d606daa')
+dueDate = datetime.utcnow()
+
+fields.append(StringFieldValue(6983, 'Test Task via API'))
+fields.append(StringFieldValue(6984, 'This is a task.'))
+fields.append(GuidFieldValue(6986, status))
+fields.append(DateFieldValue(6985, dueDate))
+fields.append(IntegerListValue(6987, [4]))
+
+record = Record(
+    appId=195, 
+    fields)
+
+response = client.AddOrUpdateRecord(record)
+
+print(f'Status Code: {response.statusCode}')
+print(f'Id: {response.data.id}')
+for warning in response.data.warnings:
+    print(f'Warning: {warning}')
+```
+
+You can update a record by providing its id. If successful will return id of record updated.
+
+```python
+fields = []
+
+status = uuid.UUID('1c1c5f7e-cd03-4b70-9790-0f83b24b5863')
+dueDate = datetime.utcnow()
+
+fields.append(StringFieldValue(6983, 'Test Task via API'))
+fields.append(StringFieldValue(6984, 'This is a task.'))
+fields.append(GuidFieldValue(6986, status))
+fields.append(DateFieldValue(6985, dueDate))
+fields.append(IntegerListValue(6987, [4]))
+
+record = Record(
+    appId=195, 
+    fields, 
+    recordId=103)
+
+response = client.AddOrUpdateRecord(record)
+
+print(f'Status Code: {response.statusCode}')
+print(f'Id: {response.data.id}')
+for warning in response.data.warnings:
+    print(f'Warning: {warning}')
 ```
 
 #### Delete Records By Ids

@@ -1,17 +1,8 @@
-filePath = 'C:\\Users\\sfree\\Documents\\Temp\\Test Attachment.txt'
-# fileName = os.path.basename(filePath)
-# contentType = mimetypes.guess_type(filePath)
+record = Record(195,fields)
 
-# request = SaveFileRequest(
-#     60, 
-#     6989, 
-#     fileName,
-#     filePath, 
-#     contentType, 
-#     'Initial revision',
-#     datetime.now())
+response = client.AddOrUpdateRecord(record)
 
-# response = client.SaveFile(request)
-
-# print(f'Status Code: {response.statusCode}')
-# print(f'File Id: {response.data.id}')
+print(f'Status Code: {response.statusCode}')
+print(f'Id: {response.data.id}')
+for warning in response.data.warnings:
+    print(f'Warning: {warning}')

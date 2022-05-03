@@ -1347,7 +1347,7 @@ class OnspringClient:
 
         record.fields = fieldsDict
 
-        requestData = json.dumps(record.__dict__)
+        requestData = json.dumps(record.__dict__, default=str)
 
         response = requests.request(
             'PUT',
