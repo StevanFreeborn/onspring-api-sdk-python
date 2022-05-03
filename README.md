@@ -11,7 +11,7 @@ This SDK was developed independently using their existing C# SDK as a guide and 
 
 ### Python
 
-Requires use of Python 3.6.0.
+Requires use of Python 3.6.0 or later.
 
 ### Requests
 
