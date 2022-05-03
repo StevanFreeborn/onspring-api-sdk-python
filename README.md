@@ -5,7 +5,7 @@ The python SDK for **version 2** of the Onspring API is meant to simplify develo
 **Note:**
 This is an unofficial SDK for the Onspring API. It was not built in consultation with Onspring Technologies LLC or a member of their development team.
 
-This SDK was developed independently using their existing C# SDK as a guide and with the intention of making development of integrations done in Python with an Onspring instance quicker and more convenient.
+This SDK was developed independently using their existing C# SDK, their swagger page, and api documentation with the intention of making development of integrations done in Python with an Onspring instance quicker and more convenient.
 
 ## Dependencies
 
