@@ -348,12 +348,49 @@ print(f'Message: {response.message}')
 
 #### Add Or Update List Value
 
+To add a list value don't provide an id value.
+
 ```python
+from Models import ListItemRequest
+
+request = ListItemRequest(
+        listId=906, 
+        name='Not Started', 
+        id='', 
+        numericValue=0, 
+        color='#ffffff')
+
+response = client.AddOrUpdateListItem(request)
+
+print(f'Status Code: {response.statusCode}')
+print(f'Id: {response.data.id}')
+```
+
+To update a list value provide an id value.
+
+```python
+from Models import ListItemRequest
+
+request = ListItemRequest(
+        listId=906, 
+        name='Pending', 
+        id='4118d53a-9121-4345-8682-07f23d606daa', 
+        numericValue=0, 
+        color='#ffffff')
+
+response = client.AddOrUpdateListItem(request)
+
+print(f'Status Code: {response.statusCode}')
+print(f'Id: {response.data.id}')
 ```
 
 #### Delete List Value
 
 ```python
+response = client.DeleteListItem(listId=906, itemId='36f94d8c-2b9d-465e-9ad1-ede04109efc9')
+
+print(f'Status Code: {response.statusCode}')
+print(f'Message: {response.message}')
 ```
 
 ### Records

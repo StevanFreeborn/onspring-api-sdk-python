@@ -1,3 +1,4 @@
+from uuid import UUID
 import requests
 import json
 import re
@@ -853,7 +854,7 @@ class OnspringClient:
             response.status_code,
             raw=response)
 
-    def DeleteListItem(self, listId: int, itemId: uuid):
+    def DeleteListItem(self, listId: int, itemId: UUID):
         """
         Delete a list value by its id and it's parent list id.
 
