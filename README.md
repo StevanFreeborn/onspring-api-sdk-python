@@ -154,8 +154,7 @@ print(f'href: {response.data.app.href}')
 Returns a collection of Onspring apps and/or surveys according to provided ids.
 
 ```python
-appIds = [195, 240]
-response = client.GetAppsByIds(appIds)
+response = client.GetAppsByIds([195, 240])
 
 print(f'Status Code: {response.statusCode}')
 print(f'Count: {response.data.count}')
@@ -178,7 +177,70 @@ for app in response.data.apps:
 
 ### Get Fields By App Id
 
+Returns a paged collection of apps and/or surveys that can be paged through. By default the page size is 50 and page number is 1.
+
 ```python
+response = client.GetFieldById(9686)
+
+print(f'Status Code: {response.statusCode}')
+
+
+if response.isSuccessful:
+    PrintField(response.data.field)
+else:
+    print(f'Message: {response.message}')
+```
+
+You can set your own page size and page number (max is 1,000) as well.
+
+```python
+pagingRequest = PagingRequest(1, 100)
+response = client.GetFieldById(9686, pagingRequest)
+
+print(f'Status Code: {response.statusCode}')
+
+
+if response.isSuccessful:
+    PrintField(response.data.field)
+else:
+    print(f'Message: {response.message}')
+```
+
+Example `PrintField` method:
+
+```python
+def PrintField(field: Field):
+    
+    print('Field:')
+    print(f' Id: {field.id}')
+    print(f' App Id: {field.appId}')
+    print(f' Name: {field.name}')
+    print(f' Type: {field.type}')
+    print(f' Status: {field.status}')
+    print(f' IsRequired: {field.isRequired}')
+    print(f' IsUnique: {field.isUnique}')
+
+    if field.type == 'Formula':
+
+        print(f' Output Type: {field.outputType}')
+
+        if field.outputType == 'ListValue':
+
+            print(f' Multiplicity: {field.multiplicity}')
+            print(' Values:')
+
+            for value in field.values:
+
+                print(f'  {value.AsString()}')
+
+    if field.type == 'List':
+
+        print(f' Multiplicity: {field.multiplicity}')
+        print(' Values:')
+
+        for value in field.values:
+
+            print(f'  {value.AsString()}')
 ```
 
 ### Get File Info By Id
