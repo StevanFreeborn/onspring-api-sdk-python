@@ -154,7 +154,7 @@ print(f'href: {response.data.app.href}')
 Returns a collection of Onspring apps and/or surveys according to provided ids.
 
 ```python
-appIds = [1,2,3,4,5]
+appIds = [195, 240]
 response = client.GetAppsByIds(appIds)
 
 print(f'Status Code: {response.statusCode}')
