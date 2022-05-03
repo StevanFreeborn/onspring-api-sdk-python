@@ -78,7 +78,7 @@ Each `OnspringClient` method - aside from `CanConnect` - returns an `ApiResponse
 
 The goal with this `ApiResponse` object is to provide the flexibility to do with the response what you'd like as well as already having the raw JSON response deserialized to python objects.
 
-If you do want to handle and/or manipulate the response object yourself you will want to use the value of the 'ApiResponse''s `raw` property which will be a [`Response` object](https://docs.python-requests.org/en/latest/user/advanced/#request-and-response-objects) from the Requests library.
+If you do want to handle and/or manipulate the response object yourself you will want to use the value of the `ApiResponse`'s `raw` property which will be a [`Response`](https://docs.python-requests.org/en/latest/user/advanced/#request-and-response-objects) object from the Requests library.
 
 ## Full API Documentation
 
