@@ -224,6 +224,13 @@ PrintField(response.data.field)
 #### Get Fields By Ids
 
 ```python
+response = client.GetFieldsByIds([9686, 9687])
+
+print(f'Status Code: {response.statusCode}')
+print(f'Count: {response.data.count}')
+
+for field in response.data.fields:
+    PrintField(field)
 ```
 
 #### Get Fields By App Id
