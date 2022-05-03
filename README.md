@@ -223,6 +223,8 @@ PrintField(response.data.field)
 
 #### Get Fields By Ids
 
+Returns a collection of Onspring fields according to provided ids.
+
 ```python
 response = client.GetFieldsByIds([9686, 9687])
 
@@ -235,7 +237,36 @@ for field in response.data.fields:
 
 #### Get Fields By App Id
 
+Returns a paged collection of fields that can be paged through. By default the page size is 50 and page number is 1.
+
 ```python
+response = client.GetFieldsByAppId(195)
+    
+    print(f'Status Code: {response.statusCode}')
+    print(f'Page Size: {response.data.pageSize}')
+    print(f'Page Number: {response.data.pageNumber}')
+    print(f'Total Pages: {response.data.totalPages}')
+    print(f'Total Records: {response.data.totalRecords}')
+
+    for field in response.data.fields:
+        PrintField(field)
+```
+
+You can set your own page size and page number (max is 1,000) as well.
+
+```python
+pagingRequest = PagingRequest(1, 100)
+
+response = client.GetFieldsByAppId(195, pagingRequest)
+    
+    print(f'Status Code: {response.statusCode}')
+    print(f'Page Size: {response.data.pageSize}')
+    print(f'Page Number: {response.data.pageNumber}')
+    print(f'Total Pages: {response.data.totalPages}')
+    print(f'Total Records: {response.data.totalRecords}')
+
+    for field in response.data.fields:
+        PrintField(field)
 ```
 
 ### Files
