@@ -125,6 +125,8 @@ for app in response.data.apps:
 You can set your own page size and page number (max is 1,000) as well.
 
 ```python
+from Models import PagingRequest
+
 pagingRequest = PagingRequest(1, 100)
 response = client.GetApps(pagingRequest)
   
@@ -255,6 +257,8 @@ response = client.GetFieldsByAppId(appId=195)
 You can set your own page size and page number (max is 1,000) as well.
 
 ```python
+from Models import PagingRequest
+
 pagingRequest = PagingRequest(1, 100)
 
 response = client.GetFieldsByAppId(appId=195, pagingRequest)
@@ -397,12 +401,65 @@ print(f'Message: {response.message}')
 
 #### Get Records By App Id
 
+Returns a paged colletion of records that can be paged through. By default the page size is 50 and page number is 1.
+
 ```python
+request = GetRecordsByAppRequest(appId=195)
+
+response = client.GetRecordsByAppId(request)
+
+print(f'Status Code: {response.statusCode}')
+print(f'Page Size: {response.data.pageSize}')
+print(f'Page Number: {response.data.pageNumber}')
+print(f'Total Pages: {response.data.totalPages}')
+print(f'Total Records: {response.data.totalRecords}')
+
+for record in response.data.records:
+    print(f'AppId: {record.appId}')
+    print(f'RecordId: {record.recordId}')
+
+    for field in record.fields:
+        print(f'Type: {field.type}')
+        print(f'FieldId: {field.fieldId}')
+        print(f'Value: {field.GetResultValueString()}')
+```
+
+You can set your own page size and page number (max is 1,000) as well. In addition to specifying what field values to return and in what format (Raw vs. Formatted) to return them.
+
+```python
+from Models import PagingRequest, GetRecordsByAppRequest
+from Enums import DataFormat 
+
+pagingRequest = PagingRequest(1,10)
+
+request = GetRecordsByAppRequest(
+    appId=195,
+    fieldIds=[9686],
+    dataFormat=DataFormat.Formatted.name,
+    pagingRequest)
+
+response = client.GetRecordsByAppId(request)
+
+print(f'Status Code: {response.statusCode}')
+print(f'Page Size: {response.data.pageSize}')
+print(f'Page Number: {response.data.pageNumber}')
+print(f'Total Pages: {response.data.totalPages}')
+print(f'Total Records: {response.data.totalRecords}')
+
+for record in response.data.records:
+    print(f'AppId: {record.appId}')
+    print(f'RecordId: {record.recordId}')
+
+    for field in record.fields:
+        print(f'Type: {field.type}')
+        print(f'FieldId: {field.fieldId}')
+        print(f'Value: {field.GetResultValueString()}')
 ```
 
 #### Get Record By Id
 
 ```python
+
 ```
 
 #### Delete Record By Id
