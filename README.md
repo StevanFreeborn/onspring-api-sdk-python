@@ -273,6 +273,8 @@ response = client.GetFieldsByAppId(appId=195, pagingRequest)
 
 #### Get File Info By Id
 
+Returns the Onspring file's metadata.
+
 ```python
 response = client.GetFileInfoById(recordId=1, fieldId=6990, fileId=274)
 
@@ -287,6 +289,8 @@ print(f'File Href: {response.data.fileInfo.fileHref}')
 ```
 
 #### Get File By Id
+
+Returns the file itself.
 
 ```python
 response = client.GetFileById(recordId=1, fieldId=6990, fileId=274)
