@@ -628,7 +628,7 @@ for record in response.data.records:
         print(f'Value: {field.GetResultValueString()}')
 ```
 
-For further details on constructing a filter please refer to the [documentation](https://software.onspring.com/hubfs/Training/Admin%20Guide%20-%20v2%20API.pdf) for v2 of the Onspring API.
+For further details on constructing the `filter` parameter please refer to the [documentation](https://software.onspring.com/hubfs/Training/Admin%20Guide%20-%20v2%20API.pdf) for v2 of the Onspring API.
 
 #### Add or Update A Record
 
