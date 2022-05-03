@@ -9,6 +9,12 @@ This SDK was developed independently using their existing C# SDK as a guide and 
 
 ## Dependencies
 
+### Python
+
+Requires use of Python 3.6.0.
+
+### Requests
+
 All methods for the `OnspringClient` make use of the [Requests](https://docs.python-requests.org/en/latest/) library to interact with the endpoints of version 2 of the Onspring API.
 
 ## Installation
