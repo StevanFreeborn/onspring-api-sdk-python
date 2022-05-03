@@ -605,7 +605,7 @@ value = '\'Test Task 5\''
 
 request = QueryRecordsRequest(
     appId=195, 
-    filter=f'{fieldId} {operator} {value}'.
+    filter=f'{fieldId} {operator} {value}',
     fieldIds=[9686],
     dataFormat=DataFormat.Formatted.name,
     pagingRequest)
