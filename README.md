@@ -184,7 +184,6 @@ response = client.GetFieldById(9686)
 
 print(f'Status Code: {response.statusCode}')
 
-
 if response.isSuccessful:
     PrintField(response.data.field)
 else:
@@ -198,7 +197,6 @@ pagingRequest = PagingRequest(1, 100)
 response = client.GetFieldById(9686, pagingRequest)
 
 print(f'Status Code: {response.statusCode}')
-
 
 if response.isSuccessful:
     PrintField(response.data.field)
