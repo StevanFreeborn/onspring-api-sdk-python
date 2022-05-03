@@ -88,7 +88,9 @@ You may wish to refer to the full [Onspring API documentation](https://software.
 
 The examples that follow assume you have created an `OnspringClient` as described in the **Start Coding** section.
 
-### Verify connectivity
+### Connectivity
+
+#### Verify connectivity
 
 ```python
 canConnect = client.CanConnect()
@@ -99,7 +101,9 @@ else:
     print('Attempt to connect failed')
 ```
 
-### Get Apps
+### Apps
+
+#### Get Apps
 
 Returns a paged collection of apps and/or surveys that can be paged through. By default the page size is 50 and page number is 1.
 
@@ -136,7 +140,7 @@ for app in response.data.apps:
     print(f'href: {app.href}')
 ```
 
-### Get App By Id
+#### Get App By Id
 
 Returns an Onspring app or survey according to provided id.
 
@@ -149,7 +153,7 @@ print(f'Name: {response.data.app.name}')
 print(f'href: {response.data.app.href}')
 ```
 
-### Get Apps By Ids
+#### Get Apps By Ids
 
 Returns a collection of Onspring apps and/or surveys according to provided ids.
 
@@ -165,46 +169,11 @@ for app in response.data.apps:
     print(f'href: {app.href}')
 ```
 
-### Get Field By Id
+### Fields
 
-```python
-```
+#### Helpers
 
-### Get Fields By Ids
-
-```python
-```
-
-### Get Fields By App Id
-
-Returns a paged collection of apps and/or surveys that can be paged through. By default the page size is 50 and page number is 1.
-
-```python
-response = client.GetFieldById(9686)
-
-print(f'Status Code: {response.statusCode}')
-
-if response.isSuccessful:
-    PrintField(response.data.field)
-else:
-    print(f'Message: {response.message}')
-```
-
-You can set your own page size and page number (max is 1,000) as well.
-
-```python
-pagingRequest = PagingRequest(1, 100)
-response = client.GetFieldById(9686, pagingRequest)
-
-print(f'Status Code: {response.statusCode}')
-
-if response.isSuccessful:
-    PrintField(response.data.field)
-else:
-    print(f'Message: {response.message}')
-```
-
-Example `PrintField` method:
+Example `PrintField` method referenced in following examples.
 
 ```python
 def PrintField(field: Field):
@@ -241,74 +210,107 @@ def PrintField(field: Field):
             print(f'  {value.AsString()}')
 ```
 
-### Get File Info By Id
+#### Get Field By Id
+
+Returns a paged collection of apps and/or surveys that can be paged through. By default the page size is 50 and page number is 1.
+
+```python
+response = client.GetFieldById(9686)
+
+print(f'Status Code: {response.statusCode}')
+
+if response.isSuccessful:
+    PrintField(response.data.field)
+else:
+    print(f'Message: {response.message}')
+```
+
+#### Get Fields By Ids
 
 ```python
 ```
 
-### Delete File By Id
+#### Get Fields By App Id
 
 ```python
 ```
 
-### Get File By Id
+### Files
+
+#### Get File Info By Id
 
 ```python
 ```
 
-### Save File
+#### Delete File By Id
 
 ```python
 ```
 
-### Add Or Update List Value
+#### Get File By Id
 
 ```python
 ```
 
-### Delete List Value
-
-### Get Records By App Id
+#### Save File
 
 ```python
 ```
 
-### Get Record By Id
+### Lists
+
+#### Add Or Update List Value
 
 ```python
 ```
 
-### Delete Record By Id
+#### Delete List Value
+
+### Records
+
+#### Get Records By App Id
 
 ```python
 ```
 
-### Get Records By Ids
+#### Get Record By Id
 
 ```python
 ```
 
-### Query Records
+#### Delete Record By Id
 
 ```python
 ```
 
-### Add or Update A Record
+#### Get Records By Ids
 
 ```python
 ```
 
-### Delete Records By Ids
+#### Query Records
 
 ```python
 ```
 
-### Get Report By Id
+#### Add or Update A Record
 
 ```python
 ```
 
-### Get Reports By App Id
+#### Delete Records By Ids
+
+```python
+```
+
+### Reports
+
+#### Get Report By Id
+
+```python
+```
+
+#### Get Reports By App Id
 
 ```python
 ```
