@@ -212,17 +212,13 @@ def PrintField(field: Field):
 
 #### Get Field By Id
 
-Returns a paged collection of apps and/or surveys that can be paged through. By default the page size is 50 and page number is 1.
+Returns an Onspring field according to provided id.
 
 ```python
 response = client.GetFieldById(9686)
 
 print(f'Status Code: {response.statusCode}')
-
-if response.isSuccessful:
-    PrintField(response.data.field)
-else:
-    print(f'Message: {response.message}')
+PrintField(response.data.field)
 ```
 
 #### Get Fields By Ids
