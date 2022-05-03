@@ -458,8 +458,47 @@ for record in response.data.records:
 
 #### Get Record By Id
 
-```python
+Returns an onspring record based on the provided app and record ids.
 
+```python
+from Models import GetRecordByIdRequest
+
+request = GetRecordByIdRequest(appId=195, recordId=60)
+
+response = client.GetRecordById(request)
+
+print(f'Status Code: {response.statusCode}')
+print(f'AppId: {response.data.appId}')
+print(f'RecordId: {response.data.recordId}')
+
+for field in response.data.fields:
+    print(f'Type: {field.type}')
+    print(f'FieldId: {field.fieldId}')
+    print(f'Value: {field.GetResultValueString()}')
+```
+
+You can specify what field values to return and in what format (Raw vs. Formatted) to return them.
+
+```python
+from Models import GetRecordByIdRequest
+from Enums import DataFormat
+
+request = GetRecordByIdRequest(
+    appId=195, 
+    recordId=60,
+    fieldIds=[9686],
+    dataFormat=DataFormat.Formatted.name)
+
+response = client.GetRecordById(request)
+
+print(f'Status Code: {response.statusCode}')
+print(f'AppId: {response.data.appId}')
+print(f'RecordId: {response.data.recordId}')
+
+for field in response.data.fields:
+    print(f'Type: {field.type}')
+    print(f'FieldId: {field.fieldId}')
+    print(f'Value: {field.GetResultValueString()}')
 ```
 
 #### Delete Record By Id
