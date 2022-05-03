@@ -145,7 +145,7 @@ for app in response.data.apps:
 Returns an Onspring app or survey according to provided id.
 
 ```python
-response = client.GetAppById(195)
+response = client.GetAppById(appId=195)
 
 print(f'Status Code: {response.statusCode}')
 print(f'id: {response.data.app.id}')
@@ -158,7 +158,7 @@ print(f'href: {response.data.app.href}')
 Returns a collection of Onspring apps and/or surveys according to provided ids.
 
 ```python
-response = client.GetAppsByIds([195, 240])
+response = client.GetAppsByIds(appIds=[195, 240])
 
 print(f'Status Code: {response.statusCode}')
 print(f'Count: {response.data.count}')
@@ -215,7 +215,7 @@ def PrintField(field: Field):
 Returns an Onspring field according to provided id.
 
 ```python
-response = client.GetFieldById(9686)
+response = client.GetFieldById(fieldId=9686)
 
 print(f'Status Code: {response.statusCode}')
 PrintField(response.data.field)
@@ -226,7 +226,7 @@ PrintField(response.data.field)
 Returns a collection of Onspring fields according to provided ids.
 
 ```python
-response = client.GetFieldsByIds([9686, 9687])
+response = client.GetFieldsByIds(fieldIds=[9686, 9687])
 
 print(f'Status Code: {response.statusCode}')
 print(f'Count: {response.data.count}')
@@ -240,7 +240,7 @@ for field in response.data.fields:
 Returns a paged collection of fields that can be paged through. By default the page size is 50 and page number is 1.
 
 ```python
-response = client.GetFieldsByAppId(195)
+response = client.GetFieldsByAppId(appId=195)
     
     print(f'Status Code: {response.statusCode}')
     print(f'Page Size: {response.data.pageSize}')
@@ -257,7 +257,7 @@ You can set your own page size and page number (max is 1,000) as well.
 ```python
 pagingRequest = PagingRequest(1, 100)
 
-response = client.GetFieldsByAppId(195, pagingRequest)
+response = client.GetFieldsByAppId(appId=195, pagingRequest)
     
     print(f'Status Code: {response.statusCode}')
     print(f'Page Size: {response.data.pageSize}')
@@ -274,7 +274,7 @@ response = client.GetFieldsByAppId(195, pagingRequest)
 #### Get File Info By Id
 
 ```python
-response = client.GetFileInfoById(1, 6990, 274)
+response = client.GetFileInfoById(recordId=1, fieldId=6990, fileId=274)
 
 print(f'Status Code: {response.statusCode}')
 print(f'Name: {response.data.fileInfo.name}')
@@ -289,7 +289,7 @@ print(f'File Href: {response.data.fileInfo.fileHref}')
 #### Get File By Id
 
 ```python
-response = client.GetFileById(1, 6990, 274)
+response = client.GetFileById(recordId=1, fieldId=6990, fileId=274)
 
 print(f'Status Code: {response.statusCode}')
 print(f'Name: {response.data.file.name}')
