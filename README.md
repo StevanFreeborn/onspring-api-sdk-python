@@ -101,8 +101,28 @@ else:
 
 ### Get Apps
 
+Returns a paged collection of apps and/or surveys that can be paged through. By default the page size is 50 and page number is 1.
+
 ```python
 response = client.GetApps()
+  
+print(f'Status Code: {response.statusCode}')
+print(f'Page Size: {response.data.pageSize}')
+print(f'Page Number: {response.data.pageNumber}')
+print(f'Total Pages: {response.data.totalPages}')
+print(f'Total Records: {response.data.totalRecords}')
+
+for app in response.data.apps:
+    print(f'Id: {app.id}')
+    print(f'Name: {app.name}')
+    print(f'href: {app.href}')
+```
+
+You can set your own page size and page number (max is 1,000) as well.
+
+```python
+pagingRequest = PagingRequest(1, 100)
+response = client.GetApps(pagingRequest)
   
 print(f'Status Code: {response.statusCode}')
 print(f'Page Size: {response.data.pageSize}')
@@ -119,6 +139,12 @@ for app in response.data.apps:
 ### Get App By Id
 
 ```python
+response = client.GetAppById(appId)
+
+    print(f'Status Code: {response.statusCode}')
+    print(f'id: {response.data.app.id}')
+    print(f'Name: {response.data.app.name}')
+    print(f'href: {response.data.app.href}')
 ```
 
 ### Get Apps By Ids
