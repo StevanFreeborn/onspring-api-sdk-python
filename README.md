@@ -660,7 +660,7 @@ for warning in response.data.warnings:
     print(f'Warning: {warning}')
 ```
 
-You can update a record by providing its id. If successful will return id of record updated.
+You can update a record by providing its id. If successful will return the id of record updated.
 
 ```python
 fields = []
