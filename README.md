@@ -2,6 +2,11 @@
 
 The python SDK for **version 2** of the Onspring API is meant to simplify development in Python for Onspring customers who want to build integrations with their Onspring instance.
 
+**Note:**
+This is an unofficial SDK for the Onspring API. It was not built in consultation with Onspring Technologies LCC or a member of their development team.
+
+This SDK was developed independently using their existing C# SDK as a guide and with the intention of making development of integrations done in Python with an Onspring instance quicker and more convenient.
+
 ## Installation
 
 Install the SDK using pip:
@@ -84,4 +89,101 @@ for app in response.data.apps:
     print(f'Id: {app.id}')
     print(f'Name: {app.name}')
     print(f'href: {app.href}')
+```
+
+### Get App By Id
+
+```python
+```
+
+### Get Apps By Ids
+
+```python
+```
+
+### Get Field By Id
+
+```python
+```
+
+### Get Fields By Ids
+
+```python
+```
+
+### Get Fields By App Id
+
+```python
+```
+
+### Get File Info By Id
+
+```python
+```
+
+### Delete File By Id
+
+```python
+```
+
+### Get File By Id
+
+```python
+```
+
+### Save File
+
+```python
+```
+
+### Add Or Update List Value
+
+```python
+```
+
+### Delete List Value
+
+### Get Records By App Id
+
+```python
+```
+
+### Get Record By Id
+
+```python
+```
+
+### Delete Record By Id
+
+```python
+```
+
+### Get Records By Ids
+
+```python
+```
+
+### Query Records
+
+```python
+```
+
+### Add or Update A Record
+
+```python
+```
+
+### Delete Records By Ids
+
+```python
+```
+
+### Get Report By Id
+
+```python
+```
+
+### Get Reports By App Id
+
+```python
 ```

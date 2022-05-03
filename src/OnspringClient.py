@@ -687,7 +687,6 @@ class OnspringClient:
             result = re.search('filename=.*;', fileName).group()
             
             # TODO: implement attempting to build file name using content-type header
-            # TODO: implement default filename value
             if result:
                 fileName = re.sub('filename=|\'|;', '', result)
             else:
