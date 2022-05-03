@@ -477,7 +477,7 @@ for field in response.data.fields:
     print(f'Value: {field.GetResultValueString()}')
 ```
 
-You can specify what field values to return and in what format (Raw vs. Formatted) to return them.
+You can also specify what field values to return and in what format (Raw vs. Formatted) to return them.
 
 ```python
 from Models import GetRecordByIdRequest
