@@ -145,7 +145,7 @@ for app in response.data.apps:
 Returns an Onspring app or survey according to provided id.
 
 ```python
-response = client.GetAppById(appId)
+response = client.GetAppById(195)
 
 print(f'Status Code: {response.statusCode}')
 print(f'id: {response.data.app.id}')
