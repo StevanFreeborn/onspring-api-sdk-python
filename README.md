@@ -138,18 +138,32 @@ for app in response.data.apps:
 
 ### Get App By Id
 
+Returns an Onspring app or survey according to provided id.
+
 ```python
 response = client.GetAppById(appId)
 
-    print(f'Status Code: {response.statusCode}')
-    print(f'id: {response.data.app.id}')
-    print(f'Name: {response.data.app.name}')
-    print(f'href: {response.data.app.href}')
+print(f'Status Code: {response.statusCode}')
+print(f'id: {response.data.app.id}')
+print(f'Name: {response.data.app.name}')
+print(f'href: {response.data.app.href}')
 ```
 
 ### Get Apps By Ids
 
+Returns a collection of Onspring apps and/or surveys according to provided ids.
+
 ```python
+appIds = [1,2,3,4,5]
+response = client.GetAppsByIds(appIds)
+
+print(f'Status Code: {response.statusCode}')
+print(f'Count: {response.data.count}')
+
+for app in response.data.apps:
+    print(f'Id: {app.id}')
+    print(f'Name: {app.name}')
+    print(f'href: {app.href}')
 ```
 
 ### Get Field By Id
