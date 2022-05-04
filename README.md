@@ -21,7 +21,7 @@ All methods for the `OnspringClient` make use of the [Requests](https://docs.pyt
 
 Install the SDK using pip:
 
-`pip install onspring-api-sdk-python`
+`pip install OnspringApiSdk`
 
 ## API Key
 
