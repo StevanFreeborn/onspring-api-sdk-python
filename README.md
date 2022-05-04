@@ -690,16 +690,94 @@ for warning in response.data.warnings:
 #### Delete Records By Ids
 
 ```python
+from Models import DeleteBatchRecordsRequest
+
+request = DeleteBatchRecordsRequest(appId=195, recordIds=[1, 2, 3])
+
+response = client.DeleteRecordsByIds(request)
+
+print(f'Status Code: {response.statusCode}')
+print(f'Message: {response.message}')
 ```
 
 ### Reports
 
 #### Get Report By Id
 
+Returns the report for the provided id.
+
 ```python
+from Models import GetReportByIdRequest
+
+request = GetReportByIdRequest(reportId=53)
+
+response = client.GetReportById(request)
+
+print(f'Status Code: {response.statusCode}')
+print('Columns:')
+print(f'{", ".join(response.data.columns)}')
+print('Rows:')
+for row in response.data.rows:
+    print(f'Record Id {row.recordId}: {", ".join([str(cell) for cell in row.cells])}')
+```
+
+You can also specify the format of the data in the report as well as whether you are requesting the report's data or its chart data.
+
+```python
+from Models import GetReportByIdRequest
+from Enums import DataFormat, ReportDataType
+
+request = GetReportByIdRequest(
+    reportId=53,
+    apiDataFormat=DataFormat.Formatted.name,
+    dataFormat=ReportDataType.ChartData.name)
+
+response = client.GetReportById(request)
+
+print(f'Status Code: {response.statusCode}')
+print('Columns:')
+print(f'{", ".join(response.data.columns)}')
+print('Rows:')
+for row in response.data.rows:
+    print(f'Record Id {row.recordId}: {", ".join([str(cell) for cell in row.cells])}')
 ```
 
 #### Get Reports By App Id
 
+Returns a paged collection of reports that can be paged through. By default the page size is 50 and page number is 1.
+
 ```python
+response = client.GetReportsByAppId(appId=195)
+
+print(f'Status Code: {response.statusCode}')
+print(f'App Id: {appId}')
+print('Reports:')
+
+for report in response.data.reports:
+    print(f' Id: {report.id}')
+    print(f' Name: {report.name}')
+    print(f' Description: {report.description}')
+```
+
+You can set your own page size and page number (max is 1,000) as well.
+
+```python
+from Models import PagingRequest
+
+pagingRequest = PagingRequest(1,10)
+
+response = client.GetReportsByAppId(appId=195, pagingRequest)
+
+print(f'Status Code: {response.statusCode}')
+print(f'Page Number: {response.data.pageNumber}')
+print(f'Page Number: {response.data.pageSize}')
+print(f'Page Number: {response.data.totalPages}')
+print(f'Page Number: {response.data.totalRecords}')
+print(f'App Id: {appId}')
+print('Reports:')
+
+for report in response.data.reports:
+    print(f' Id: {report.id}')
+    print(f' Name: {report.name}')
+    print(f' Description: {report.description}')
 ```
