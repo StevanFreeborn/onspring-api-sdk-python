@@ -55,7 +55,7 @@ url = https://api.onspring.com
 Example constructing `OnspringClient`:
 
 ```python
-from OnspringClient import OnspringClient
+from OnspringApiSdk.OnspringClient import OnspringClient
 from configparser import ConfigParser
 
 cfg = ConfigParser()
