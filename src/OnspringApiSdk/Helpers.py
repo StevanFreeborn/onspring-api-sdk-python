@@ -1,5 +1,5 @@
 from datetime import datetime
-from Enums import *
+from OnspringApiSdk.Enums import *
 
 def parseDate(date: str):
 

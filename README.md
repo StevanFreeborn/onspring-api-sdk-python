@@ -125,7 +125,7 @@ for app in response.data.apps:
 You can set your own page size and page number (max is 1,000) as well.
 
 ```python
-from Models import PagingRequest
+from OnspringApiSdk.Models import PagingRequest
 
 pagingRequest = PagingRequest(1, 100)
 response = client.GetApps(pagingRequest)
@@ -257,7 +257,7 @@ response = client.GetFieldsByAppId(appId=195)
 You can set your own page size and page number (max is 1,000) as well.
 
 ```python
-from Models import PagingRequest
+from OnspringApiSdk.Models import PagingRequest
 
 pagingRequest = PagingRequest(1, 100)
 
@@ -316,7 +316,7 @@ print(f'File Location: {filePath}')
 #### Save File
 
 ```python
-from Models import SaveFileRequest
+from OnspringApiSdk.Models import SaveFileRequest
 import os
 import mimetypes
 
@@ -355,7 +355,7 @@ print(f'Message: {response.message}')
 To add a list value don't provide an id value.
 
 ```python
-from Models import ListItemRequest
+from OnspringApiSdk.Models import ListItemRequest
 
 request = ListItemRequest(
         listId=906, 
@@ -373,7 +373,7 @@ print(f'Id: {response.data.id}')
 To update a list value provide an id value.
 
 ```python
-from Models import ListItemRequest
+from OnspringApiSdk.Models import ListItemRequest
 
 request = ListItemRequest(
         listId=906, 
@@ -427,8 +427,8 @@ for record in response.data.records:
 You can set your own page size and page number (max is 1,000) as well. In addition to specifying what field values to return and in what format (Raw vs. Formatted) to return them.
 
 ```python
-from Models import PagingRequest, GetRecordsByAppRequest
-from Enums import DataFormat 
+from OnspringApiSdk.Models import PagingRequest, GetRecordsByAppRequest
+from OnspringApiSdk.Enums import DataFormat 
 
 pagingRequest = PagingRequest(1,10)
 
@@ -461,7 +461,7 @@ for record in response.data.records:
 Returns an onspring record based on the provided app and record ids.
 
 ```python
-from Models import GetRecordByIdRequest
+from OnspringApiSdk.Models import GetRecordByIdRequest
 
 request = GetRecordByIdRequest(appId=195, recordId=60)
 
@@ -480,8 +480,8 @@ for field in response.data.fields:
 You can also specify what field values to return and in what format (Raw vs. Formatted) to return them.
 
 ```python
-from Models import GetRecordByIdRequest
-from Enums import DataFormat
+from OnspringApiSdk.Models import GetRecordByIdRequest
+from OnspringApiSdk.Enums import DataFormat
 
 request = GetRecordByIdRequest(
     appId=195, 
@@ -515,7 +515,7 @@ print(f'Message: {response.message}')
 Returns a collection of Onspring records based on the provided appId and recordIds.
 
 ```python
-from Models import GetBatchRecordsRequest
+from OnspringApiSdk.Models import GetBatchRecordsRequest
 
 request = GetBatchRecordsRequest(appId=195, recordIds=[1, 2, 3])
 
@@ -537,8 +537,8 @@ for record in response.data.records:
 You can also specify what field values to return and in what format (Raw vs. Formatted) to return them.
 
 ```python
-from Models import GetBatchRecordsRequest
-from Enums import DataFormat
+from OnspringApiSdk.Models import GetBatchRecordsRequest
+from OnspringApiSdk.Enums import DataFormat
 
 request = GetBatchRecordsRequest(
     appId=195, 
@@ -566,7 +566,7 @@ for record in response.data.records:
 Returns a paged colletion of records based on a criteria that can be paged through. By default the page size is 50 and page number is 1.
 
 ```python
-from Models import QueryRecordsRequest
+from OnspringApiSdk.Models import QueryRecordsRequest
 
 fieldId = 6983
 operator = 'eq'
@@ -595,8 +595,8 @@ for record in response.data.records:
 You can set your own page size and page number (max is 1,000) as well. In addition to specifying what field values to return and in what format (Raw vs. Formatted) to return them.
 
 ```python
-from Models import PagingRequest, QueryRecordsRequest
-from Enums import DataFormat
+from OnspringApiSdk.Models import PagingRequest, QueryRecordsRequest
+from OnspringApiSdk.Enums import DataFormat
 
 pagingRequest = PagingRequest(1, 10)
 fieldId = 6983
@@ -635,7 +635,7 @@ For further details on constructing the `filter` parameter please refer to the [
 You can add a record by not providing a record id value. If successful will return the id of the added record.
 
 ```python
-from Models import StringFieldValue, GuidFieldValue, DateFieldValue, IntegerListValue, Record
+from OnspringApiSdk.Models import StringFieldValue, GuidFieldValue, DateFieldValue, IntegerListValue, Record
 
 fields = []
 
@@ -663,6 +663,8 @@ for warning in response.data.warnings:
 You can update a record by providing its id. If successful will return the id of record updated.
 
 ```python
+from OnspringApiSdk.Models import StringFieldValue, GuidFieldValue, DateFieldValue, IntegerListValue, Record
+
 fields = []
 
 status = uuid.UUID('1c1c5f7e-cd03-4b70-9790-0f83b24b5863')
@@ -690,7 +692,7 @@ for warning in response.data.warnings:
 #### Delete Records By Ids
 
 ```python
-from Models import DeleteBatchRecordsRequest
+from OnspringApiSdk.Models import DeleteBatchRecordsRequest
 
 request = DeleteBatchRecordsRequest(appId=195, recordIds=[1, 2, 3])
 
@@ -707,7 +709,7 @@ print(f'Message: {response.message}')
 Returns the report for the provided id.
 
 ```python
-from Models import GetReportByIdRequest
+from OnspringApiSdk.Models import GetReportByIdRequest
 
 request = GetReportByIdRequest(reportId=53)
 
@@ -724,8 +726,8 @@ for row in response.data.rows:
 You can also specify the format of the data in the report as well as whether you are requesting the report's data or its chart data.
 
 ```python
-from Models import GetReportByIdRequest
-from Enums import DataFormat, ReportDataType
+from OnspringApiSdk.Models import GetReportByIdRequest
+from OnspringApiSdk.Enums import DataFormat, ReportDataType
 
 request = GetReportByIdRequest(
     reportId=53,
@@ -762,7 +764,7 @@ for report in response.data.reports:
 You can set your own page size and page number (max is 1,000) as well.
 
 ```python
-from Models import PagingRequest
+from OnspringApiSdk.Models import PagingRequest
 
 pagingRequest = PagingRequest(1,10)
 

@@ -1,10 +1,10 @@
 import datetime
 import uuid
 
-from Enums import *
+from OnspringApiSdk.Enums import *
 from decimal import Decimal
 from datetime import datetime
-from Helpers import parseDate
+from OnspringApiSdk.Helpers import parseDate
 
 # generic
 

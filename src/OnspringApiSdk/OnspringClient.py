@@ -2,8 +2,8 @@ import requests
 import json
 import re
 
-from Endpoints import *
-from Models import *
+from OnspringApiSdk.Endpoints import *
+from OnspringApiSdk.Models import *
 
 class OnspringClient:
     """
