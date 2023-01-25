@@ -5,26 +5,9 @@ from OnspringApiSdk.Enums import *
 from decimal import Decimal
 from datetime import datetime
 from OnspringApiSdk.Helpers import parseDate
+from requests import Response
 
-# generic
-
-class ApiResponse:
-    """
-    An object to represent a response to a request made by an `OnspringClient`.
-
-    Attributes:
-        statusCode (`int`): The http status code of the response.
-        data: If the request was successful will contain the response data deserialized to custom python objects.
-        message (`str`): A message that may provide more detail about the requests success or failure.
-        raw (`requests.Response`): Exposes the raw response object of the request if you'd like to handle it directly.
-    """
-
-    def __init__(self, statusCode=None, data=None, message=None, raw=None):
-        self.statusCode = statusCode
-        self.isSuccessful = int(statusCode) < 400
-        self.data = data
-        self.message = message
-        self.raw = raw
+# paging
 
 class PagingRequest:
     """
@@ -36,8 +19,8 @@ class PagingRequest:
     """
 
     def __init__(self, pageNumber: int, pageSize: int):
-        self.pageNumber = pageNumber
-        self.pageSize = pageSize
+        self.pageNumber:int = pageNumber
+        self.pageSize:int = pageSize
 
 #app specific
 
@@ -52,9 +35,9 @@ class App:
     """
 
     def __init__(self, href: str, id: int, name: str):
-        self.href = href
-        self.id = id
-        self.name = name
+        self.href:str = href
+        self.id:int = id
+        self.name:str = name
 
 class GetAppsResponse:
     """
@@ -69,11 +52,11 @@ class GetAppsResponse:
     """
 
     def __init__(self, pageNumber: int, pageSize: int, totalPages:int , totalRecords: int, apps: list[App]):
-        self.pageNumber = pageNumber
-        self.pageSize = pageSize
-        self.totalPages = totalPages
-        self.totalRecords = totalRecords
-        self.apps = apps
+        self.pageNumber:int = pageNumber
+        self.pageSize:int = pageSize
+        self.totalPages:int = totalPages
+        self.totalRecords:int = totalRecords
+        self.apps:list[App] = apps
 
 class GetAppByIdResponse:
     """
@@ -84,7 +67,7 @@ class GetAppByIdResponse:
     """
 
     def __init__(self, app: App):
-        self.app = app
+        self.app:App = app
 
 class GetAppsByIdsResponse:
     """
@@ -96,8 +79,8 @@ class GetAppsByIdsResponse:
     """
 
     def __init__(self, count: int, apps: list[App]):
-        self.count = count
-        self.apps = apps
+        self.count:int = count
+        self.apps:list[App] = apps
 
 # field specific
 
@@ -114,18 +97,18 @@ class ListValue:
     """
 
     def __init__(self, id: int, name: str, sortOrder: int, numericValue: Decimal, color: str):
-        self.id = id
-        self.name = name
-        self.sortOrder = sortOrder
+        self.id:int = id
+        self.name:str = name
+        self.sortOrder:int = sortOrder
 
         if numericValue != None:
-            self.numericValue = Decimal(numericValue)
+            self.numericValue:Decimal = Decimal(numericValue)
         else:
-            self.numericValue = numericValue
+            self.numericValue:Decimal = numericValue
         
-        self.color = color
+        self.color:str = color
 
-    def AsString(self):
+    def AsString(self) -> str:
         """
         Gets the list value as a comma separated string of it's properties and their values.
 
@@ -170,17 +153,17 @@ class Field:
         outputType: str=None
         ):
 
-        self.id = id
-        self.appId = appId
-        self.name = name
-        self.type = type
-        self.status = status
-        self.isRequired = isRequired
-        self.isUnique = isUnique
-        self.listId = listId
-        self.values = values
-        self.outputType = outputType
-        self.multiplicity = multiplicity
+        self.id:int = id
+        self.appId:int = appId
+        self.name:str = name
+        self.type:str = type
+        self.status:str = status
+        self.isRequired:bool = isRequired
+        self.isUnique:bool = isUnique
+        self.listId:int = listId
+        self.values:list[ListValue] = values
+        self.outputType:str = outputType
+        self.multiplicity:str = multiplicity
 
 class GetFieldByIdResponse:
     """
@@ -191,7 +174,7 @@ class GetFieldByIdResponse:
     """
 
     def __init__(self, field: Field):
-        self.field = field
+        self.field:Field = field
 
 class GetFieldsByIdsResponse:
     """
@@ -203,8 +186,8 @@ class GetFieldsByIdsResponse:
     """
 
     def __init__(self, count: int, fields: list[Field]):
-        self.count = count
-        self.fields = fields
+        self.count:int = count
+        self.fields:list[Field] = fields
 
 class GetFieldsByAppIdResponse:
     """
@@ -219,11 +202,11 @@ class GetFieldsByAppIdResponse:
     """
 
     def __init__(self, pageNumber: int, pageSize: int, totalPages: int, totalRecords: int, fields: list[Field]):
-        self.pageNumber = pageNumber
-        self.pageSize = pageSize
-        self.totalPages = totalPages
-        self.totalRecords = totalRecords
-        self.fields = fields
+        self.pageNumber:int = pageNumber
+        self.pageSize:int = pageSize
+        self.totalPages:int = totalPages
+        self.totalRecords:int = totalRecords
+        self.fields:list[Field] = fields
 
 # file specific
 
@@ -239,10 +222,10 @@ class File:
     """
 
     def __init__(self, name: str, contentType: str, contentLength: int, content: bytes):
-        self.name = name
-        self.contentType = contentType
-        self.contentLength = contentLength
-        self.content = content
+        self.name:str = name
+        self.contentType:str = contentType
+        self.contentLength:int = contentLength
+        self.content:bytes = content
 
 class FileInfo:
     """
@@ -259,13 +242,13 @@ class FileInfo:
     """
 
     def __init__(self, type: str, contentType: str, name: str, createdDate: datetime, modifiedDate: datetime, owner: str, fileHref: str):
-        self.type = type
-        self.contentType = contentType
-        self.name = name
-        self.createdDate = createdDate
-        self.modifiedDate = modifiedDate
-        self.owner = owner
-        self.fileHref = fileHref
+        self.type:str = type
+        self.contentType:str = contentType
+        self.name:str = name
+        self.createdDate:datetime = createdDate
+        self.modifiedDate:datetime = modifiedDate
+        self.owner:str = owner
+        self.fileHref:str = fileHref
 
 class GetFileInfoByIdResponse:
     """
@@ -276,7 +259,7 @@ class GetFileInfoByIdResponse:
     """
 
     def __init__(self, fileInfo: FileInfo):
-        self.fileInfo = fileInfo
+        self.fileInfo:FileInfo = fileInfo
 
 class GetFileByIdResponse:
     """
@@ -287,7 +270,7 @@ class GetFileByIdResponse:
     """
 
     def __init__(self, file: File):
-        self.file = file
+        self.file:File = file
 
 class SaveFileRequest:
     """
@@ -303,13 +286,13 @@ class SaveFileRequest:
         notes (`datetime`): An optional date noting when the file was modified.
     """
     def __init__(self, recordId: int, fieldId: int, fileName: str, filePath: str, contentType: str, notes: str=None, modifiedDate: datetime=None):
-        self.recordId = recordId
-        self.fieldId = fieldId
-        self.notes = notes
-        self.modifiedDate = modifiedDate
-        self.fileName = fileName
-        self.filePath = filePath
-        self.contentType = contentType
+        self.recordId:int = recordId
+        self.fieldId:int = fieldId
+        self.notes:str = notes
+        self.modifiedDate:datetime = modifiedDate
+        self.fileName:str = fileName
+        self.filePath:str = filePath
+        self.contentType:str = contentType
 
 class SaveFileResponse:
     """
@@ -320,7 +303,7 @@ class SaveFileResponse:
     """
 
     def __init__(self, id: int):
-        self.id = id
+        self.id:int = id
 
 # list specific
 
@@ -336,12 +319,12 @@ class ListItemRequest:
         color (`str`): The color value assigned to the list value.
     """
 
-    def __init__(self, listId: int, name: str, id: uuid=None, numericValue: int=None, color: str=None):
-        self.listId = listId
-        self.name = name
-        self.id = id
-        self.numericValue = numericValue
-        self.color = color
+    def __init__(self, listId: int, name: str, id: uuid.UUID=None, numericValue: int=None, color: str=None):
+        self.listId:int = listId
+        self.name:str = name
+        self.id:uuid.UUID = id
+        self.numericValue:int = numericValue
+        self.color:str = color
 
 class AddOrUpdateListItemResponse:
     """
@@ -351,10 +334,72 @@ class AddOrUpdateListItemResponse:
         id (`int`): The id of the list value updated or added in Onspring.
     """
 
-    def __init__(self, id: uuid):
-        self.id = id
+    def __init__(self, id: uuid.UUID):
+        self.id:uuid.UUID = id
 
 # record specific
+
+class TimeSpanData:
+    """
+    An object to represent the data that makes up an Onspring timespan field.
+
+    Attributes:
+        quantity (`Decimal`):
+        increment (`Enums.Increment`):
+        recurrence (`Enums.Recurrence`):
+        endByDate (`datetime`):
+        endAfterOccurrences (`int`):
+    """
+
+    def __init__(self, quantity: Decimal, increment: Increment, recurrence: Recurrence=None, endByDate: datetime=None, endAfterOccurrences: int=None):
+        self.quantity:Decimal = quantity
+        self.increment:Increment = increment
+        self.recurrence:Recurrence = recurrence
+        self.endByDate:datetime = endByDate
+        self.endAfterOccurrences:int = endAfterOccurrences
+
+    def AsString(self) -> str:
+        if self.endByDate != None:
+            formattedDate = self.endByDate.strftime("%m/%d/%Y %I:%M %p")
+            return f'Every {self.quantity} {self.increment} End By {formattedDate}'
+        elif self.endAfterOccurrences != None:
+            return f'Every {self.quantity} {self.increment} End After {self.endAfterOccurrences}'
+        else:
+            return f'{self.quantity} {self.increment}'
+
+class Attachment:
+    """
+    An object to represent an attachment in Onspring.
+
+    Attributes:
+        fileId (`int`): The id of the file in Onspring.
+        fileName (`str`): The name of the file in Onspring.
+        notes (`str`): The notes for the file in Onspring.
+        storageLocation (`str`): The storage location of the file in Onspring.
+    """
+
+    def __init__(self, fileId: int, fileName: str, notes: str, storageLocation: str):
+        self.fileId:int = fileId
+        self.fileName:str = fileName
+        self.notes:str = notes
+        self.storageLocation:str = storageLocation
+
+class ScoringGroup:
+    """
+    An object to represent an Onspring scoring group.
+
+    Attributes:
+        listValueId (`UUID`): The id of the list value.
+        name (`str`): The name of the list value.
+        score (`Decimal`): The score for the list value.
+        maximumScore (`Decimal`): The maximum possible score for the group.
+    """
+
+    def __init__(self, listValueId: uuid.UUID, name: str, score: Decimal, maximumScore: Decimal):
+        self.listValueId:uuid.UUID = listValueId
+        self.name:str = name
+        self.score:Decimal = score
+        self.maximumScore:Decimal = maximumScore
 
 class RecordFieldValue:
     """
@@ -366,12 +411,12 @@ class RecordFieldValue:
         type (`str`): The type of value.
     """
 
-    def __init__(self, fieldId: int, value: str, type: str=None):
-        self.fieldId = fieldId
+    def __init__(self, fieldId: int, value, type: str=None):
+        self.fieldId:int = fieldId
         self.value = value
-        self.type = type
+        self.type:str = type
 
-    def AsString(self):
+    def AsString(self) -> str | None:
         """
         If the `Models.RecordFieldValue` type is String will return the value property as a `str` otherwise will return `None`.
 
@@ -387,7 +432,7 @@ class RecordFieldValue:
 
         return StringFieldValue(self.fieldId, self.value).value
 
-    def AsInteger(self):
+    def AsInteger(self) -> int | None:
         """
         If the `Models.RecordFieldValue` type is Integer will return the value property as an `int` otherwise will return `None`.
 
@@ -403,7 +448,7 @@ class RecordFieldValue:
         
         return IntegerFieldValue(self.fieldId, int(self.value)).value
 
-    def AsDecimal(self):
+    def AsDecimal(self) -> Decimal | None:
         """
         If the `Models.RecordFieldValue` type is Decimal will return the value property as a `Decimal` otherwise will return `None`.
 
@@ -419,7 +464,7 @@ class RecordFieldValue:
         
         return DecimalFieldValue(self.fieldId, Decimal(self.value)).value
 
-    def AsDate(self):
+    def AsDate(self) -> datetime | None:
         """
         If the `Models.RecordFieldValue` type is Date will return the value property as a `datetime` otherwise will return `None`.
 
@@ -437,7 +482,7 @@ class RecordFieldValue:
 
         return DateFieldValue(self.fieldId, date).value
 
-    def AsGuid(self):
+    def AsGuid(self) -> uuid.UUID | None:
         """
         If the `Models.RecordFieldValue` type is Guid will return the value property as an `UUID` otherwise will return `None`.
 
@@ -453,7 +498,7 @@ class RecordFieldValue:
         
         return GuidFieldValue(self.fieldId, uuid.UUID(self.value)).value
         
-    def AsTimeSpan(self):
+    def AsTimeSpan(self) -> TimeSpanData | None:
         """
         If the `Models.RecordFieldValue` type is TimeSpan will return the value property as a `Model.TimeSpanData` otherwise will return `None`.
 
@@ -486,7 +531,7 @@ class RecordFieldValue:
 
         return TimeSpanValue(self.fieldId, data).value
 
-    def AsStringList(self):
+    def AsStringList(self) -> list[str] | None:
         """
         If the `Models.RecordFieldValue` type is StringList will return the value property as a `list[str]` otherwise will return `None`.
 
@@ -504,7 +549,7 @@ class RecordFieldValue:
 
         return StringListValue(self.fieldId, strings).value
 
-    def AsIntegerList(self):
+    def AsIntegerList(self) -> list[int] | None:
         """
         If the `Models.RecordFieldValue` type is IntegerList will return the value property as a `list[int]` otherwise will return `None`.
 
@@ -522,7 +567,7 @@ class RecordFieldValue:
             
         return IntegerListValue(self.fieldId, integers).value
 
-    def AsGuidList(self):
+    def AsGuidList(self) -> list[uuid.UUID] | None:
         """
         If the `Models.RecordFieldValue` type is GuidList will return the value property as a `list[UUID]` otherwise will return `None`.
 
@@ -543,7 +588,7 @@ class RecordFieldValue:
             
         return GuidListValue(self.fieldId, guids).value
 
-    def AsAttachmentList(self):
+    def AsAttachmentList(self) -> list[Attachment] | None:
         """
         If the `Models.RecordFieldValue` type is AttachmentList will return the value property as a `list[Models.Attachment]` otherwise will return `None`.
 
@@ -573,7 +618,7 @@ class RecordFieldValue:
 
         return AttachmentListValue(self.fieldId, attachments).value
 
-    def AsScoringGroupList(self):
+    def AsScoringGroupList(self) -> list[ScoringGroup] | None:
         """
         If the `Models.RecordFieldValue` type is ScoringGroupList will return the value property as a `list[Models.ScoringGroup]` otherwise will return `None`.
 
@@ -585,7 +630,7 @@ class RecordFieldValue:
         """
 
         if self.type != ResultValueType.ScoringGroupList.name:
-            return
+            return None
 
         scoringGroups = []
 
@@ -603,7 +648,7 @@ class RecordFieldValue:
         
         return ScoringGroupListValue(self.fieldId, scoringGroups).value
 
-    def AsFileList(self):
+    def AsFileList(self) -> list[int] | None:
         """
         If the `Models.RecordFieldValue` type is FileList will return the value property as a `list[int]` otherwise will return `None`.
 
@@ -621,7 +666,7 @@ class RecordFieldValue:
             
         return FileListValue(self.fieldId, files).value
 
-    def getValue(self):
+    def getValue(self) -> object:
         """
         Will determine the appropriate way to return the fields value based on it's type.
 
@@ -671,7 +716,7 @@ class RecordFieldValue:
         else:
             return None
 
-    def GetResultValueString(self):
+    def GetResultValueString(self) -> str:
         """
         Will return the value property regardless of the field value's type as a string.
 
@@ -752,9 +797,9 @@ class Record:
     """
     
     def __init__(self, appId: int, fields: list[RecordFieldValue], recordId: int=None):
-        self.appId = appId
-        self.recordId = recordId
-        self.fields = fields
+        self.appId:int = appId
+        self.recordId:recordId = recordId
+        self.fields:list[RecordFieldValue] = fields
 
 class GetRecordsByAppRequest:
     """
@@ -768,11 +813,11 @@ class GetRecordsByAppRequest:
     """
 
     def __init__(self, appId: int, fieldIds: list[int]=[], dataFormat: str=DataFormat.Raw.name, pagingRequest: PagingRequest=PagingRequest(1,50)):
-        self.appId = appId
-        self.fieldIds = fieldIds
-        self.dataFormat = dataFormat
-        self.pageSize = pagingRequest.pageSize
-        self.pageNumber = pagingRequest.pageNumber
+        self.appId:int = appId
+        self.fieldIds:list[int] = fieldIds
+        self.dataFormat:str = dataFormat
+        self.pageSize:int = pagingRequest.pageSize
+        self.pageNumber:int = pagingRequest.pageNumber
 
 class QueryRecordsRequest:
     """
@@ -787,11 +832,11 @@ class QueryRecordsRequest:
     """
 
     def __init__(self, appId: int, filter: str, fieldIds: list[int]=[], dataFormat: str=DataFormat.Raw.name, pagingRequest: PagingRequest=PagingRequest(1,50)):
-        self.appId = appId
-        self.filter = filter
-        self.fieldIds = fieldIds
-        self.dataFormat = dataFormat
-        self.pagingRequest = pagingRequest
+        self.appId:int = appId
+        self.filter:str = filter
+        self.fieldIds:list[int] = fieldIds
+        self.dataFormat:str = dataFormat
+        self.pagingRequest:PagingRequest = pagingRequest
 
 class GetRecordsResponse:
     """
@@ -806,11 +851,11 @@ class GetRecordsResponse:
     """
 
     def __init__(self, pageNumber: int, pageSize: int, totalPages: int, totalRecords: int, records: list[Record]):
-        self.pageNumber = pageNumber
-        self.pageSize = pageSize
-        self.totalPages = totalPages
-        self.totalRecords = totalRecords
-        self.records = records
+        self.pageNumber:int = pageNumber
+        self.pageSize:int = pageSize
+        self.totalPages:int = totalPages
+        self.totalRecords:int = totalRecords
+        self.records:list[Record] = records
 
 class GetRecordByIdRequest:
     """
@@ -823,10 +868,10 @@ class GetRecordByIdRequest:
         dataFormat (`str`): The format of the response data.
     """
     def __init__(self, appId: int, recordId: int, fieldIds: list[int]=[], dataFormat: str=DataFormat.Raw.name):
-        self.appId = appId
-        self.recordId = recordId
-        self.fieldIds = fieldIds
-        self.dataFormat = dataFormat
+        self.appId:int = appId
+        self.recordId:int = recordId
+        self.fieldIds:list[int] = fieldIds
+        self.dataFormat:str = dataFormat
 
 class GetBatchRecordsRequest:
     """
@@ -840,10 +885,10 @@ class GetBatchRecordsRequest:
     """
 
     def __init__(self, appId: int, recordIds: list[int], fieldIds: list[int]=[], dataFormat: str=DataFormat.Raw.name):
-        self.appId = appId
-        self.recordIds = recordIds
-        self.fieldIds = fieldIds
-        self.dataFormat = dataFormat
+        self.appId:int = appId
+        self.recordIds:list[int] = recordIds
+        self.fieldIds:list[int] = fieldIds
+        self.dataFormat:str = dataFormat
 
 class GetBatchRecordsResponse:
     """
@@ -855,8 +900,8 @@ class GetBatchRecordsResponse:
     """
 
     def __init__(self, count: int, records: list[Record]):
-        self.count = count
-        self.records = records
+        self.count:int = count
+        self.records:list[Record] = records
 
 class AddOrUpdateRecordResponse:
     """
@@ -868,8 +913,8 @@ class AddOrUpdateRecordResponse:
     """
 
     def __init__(self, id: int, warnings: list[str]=[]):
-        self.id = id
-        self.warnings = warnings
+        self.id:int = id
+        self.warnings:list[str] = warnings
 
 class DeleteBatchRecordsRequest:
     """
@@ -881,8 +926,8 @@ class DeleteBatchRecordsRequest:
     """
 
     def __init__(self, appId: int, recordIds: list[int]):
-        self.appId = appId
-        self.recordIds = recordIds
+        self.appId:int = appId
+        self.recordIds:list[int] = recordIds
 
 # field types
 
@@ -897,7 +942,7 @@ class StringFieldValue(RecordFieldValue):
     """
 
     def __init__(self, fieldId: int, value):
-        self.type = ResultValueType.String.name
+        self.type:str = ResultValueType.String.name
         RecordFieldValue.__init__(self, fieldId, value, self.type)
 
 class IntegerFieldValue(RecordFieldValue):
@@ -911,7 +956,7 @@ class IntegerFieldValue(RecordFieldValue):
     """
 
     def __init__(self, fieldId: int, value: int):
-        self.type = ResultValueType.Integer.name
+        self.type:str = ResultValueType.Integer.name
         RecordFieldValue.__init__(self, fieldId, value, self.type)
 
 class DecimalFieldValue(RecordFieldValue):
@@ -925,7 +970,7 @@ class DecimalFieldValue(RecordFieldValue):
     """
 
     def __init__(self, fieldId: int, value: Decimal):
-        self.type = ResultValueType.Decimal.name
+        self.type:str = ResultValueType.Decimal.name
         RecordFieldValue.__init__(self, fieldId, value, self.type)
 
 class DateFieldValue(RecordFieldValue):
@@ -939,7 +984,7 @@ class DateFieldValue(RecordFieldValue):
     """
 
     def __init__(self, fieldId: int, value: datetime):
-        self.type = ResultValueType.Date.name
+        self.type:str = ResultValueType.Date.name
         RecordFieldValue.__init__(self, fieldId, value, self.type)
 
 class GuidFieldValue(RecordFieldValue):
@@ -953,36 +998,8 @@ class GuidFieldValue(RecordFieldValue):
     """
 
     def __init__(self, fieldId: int, value: uuid.UUID):
-        self.type = ResultValueType.Guid.name
+        self.type:str = ResultValueType.Guid.name
         RecordFieldValue.__init__(self, fieldId, value, self.type)
-
-class TimeSpanData:
-    """
-    An object to represent the data that makes up an Onspring timespan field.
-
-    Attributes:
-        quantity (`Decimal`):
-        increment (`Enums.Increment`):
-        recurrence (`Enums.Recurrence`):
-        endByDate (`datetime`):
-        endAfterOccurrences (`int`):
-    """
-
-    def __init__(self, quantity: Decimal, increment: Increment, recurrence: Recurrence=None, endByDate: datetime=None, endAfterOccurrences: int=None):
-        self.quantity = quantity
-        self.increment = increment
-        self.recurrence = recurrence
-        self.endByDate = endByDate
-        self.endAfterOccurrences = endAfterOccurrences
-
-    def AsString(self):
-        if self.endByDate != None:
-            formattedDate = self.endByDate.strftime("%m/%d/%Y %I:%M %p")
-            return f'Every {self.quantity} {self.increment} End By {formattedDate}'
-        elif self.endAfterOccurrences != None:
-            return f'Every {self.quantity} {self.increment} End After {self.endAfterOccurrences}'
-        else:
-            return f'{self.quantity} {self.increment}'
 
 class TimeSpanValue(RecordFieldValue):
     """
@@ -995,7 +1012,7 @@ class TimeSpanValue(RecordFieldValue):
     """
 
     def __init__(self, fieldId: int, value: TimeSpanData):
-        self.type = ResultValueType.TimeSpan.name
+        self.type:str = ResultValueType.TimeSpan.name
         RecordFieldValue.__init__(self, fieldId, value, self.type)
 
 class StringListValue(RecordFieldValue):
@@ -1009,7 +1026,7 @@ class StringListValue(RecordFieldValue):
     """
 
     def __init__(self, fieldId: int, value: list[str]):
-        self.type = ResultValueType.StringList.name
+        self.type:str = ResultValueType.StringList.name
         RecordFieldValue.__init__(self, fieldId, value, self.type)
 
 class IntegerListValue(RecordFieldValue):
@@ -1023,7 +1040,7 @@ class IntegerListValue(RecordFieldValue):
     """
 
     def __init__(self, fieldId: int, value: list[int]):
-        self.type = ResultValueType.IntegerList.name
+        self.type:str = ResultValueType.IntegerList.name
         RecordFieldValue.__init__(self, fieldId, value, self.type)
 
 class GuidListValue(RecordFieldValue):
@@ -1037,25 +1054,8 @@ class GuidListValue(RecordFieldValue):
     """
 
     def __init__(self, fieldId: int, value: list[uuid.UUID]):
-        self.type = ResultValueType.GuidList.name
+        self.type:str = ResultValueType.GuidList.name
         RecordFieldValue.__init__(self, fieldId, value, self.type)
-
-class Attachment:
-    """
-    An object to represent an attachment in Onspring.
-
-    Attributes:
-        fileId (`int`): The id of the file in Onspring.
-        fileName (`str`): The name of the file in Onspring.
-        notes (`str`): The notes for the file in Onspring.
-        storageLocation (`str`): The storage location of the file in Onspring.
-    """
-
-    def __init__(self, fileId: int, fileName: str, notes: str, storageLocation: str):
-        self.fileId = fileId
-        self.fileName = fileName
-        self.notes = notes
-        self.storageLocation = storageLocation
 
 class AttachmentListValue(RecordFieldValue):
     """
@@ -1068,7 +1068,7 @@ class AttachmentListValue(RecordFieldValue):
     """
 
     def __init__(self, fieldId: int, value: list[Attachment]):
-        self.type = ResultValueType.AttachmentList.name
+        self.type:str = ResultValueType.AttachmentList.name
         RecordFieldValue.__init__(self, fieldId, value, self.type)
 
 class FileListValue(RecordFieldValue):
@@ -1082,25 +1082,8 @@ class FileListValue(RecordFieldValue):
     """
 
     def __init__(self, fieldId: int, value: list[int]):
-        self.type = ResultValueType.FileList.name
+        self.type:str = ResultValueType.FileList.name
         RecordFieldValue.__init__(self, fieldId, value, self.type)
-
-class ScoringGroup:
-    """
-    An object to represent an Onspring scoring group.
-
-    Attributes:
-        listValueId (`UUID`): The id of the list value.
-        name (`str`): The name of the list value.
-        score (`Decimal`): The score for the list value.
-        maximumScore (`Decimal`): The maximum possible score for the group.
-    """
-
-    def __init__(self, listValueId: uuid.UUID, name: str, score: Decimal, maximumScore: Decimal):
-        self.listValueId = listValueId
-        self.name = name
-        self.score = score
-        self.maximumScore = maximumScore
 
 class ScoringGroupListValue(RecordFieldValue):
     """
@@ -1113,7 +1096,7 @@ class ScoringGroupListValue(RecordFieldValue):
     """
 
     def __init__(self, fieldId: int, value: list[ScoringGroup]):
-        self.type = ResultValueType.ScoringGroupList.name
+        self.type:str = ResultValueType.ScoringGroupList.name
         RecordFieldValue.__init__(self, fieldId, value, self.type)
 
 # report specific
@@ -1129,9 +1112,9 @@ class GetReportByIdRequest:
     """
     
     def __init__(self, reportId: int, apiDataFormat: str=DataFormat.Raw.name, dataType: str=ReportDataType.ReportData.name):
-        self.reportId = reportId
-        self.apiDataFormat = apiDataFormat
-        self.dataType = dataType
+        self.reportId:int = reportId
+        self.apiDataFormat:str = apiDataFormat
+        self.dataType:str = dataType
 
 class Row:
     """
@@ -1143,8 +1126,8 @@ class Row:
     """
 
     def __init__(self, recordId: int, cells: list[str]):
-        self.recordId = recordId
-        self.cells = cells
+        self.recordId:int = recordId
+        self.cells:list[str] = cells
 
 class GetReportByIdResponse:
     """
@@ -1156,8 +1139,8 @@ class GetReportByIdResponse:
     """
 
     def __init__(self, columns: list[str], rows: list[Row]):
-        self.columns = columns
-        self.rows = rows
+        self.columns:list[str] = columns
+        self.rows:list[Row] = rows
 
 class Report:
     """
@@ -1171,10 +1154,10 @@ class Report:
     """
 
     def __init__(self, appId: int, id: int, name: str, description: str):
-        self.appId = appId
-        self.id = id
-        self.name = name
-        self.description = description
+        self.appId:int = appId
+        self.id:int = id
+        self.name:str = name
+        self.description:str = description
 
 class GetReportsByAppIdResponse:
     """
@@ -1189,8 +1172,50 @@ class GetReportsByAppIdResponse:
     """
 
     def __init__(self, pageNumber: int, pageSize: int, totalPages: int, totalRecords: int, reports: list[Report]):
-        self.pageNumber = pageNumber
-        self.pageSize = pageSize
-        self.totalPages = totalPages
-        self.totalRecords = totalRecords
-        self.reports = reports
+        self.pageNumber:int = pageNumber
+        self.pageSize:int = pageSize
+        self.totalPages:int = totalPages
+        self.totalRecords:int = totalRecords
+        self.reports:list[Report] = reports
+
+# generic
+
+class ApiResponse:
+    """
+    An object to represent a response to a request made by an `OnspringClient`.
+
+    Attributes:
+        statusCode (`int`): The http status code of the response.
+        data: If the request was successful will contain the response data deserialized to custom python objects.
+        message (`str`): A message that may provide more detail about the requests success or failure.
+        raw (`requests.Response`): Exposes the raw response object of the request if you'd like to handle it directly.
+    """
+
+    def __init__(
+        self, 
+        statusCode:int=None, 
+        data:
+        GetAppsResponse|
+        GetAppByIdResponse|
+        GetAppsByIdsResponse|
+        GetFieldByIdResponse|
+        GetFieldsByIdsResponse|
+        GetFieldsByAppIdResponse|
+        GetFileInfoByIdResponse|
+        GetFileByIdResponse|
+        SaveFileResponse|
+        AddOrUpdateListItemResponse|
+        GetRecordsResponse|
+        Record|
+        GetBatchRecordsResponse|
+        AddOrUpdateRecordResponse|
+        GetReportByIdResponse|
+        GetReportsByAppIdResponse=None,
+        message:str=None, 
+        raw:Response=None
+        ):
+        self.statusCode:int = statusCode
+        self.isSuccessful:bool = int(statusCode) < 400
+        self.data = data
+        self.message:str = message
+        self.raw:Response = raw

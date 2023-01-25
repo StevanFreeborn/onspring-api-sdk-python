@@ -22,7 +22,7 @@ class OnspringClient:
 
     # connectivity methods
 
-    def CanConnect(self):
+    def CanConnect(self) -> bool:
         """
         Verifies if the API is reachable by calling the ping endpoint.
 
@@ -43,7 +43,7 @@ class OnspringClient:
 
     # app methods
 
-    def GetApps(self, pagingRequest=PagingRequest(1, 50)):
+    def GetApps(self, pagingRequest=PagingRequest(1, 50)) -> ApiResponse:
         """
         Gets all accessible apps for client.
 
@@ -109,7 +109,7 @@ class OnspringClient:
             response.status_code,
             raw=response)
 
-    def GetAppById(self, appId: int):
+    def GetAppById(self, appId: int)  -> ApiResponse:
         """
         Get an app by it's id.
 
@@ -168,7 +168,7 @@ class OnspringClient:
             response.status_code,
             raw=response)
 
-    def GetAppsByIds(self, appIds: list):
+    def GetAppsByIds(self, appIds: list) -> ApiResponse:
         """
         Get a set of apps by their ids.
 
@@ -243,7 +243,7 @@ class OnspringClient:
 
     # field methods
 
-    def GetFieldById(self, fieldId: int):
+    def GetFieldById(self, fieldId: int) -> ApiResponse:
         """
         Get a field by it's id.
 
@@ -329,7 +329,7 @@ class OnspringClient:
             response.status_code,
             raw=response)
 
-    def GetFieldsByIds(self, fieldIds: list):
+    def GetFieldsByIds(self, fieldIds: list) -> ApiResponse:
         """
         Get a set of fields by their ids.
 
@@ -413,7 +413,7 @@ class OnspringClient:
             response.status_code,
             raw=response)
 
-    def GetFieldsByAppId(self, appId: int, pagingRequest=PagingRequest(1, 50)):
+    def GetFieldsByAppId(self, appId: int, pagingRequest=PagingRequest(1, 50)) -> ApiResponse:
         """
         Get all fields for an app.
 
@@ -488,7 +488,7 @@ class OnspringClient:
 
     # file methods
 
-    def GetFileInfoById(self, recordId: int, fieldId: int, fileId: int):
+    def GetFileInfoById(self, recordId: int, fieldId: int, fileId: int) -> ApiResponse:
         """
         Get the metadata information for a file.
 
@@ -567,7 +567,7 @@ class OnspringClient:
             response.status_code,
             raw=response)
 
-    def DeleteFileById(self, recordId: int, fieldId: int, fileId: int):
+    def DeleteFileById(self, recordId: int, fieldId: int, fileId: int) -> ApiResponse:
         """
         Delete a file by its id.
 
@@ -632,7 +632,7 @@ class OnspringClient:
             response.status_code,
             raw=response)
 
-    def GetFileById(self, recordId: int, fieldId: int, fileId: int):
+    def GetFileById(self, recordId: int, fieldId: int, fileId: int) -> ApiResponse:
         """
         Get a file by its id.
 
@@ -710,7 +710,7 @@ class OnspringClient:
             response.status_code,
             raw=response)
 
-    def SaveFile(self,  saveFileRequest: SaveFileRequest):
+    def SaveFile(self,  saveFileRequest: SaveFileRequest) -> ApiResponse:
         """
         Delete a file by its id.
 
@@ -784,7 +784,7 @@ class OnspringClient:
 
     # list methods
 
-    def AddOrUpdateListItem(self, listItemRequest: ListItemRequest):
+    def AddOrUpdateListItem(self, listItemRequest: ListItemRequest) -> ApiResponse:
         """
         Add or update a list value by its id.
 
@@ -853,7 +853,7 @@ class OnspringClient:
             response.status_code,
             raw=response)
 
-    def DeleteListItem(self, listId: int, itemId: str):
+    def DeleteListItem(self, listId: int, itemId: str) -> ApiResponse:
         """
         Delete a list value by its id and it's parent list id.
 
@@ -908,7 +908,7 @@ class OnspringClient:
 
     # record methods
 
-    def GetRecordsByAppId(self, getRecordsByAppRequest: GetRecordsByAppRequest):
+    def GetRecordsByAppId(self, getRecordsByAppRequest: GetRecordsByAppRequest) -> ApiResponse:
         """
         Get all the records for an app by its id.
 
@@ -1002,7 +1002,7 @@ class OnspringClient:
             response.status_code,
             raw=response)
     
-    def GetRecordById(self, getRecordByIdRequest: GetRecordByIdRequest):
+    def GetRecordById(self, getRecordByIdRequest: GetRecordByIdRequest) -> ApiResponse:
         """
         Get a record by its id.
 
@@ -1080,7 +1080,7 @@ class OnspringClient:
             response.status_code,
             raw=response)
 
-    def DeleteRecordById(self, appId: int, recordId: int):
+    def DeleteRecordById(self, appId: int, recordId: int) -> ApiResponse:
         """
         Delete a record by its id.
 
@@ -1133,7 +1133,7 @@ class OnspringClient:
             response.status_code,
             raw=response)
         
-    def GetRecordsByIds(self, getBatchRecordsRequest: GetBatchRecordsRequest):
+    def GetRecordsByIds(self, getBatchRecordsRequest: GetBatchRecordsRequest) -> ApiResponse:
         """
         Get records by their id.
 
@@ -1224,7 +1224,7 @@ class OnspringClient:
             response.status_code,
             raw=response)
 
-    def QueryRecords(self, queryRecordsRequest: QueryRecordsRequest):
+    def QueryRecords(self, queryRecordsRequest: QueryRecordsRequest) -> ApiResponse:
         """
         Get records based on a criteria.
 
@@ -1325,7 +1325,7 @@ class OnspringClient:
             response.status_code,
             raw=response)
 
-    def AddOrUpdateRecord(self, record: Record):
+    def AddOrUpdateRecord(self, record: Record) -> ApiResponse:
         """
         Add a new record or update a record by its id. Not including an id adds a new record.
 
@@ -1401,7 +1401,7 @@ class OnspringClient:
                 response.status_code,
                 raw=response)
 
-    def DeleteRecordsByIds(self, deleteBatchRecordsRequest: DeleteBatchRecordsRequest):
+    def DeleteRecordsByIds(self, deleteBatchRecordsRequest: DeleteBatchRecordsRequest) -> ApiResponse:
         """
         Delete records by their ids.
 
@@ -1467,7 +1467,7 @@ class OnspringClient:
 
     # report methods
 
-    def GetReportById(self, getReportByIdRequest: GetReportByIdRequest):
+    def GetReportById(self, getReportByIdRequest: GetReportByIdRequest) -> ApiResponse:
         """
         Get a report by its id.
 
@@ -1548,7 +1548,7 @@ class OnspringClient:
             response.status_code,
             raw=response)
 
-    def GetReportsByAppId(self, appId: int, pagingRequest: PagingRequest=PagingRequest(1,50)):
+    def GetReportsByAppId(self, appId: int, pagingRequest: PagingRequest=PagingRequest(1,50)) -> ApiResponse:
         """
         Get reports for an app by its id..
 

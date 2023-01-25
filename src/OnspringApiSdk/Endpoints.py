@@ -2,7 +2,7 @@ import uuid
 
 # connectivity endpoints
 
-def GetPingEndpoint(baseUrl: str):
+def GetPingEndpoint(baseUrl: str) -> str:
     """
     Returns the ping endpoint.
 
@@ -17,7 +17,7 @@ def GetPingEndpoint(baseUrl: str):
 
 # app endpoints
 
-def GetAppsEndpoint(baseUrl: str):
+def GetAppsEndpoint(baseUrl: str) -> str:
     """
     Returns the get apps endpoint.
 
@@ -30,7 +30,7 @@ def GetAppsEndpoint(baseUrl: str):
 
     return f'{baseUrl}/Apps'
 
-def GetAppByIdEndpoint(baseUrl: str, appId: int):
+def GetAppByIdEndpoint(baseUrl: str, appId: int) -> str:
     """
     Returns the get app by id endpoint.
 
@@ -44,7 +44,7 @@ def GetAppByIdEndpoint(baseUrl: str, appId: int):
 
     return f'{baseUrl}/Apps/id/{appId}'
 
-def GetAppsByIdsEndpoint(baseUrl: str):
+def GetAppsByIdsEndpoint(baseUrl: str) -> str:
     """
     Returns the get apps by ids endpoint.
 
@@ -59,7 +59,7 @@ def GetAppsByIdsEndpoint(baseUrl: str):
 
 # field endpoints
 
-def GetFieldByIdEndpoint(baseUrl: str, fieldId: int):
+def GetFieldByIdEndpoint(baseUrl: str, fieldId: int) -> str:
     """
     Returns the get field by id endpoint.
 
@@ -73,7 +73,7 @@ def GetFieldByIdEndpoint(baseUrl: str, fieldId: int):
 
     return f'{baseUrl}/Fields/id/{fieldId}'
 
-def GetFieldsByIdsEndpoint(baseUrl: str):
+def GetFieldsByIdsEndpoint(baseUrl: str) -> str:
     """
     Returns the get fields by ids endpoint.
 
@@ -86,7 +86,7 @@ def GetFieldsByIdsEndpoint(baseUrl: str):
 
     return f'{baseUrl}/Fields/batch-get'
 
-def GetFieldsByAppIdEndpoint(baseUrl: str, appId: int):
+def GetFieldsByAppIdEndpoint(baseUrl: str, appId: int) -> str:
     """
     Returns the get fields by app id endpoint.
 
@@ -102,7 +102,7 @@ def GetFieldsByAppIdEndpoint(baseUrl: str, appId: int):
 
 # file endpoints
 
-def GetFileInfoByIdEndpoint(baseUrl: str, recordId: int, fieldId: int, fileId: int):
+def GetFileInfoByIdEndpoint(baseUrl: str, recordId: int, fieldId: int, fileId: int) -> str:
     """
     Returns the get file info by its id endpoint.
 
@@ -118,7 +118,7 @@ def GetFileInfoByIdEndpoint(baseUrl: str, recordId: int, fieldId: int, fileId: i
 
     return f'{baseUrl}/Files/recordId/{recordId}/fieldId/{fieldId}/fileId/{fileId}'
 
-def DeleteFileByIdEndpoint(baseUrl: str, recordId: int, fieldId: int, fileId: int):
+def DeleteFileByIdEndpoint(baseUrl: str, recordId: int, fieldId: int, fileId: int) -> str:
     """
     Returns the delete file by its id endpoint.
 
@@ -134,7 +134,7 @@ def DeleteFileByIdEndpoint(baseUrl: str, recordId: int, fieldId: int, fileId: in
 
     return f'{baseUrl}/Files/recordId/{recordId}/fieldId/{fieldId}/fileId/{fileId}'
 
-def GetFileByIdEndpoint(baseUrl: str, recordId: int, fieldId: int, fileId: int):
+def GetFileByIdEndpoint(baseUrl: str, recordId: int, fieldId: int, fileId: int) -> str:
     """
     Returns the get file by its id endpoint.
 
@@ -150,7 +150,7 @@ def GetFileByIdEndpoint(baseUrl: str, recordId: int, fieldId: int, fileId: int):
 
     return f'{baseUrl}/Files/recordId/{recordId}/fieldId/{fieldId}/fileId/{fileId}/file'
 
-def SaveFileEndpoint(baseUrl: str):
+def SaveFileEndpoint(baseUrl: str) -> str:
     """
     Returns the save file endpoint.
 
@@ -165,7 +165,7 @@ def SaveFileEndpoint(baseUrl: str):
 
 # list endpoints
 
-def AddOrUpdateListItemEndpoint(baseUrl, listId: int):
+def AddOrUpdateListItemEndpoint(baseUrl, listId: int) -> str:
     """
     Returns the add or update list item endpoint.
 
@@ -179,7 +179,7 @@ def AddOrUpdateListItemEndpoint(baseUrl, listId: int):
 
     return f'{baseUrl}/Lists/id/{listId}/items'
 
-def DeleteListItemEndpoint(baseUrl: str, listId: int, itemId: uuid):
+def DeleteListItemEndpoint(baseUrl: str, listId: int, itemId: uuid) -> str:
     """
     Returns the delete list item endpoint.
 
@@ -196,7 +196,7 @@ def DeleteListItemEndpoint(baseUrl: str, listId: int, itemId: uuid):
 
 # record endpoints
 
-def GetRecordsByAppIdEndpoint(baseUrl, appId: int):
+def GetRecordsByAppIdEndpoint(baseUrl, appId: int) -> str:
     """
     Returns the get records by app id endpoint.
 
@@ -210,7 +210,7 @@ def GetRecordsByAppIdEndpoint(baseUrl, appId: int):
 
     return f'{baseUrl}/Records/appId/{appId}'
 
-def GetRecordByIdEndpoint(baseUrl, appId: int, recordId: int):
+def GetRecordByIdEndpoint(baseUrl, appId: int, recordId: int) -> str:
     """
     Returns the get record by id endpoint.
 
@@ -225,7 +225,7 @@ def GetRecordByIdEndpoint(baseUrl, appId: int, recordId: int):
 
     return f'{baseUrl}/Records/appId/{appId}/recordId/{recordId}'
 
-def DeleteRecordByIdEndpoint(baseUrl, appId: int, recordId: int):
+def DeleteRecordByIdEndpoint(baseUrl, appId: int, recordId: int) -> str:
     """
     Returns the delete record by id endpoint.
 
@@ -240,7 +240,7 @@ def DeleteRecordByIdEndpoint(baseUrl, appId: int, recordId: int):
 
     return f'{baseUrl}/Records/appId/{appId}/recordId/{recordId}'
 
-def GetRecordsByIdsEndpoint(baseUrl):
+def GetRecordsByIdsEndpoint(baseUrl) -> str:
     """
     Returns the get records by ids endpoint.
 
@@ -253,7 +253,7 @@ def GetRecordsByIdsEndpoint(baseUrl):
     
     return f'{baseUrl}/Records/batch-get'
 
-def QueryRecordsEndpoint(baseUrl):
+def QueryRecordsEndpoint(baseUrl) -> str:
     """
     Returns the query records endpoint.
 
@@ -266,7 +266,7 @@ def QueryRecordsEndpoint(baseUrl):
 
     return f'{baseUrl}/Records/Query'
 
-def AddOrUpdateRecordEndpoint(baseUrl):
+def AddOrUpdateRecordEndpoint(baseUrl) -> str:
     """
     Returns the add or update record endpoint.
 
@@ -279,7 +279,7 @@ def AddOrUpdateRecordEndpoint(baseUrl):
 
     return f'{baseUrl}/Records'
 
-def DeleteRecordsByIds(baseUrl):
+def DeleteRecordsByIds(baseUrl) -> str:
     """
     Returns the delete records by ids endpoint.
 
@@ -294,7 +294,7 @@ def DeleteRecordsByIds(baseUrl):
 
 # report endpoints
 
-def GetReportByIdEndpoint(baseUrl, reportId: int):
+def GetReportByIdEndpoint(baseUrl, reportId: int) -> str:
     """
     Returns the get report by id endpoint.
 
@@ -308,7 +308,7 @@ def GetReportByIdEndpoint(baseUrl, reportId: int):
 
     return f'{baseUrl}/Reports/id/{reportId}'
 
-def GetReportsByAppIdEndpoint(baseUrl, appId: int):
+def GetReportsByAppIdEndpoint(baseUrl, appId: int) -> str:
     """
     Returns the get reports by app id endpoint.
 

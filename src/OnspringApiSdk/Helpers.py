@@ -1,7 +1,7 @@
 from datetime import datetime
 from OnspringApiSdk.Enums import *
 
-def parseDate(date: str):
+def parseDate(date: str) -> datetime:
 
     if date==None:
         return None
