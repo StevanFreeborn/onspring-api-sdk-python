@@ -11,7 +11,7 @@ This SDK was developed independently using their existing C# SDK, their swagger 
 
 ### Python
 
-Requires use of Python 3.6.0 or later.
+Requires use of Python 3.10.0 or later.
 
 ### Requests
 
