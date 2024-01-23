@@ -20,7 +20,7 @@ class TestOnspringClient(object):
             "totalPages": 1,
             "totalRecords": 2,
             "items": [
-                 {
+                {
                     "multiplicity": "SingleSelect",
                     "listId": 638,
                     "values": [
