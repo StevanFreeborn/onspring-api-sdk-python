@@ -485,10 +485,9 @@ class OnspringClient:
                 item = dict(item)
 
                 values = item.get('values')
+                listValues = []
 
                 if values != None:
-
-                    listValues = []
 
                     for value in values:
 
