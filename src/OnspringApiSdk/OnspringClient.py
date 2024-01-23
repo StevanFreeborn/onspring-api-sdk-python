@@ -484,6 +484,25 @@ class OnspringClient:
 
                 item = dict(item)
 
+                values = item.get('values')
+
+                if values != None:
+
+                    listValues = []
+
+                    for value in values:
+
+                            value = dict(value)
+    
+                            value = ListValue(
+                                value.get('id'),
+                                value.get('name'),
+                                value.get('sortOrder'),
+                                value.get('numericValue'),
+                                value.get('color'))
+    
+                            listValues.append(value)
+
                 field = Field(
                     item.get('id'),
                     item.get('appId'),
@@ -491,7 +510,11 @@ class OnspringClient:
                     item.get('type'),
                     item.get('status'),
                     item.get('isRequired'),
-                    item.get('isUnique'))
+                    item.get('isUnique'),
+                    item.get("listId"),
+                    listValues,
+                    item.get('multiplicity'),
+                    item.get('outputType'))
 
                 fields.append(field)
 
