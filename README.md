@@ -322,7 +322,7 @@ import mimetypes
 
 filePath = 'C:\\Users\\sfree\\Documents\\Temp\\Test Attachment.txt'
 fileName = os.path.basename(filePath)
-contentType = mimetypes.guess_type(filePath)
+contentType = mimetypes.guess_type(filePath)[0]
 
 request = SaveFileRequest(
     recordId=60, 
