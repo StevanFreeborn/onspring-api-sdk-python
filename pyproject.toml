@@ -1,3 +1,58 @@
 [build-system]
-requires = ["setuptools>=42"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "OnspringApiSdk"
+version = "3.0.0"
+description = "A package for interacting with version 2 of the Onspring API."
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+    { name = "StevanFreeborn", email = "stevan.freeborn@gmail.com" },
+]
+license = { text = "MIT" }
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "pydantic>=2.0.0",
+    "httpx>=0.24.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/StevanFreeborn/onspring-api-sdk-python"
+"Bug Tracker" = "https://github.com/StevanFreeborn/onspring-api-sdk-python/issues"
+
+[dependency-groups]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-cov>=7.1.0",
+    "pytest-rerunfailures>=14.0",
+    "python-dotenv>=1.0.0",
+    "respx>=0.20.0",
+    "ruff>=0.1.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/onspring_api_sdk"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+markers = [
+    "integration: marks tests as integration tests (real API calls)",
+]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 120
+
+[tool.ruff.lint]
+select = ["D", "E", "F", "I", "N"]
+ignore = ["D203", "D213"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["D"]
