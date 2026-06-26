@@ -1,0 +1,20 @@
+name: Publish
+on:
+  push:
+    branches: [master]
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+      - name: Setup UV
+        uses: astral-sh/setup-uv@v8.2.0
+        with:
+          python-version: "3.13"
+      - name: Run uv build
+        run: uv build
+      - name: Publish to PYPI
+        uses: pypa/gh-action-pypi-publish@release/v1

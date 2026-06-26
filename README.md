@@ -13,9 +13,9 @@ This SDK was developed independently using their existing C# SDK, their swagger 
 
 Requires use of Python 3.10.0 or later.
 
-### Requests
+### httpx
 
-All methods for the `OnspringClient` make use of the [Requests](https://docs.python-requests.org/en/latest/) library to interact with the endpoints of version 2 of the Onspring API.
+All methods for `OnspringClient` and `AsyncOnspringClient` make use of the [httpx](https://www.python-httpx.org/) library to interact with the endpoints of version 2 of the Onspring API.
 
 ## Installation
 
@@ -39,8 +39,8 @@ In order to successfully interact with the Onspring Api you will need an API key
 
 The most common way to use the SDK is to create an `OnspringClient` instance and call its methods. Its constructor requires two parameters:
 
-- `baseUrl` - currently this should always be: `https://api.onspring.com`
-- `apiKey` - the value obtained by following the steps in the **API Key** section
+- `url` - currently this should always be: `https://api.onspring.com`
+- `key` - the value obtained by following the steps in the **API Key** section
 
 It is best practice to read these values in from a configuration file for both flexibility and security purposes.
 
@@ -55,7 +55,7 @@ url = https://api.onspring.com
 Example constructing `OnspringClient`:
 
 ```python
-from OnspringApiSdk.OnspringClient import OnspringClient
+from onspring_api_sdk import OnspringClient
 from configparser import ConfigParser
 
 cfg = ConfigParser()
@@ -67,22 +67,55 @@ url = cfg['prod']['url']
 client = OnspringClient(url, key)
 ```
 
+### `AsyncOnspringClient`
+
+An async client is also available for use with `asyncio`:
+
+```python
+from onspring_api_sdk import AsyncOnspringClient
+
+async with AsyncOnspringClient(url, key) as client:
+    response = await client.get_apps()
+```
+
+All methods mirror the sync client with `await` prefixed.
+
 ### `ApiResponse`
 
-Each `OnspringClient` method - aside from `CanConnect` - returns an `ApiResponse` object which will have the following properties:
+Each client method returns an `ApiResponse` object with the following properties:
 
-- `statusCode` - The http status code of the response.
-- `data` - If the request was successful will contain the response data deserialized to custom python objects.
+- `status_code` - The http status code of the response.
+- `is_successful` - Whether the request was successful (status < 400).
+- `data` - If the request was successful will contain the response data deserialized to Pydantic models.
 - `message` - A message that may provide more detail about the requests success or failure.
-- `raw` - Exposes the raw response object of the request if you'd like to handle it directly.
+- `raw_response` - Exposes the raw [`httpx.Response`](https://www.python-httpx.org/api/#response) object if you'd like to handle it directly.
 
-The goal with this `ApiResponse` object is to provide the flexibility to do with the response what you'd like as well as already having the raw JSON response deserialized to python objects.
+The goal with this `ApiResponse` object is to provide the flexibility to do with the response what you'd like while already having the JSON response deserialized to Python objects.
 
-If you do want to handle and/or manipulate the response object yourself you will want to use the value of the `ApiResponse`'s `raw` property which will be a [`Response`](https://docs.python-requests.org/en/latest/user/advanced/#request-and-response-objects) object from the [Requests](https://docs.python-requests.org/en/latest/) library.
+### Error Handling
+
+You can check `is_successful` or call `raise_for_status()` to raise an exception on failure:
+
+```python
+from onspring_api_sdk import OnspringError, OnspringAuthenticationError
+
+response = client.get_apps()
+
+if not response.is_successful:
+    print(f'Request failed: {response.message}')
+
+# Or raise on failure:
+try:
+    response.raise_for_status()
+except OnspringAuthenticationError:
+    print('Check your API key')
+except OnspringError as e:
+    print(f'Request failed: {e}')
+```
 
 ## Full API Documentation
 
-You may wish to refer to the full [Onspring API documentation](https://software.onspring.com/hubfs/Training/Admin%20Guide%20-%20v2%20API.pdf) when determining which values to pass as parameters to some of the `OnspringClient` methods. There is also a [swagger page](https://api.onspring.com/swagger/index.html) that you can use for making exploratory requests.
+You may wish to refer to the full [Onspring API documentation](https://software.onspring.com/hubfs/Training/Admin%20Guide%20-%20v2%20API.pdf) when determining which values to pass as parameters to some of the client methods. There is also a [swagger page](https://api.onspring.com/swagger/index.html) that you can use for making exploratory requests.
 
 ## Example Code
 
@@ -93,9 +126,7 @@ The examples that follow assume you have created an `OnspringClient` as describe
 #### Verify connectivity
 
 ```python
-canConnect = client.CanConnect()
-
-if canConnect:
+if client.can_connect():
     print('Connected successfully')
 else:
     print('Attempt to connect failed')
@@ -108,13 +139,13 @@ else:
 Returns a paged collection of apps and/or surveys that can be paged through. By default the page size is 50 and page number is 1.
 
 ```python
-response = client.GetApps()
-  
-print(f'Status Code: {response.statusCode}')
-print(f'Page Size: {response.data.pageSize}')
-print(f'Page Number: {response.data.pageNumber}')
-print(f'Total Pages: {response.data.totalPages}')
-print(f'Total Records: {response.data.totalRecords}')
+response = client.get_apps()
+
+print(f'Status Code: {response.status_code}')
+print(f'Page Size: {response.data.page_size}')
+print(f'Page Number: {response.data.page_number}')
+print(f'Total Pages: {response.data.total_pages}')
+print(f'Total Records: {response.data.total_records}')
 
 for app in response.data.apps:
     print(f'Id: {app.id}')
@@ -125,16 +156,16 @@ for app in response.data.apps:
 You can set your own page size and page number (max is 1,000) as well.
 
 ```python
-from OnspringApiSdk.Models import PagingRequest
+from onspring_api_sdk.models import PagingRequest
 
-pagingRequest = PagingRequest(1, 100)
-response = client.GetApps(pagingRequest)
-  
-print(f'Status Code: {response.statusCode}')
-print(f'Page Size: {response.data.pageSize}')
-print(f'Page Number: {response.data.pageNumber}')
-print(f'Total Pages: {response.data.totalPages}')
-print(f'Total Records: {response.data.totalRecords}')
+paging_request = PagingRequest(page_number=1, page_size=100)
+response = client.get_apps(paging_request=paging_request)
+
+print(f'Status Code: {response.status_code}')
+print(f'Page Size: {response.data.page_size}')
+print(f'Page Number: {response.data.page_number}')
+print(f'Total Pages: {response.data.total_pages}')
+print(f'Total Records: {response.data.total_records}')
 
 for app in response.data.apps:
     print(f'Id: {app.id}')
@@ -147,9 +178,9 @@ for app in response.data.apps:
 Returns an Onspring app or survey according to provided id.
 
 ```python
-response = client.GetAppById(appId=195)
+response = client.get_app_by_id(app_id=195)
 
-print(f'Status Code: {response.statusCode}')
+print(f'Status Code: {response.status_code}')
 print(f'id: {response.data.app.id}')
 print(f'Name: {response.data.app.name}')
 print(f'href: {response.data.app.href}')
@@ -160,9 +191,9 @@ print(f'href: {response.data.app.href}')
 Returns a collection of Onspring apps and/or surveys according to provided ids.
 
 ```python
-response = client.GetAppsByIds(appIds=[195, 240])
+response = client.get_apps_by_ids(app_ids=[195, 240])
 
-print(f'Status Code: {response.statusCode}')
+print(f'Status Code: {response.status_code}')
 print(f'Count: {response.data.count}')
 
 for app in response.data.apps:
@@ -173,43 +204,36 @@ for app in response.data.apps:
 
 ### Fields
 
-#### Helpers
+#### Print Field Helper
 
-Example `PrintField` method referenced in following examples.
+An example helper for printing field details used in the following examples:
 
 ```python
-def PrintField(field: Field):
-    
+from onspring_api_sdk.models import OnspringField
+
+
+def print_field(field: OnspringField):
+
     print('Field:')
     print(f' Id: {field.id}')
-    print(f' App Id: {field.appId}')
+    print(f' App Id: {field.app_id}')
     print(f' Name: {field.name}')
     print(f' Type: {field.type}')
     print(f' Status: {field.status}')
-    print(f' IsRequired: {field.isRequired}')
-    print(f' IsUnique: {field.isUnique}')
+    print(f' Is Required: {field.is_required}')
+    print(f' Is Unique: {field.is_unique}')
 
     if field.type == 'Formula':
+        print(f' Output Type: {field.output_type}')
 
-        print(f' Output Type: {field.outputType}')
+    if field.type == 'List':
+        print(f' Multiplicity: {field.multiplicity}')
 
-        if field.outputType == 'ListValue':
-
-            print(f' Multiplicity: {field.multiplicity}')
+        if field.values:
             print(' Values:')
 
             for value in field.values:
-
-                print(f'  {value.AsString()}')
-
-    if field.type == 'List':
-
-        print(f' Multiplicity: {field.multiplicity}')
-        print(' Values:')
-
-        for value in field.values:
-
-            print(f'  {value.AsString()}')
+                print(f'  {value}')
 ```
 
 #### Get Field By Id
@@ -217,10 +241,10 @@ def PrintField(field: Field):
 Returns an Onspring field according to provided id.
 
 ```python
-response = client.GetFieldById(fieldId=9686)
+response = client.get_field_by_id(field_id=9686)
 
-print(f'Status Code: {response.statusCode}')
-PrintField(response.data.field)
+print(f'Status Code: {response.status_code}')
+print_field(response.data.field)
 ```
 
 #### Get Fields By Ids
@@ -228,13 +252,13 @@ PrintField(response.data.field)
 Returns a collection of Onspring fields according to provided ids.
 
 ```python
-response = client.GetFieldsByIds(fieldIds=[9686, 9687])
+response = client.get_fields_by_ids(field_ids=[9686, 9687])
 
-print(f'Status Code: {response.statusCode}')
+print(f'Status Code: {response.status_code}')
 print(f'Count: {response.data.count}')
 
 for field in response.data.fields:
-    PrintField(field)
+    print_field(field)
 ```
 
 #### Get Fields By App Id
@@ -242,35 +266,34 @@ for field in response.data.fields:
 Returns a paged collection of fields that can be paged through. By default the page size is 50 and page number is 1.
 
 ```python
-response = client.GetFieldsByAppId(appId=195)
-    
-    print(f'Status Code: {response.statusCode}')
-    print(f'Page Size: {response.data.pageSize}')
-    print(f'Page Number: {response.data.pageNumber}')
-    print(f'Total Pages: {response.data.totalPages}')
-    print(f'Total Records: {response.data.totalRecords}')
+response = client.get_fields_by_app_id(app_id=195)
 
-    for field in response.data.fields:
-        PrintField(field)
+print(f'Status Code: {response.status_code}')
+print(f'Page Size: {response.data.page_size}')
+print(f'Page Number: {response.data.page_number}')
+print(f'Total Pages: {response.data.total_pages}')
+print(f'Total Records: {response.data.total_records}')
+
+for field in response.data.fields:
+    print_field(field)
 ```
 
 You can set your own page size and page number (max is 1,000) as well.
 
 ```python
-from OnspringApiSdk.Models import PagingRequest
+from onspring_api_sdk.models import PagingRequest
 
-pagingRequest = PagingRequest(1, 100)
+paging_request = PagingRequest(page_number=1, page_size=100)
+response = client.get_fields_by_app_id(app_id=195, paging_request=paging_request)
 
-response = client.GetFieldsByAppId(appId=195, pagingRequest)
-    
-    print(f'Status Code: {response.statusCode}')
-    print(f'Page Size: {response.data.pageSize}')
-    print(f'Page Number: {response.data.pageNumber}')
-    print(f'Total Pages: {response.data.totalPages}')
-    print(f'Total Records: {response.data.totalRecords}')
+print(f'Status Code: {response.status_code}')
+print(f'Page Size: {response.data.page_size}')
+print(f'Page Number: {response.data.page_number}')
+print(f'Total Pages: {response.data.total_pages}')
+print(f'Total Records: {response.data.total_records}')
 
-    for field in response.data.fields:
-        PrintField(field)
+for field in response.data.fields:
+    print_field(field)
 ```
 
 ### Files
@@ -280,16 +303,16 @@ response = client.GetFieldsByAppId(appId=195, pagingRequest)
 Returns the Onspring file's metadata.
 
 ```python
-response = client.GetFileInfoById(recordId=1, fieldId=6990, fileId=274)
+response = client.get_file_info_by_id(record_id=1, field_id=6990, file_id=274)
 
-print(f'Status Code: {response.statusCode}')
-print(f'Name: {response.data.fileInfo.name}')
-print(f'Type: {response.data.fileInfo.type}')
-print(f'Owner: {response.data.fileInfo.owner}')
-print(f'Content Type: {response.data.fileInfo.contentType}')
-print(f'Created Date: {response.data.fileInfo.createdDate}')
-print(f'Modified Date: {response.data.fileInfo.modifiedDate}')
-print(f'File Href: {response.data.fileInfo.fileHref}')
+print(f'Status Code: {response.status_code}')
+print(f'Name: {response.data.file_info.name}')
+print(f'Type: {response.data.file_info.type}')
+print(f'Owner: {response.data.file_info.owner}')
+print(f'Content Type: {response.data.file_info.content_type}')
+print(f'Created Date: {response.data.file_info.created_date}')
+print(f'Modified Date: {response.data.file_info.modified_date}')
+print(f'File Href: {response.data.file_info.file_href}')
 ```
 
 #### Get File By Id
@@ -297,54 +320,55 @@ print(f'File Href: {response.data.fileInfo.fileHref}')
 Returns the file itself.
 
 ```python
-response = client.GetFileById(recordId=1, fieldId=6990, fileId=274)
+response = client.get_file_by_id(record_id=1, field_id=6990, file_id=274)
 
-print(f'Status Code: {response.statusCode}')
+print(f'Status Code: {response.status_code}')
 print(f'Name: {response.data.file.name}')
-print(f'Content Type: {response.data.file.contentType}')
-print(f'Content Length: {response.data.file.contentLength}')
+print(f'Content Type: {response.data.file.content_type}')
+print(f'Content Length: {response.data.file.content_length}')
 
-filePath = f'C:\\Users\\sfree\\Documents\\Temp\\{response.data.file.name}'
+file_path = f'C:\\Users\\sfree\\Documents\\Temp\\{response.data.file.name}'
 
-with open(filePath, "wb") as file:
-    
-    file.write(response.data.file.content)
+with open(file_path, "wb") as f:
+    f.write(response.data.file.content)
 
-print(f'File Location: {filePath}')
+print(f'File Location: {file_path}')
 ```
 
 #### Save File
 
 ```python
-from OnspringApiSdk.Models import SaveFileRequest
+from onspring_api_sdk.models import SaveFileRequest
+from datetime import datetime
 import os
 import mimetypes
 
-filePath = 'C:\\Users\\sfree\\Documents\\Temp\\Test Attachment.txt'
-fileName = os.path.basename(filePath)
-contentType = mimetypes.guess_type(filePath)[0]
+file_path = 'C:\\Users\\sfree\\Documents\\Temp\\Test Attachment.txt'
+file_name = os.path.basename(file_path)
+content_type = mimetypes.guess_type(file_path)[0]
 
 request = SaveFileRequest(
-    recordId=60, 
-    fieldId=6989, 
-    fileName,
-    filePath, 
-    contentType, 
+    record_id=60,
+    field_id=6989,
+    file_name=file_name,
+    file_path=file_path,
+    content_type=content_type,
     notes='Initial revision',
-    modifiedDate=datetime.now())
+    modified_date=datetime.now(),
+)
 
-response = client.SaveFile(request)
+response = client.save_file(request)
 
-print(f'Status Code: {response.statusCode}')
+print(f'Status Code: {response.status_code}')
 print(f'File Id: {response.data.id}')
 ```
 
 #### Delete File By Id
 
 ```python
-response = client.DeleteFileById(recordId=60, fieldId=6989, fileId=231)
+response = client.delete_file_by_id(record_id=60, field_id=6989, file_id=231)
 
-print(f'Status Code: {response.statusCode}')
+print(f'Status Code: {response.status_code}')
 print(f'Message: {response.message}')
 ```
 
@@ -355,45 +379,50 @@ print(f'Message: {response.message}')
 To add a list value don't provide an id value.
 
 ```python
-from OnspringApiSdk.Models import ListItemRequest
+from onspring_api_sdk.models import ListItemRequest
 
 request = ListItemRequest(
-        listId=906, 
-        name='Not Started', 
-        id='', 
-        numericValue=0, 
-        color='#ffffff')
+    list_id=906,
+    name='Not Started',
+    numeric_value=0,
+    color='#ffffff',
+)
 
-response = client.AddOrUpdateListItem(request)
+response = client.add_or_update_list_item(request)
 
-print(f'Status Code: {response.statusCode}')
+print(f'Status Code: {response.status_code}')
 print(f'Id: {response.data.id}')
 ```
 
 To update a list value provide an id value.
 
 ```python
-from OnspringApiSdk.Models import ListItemRequest
+from onspring_api_sdk.models import ListItemRequest
+import uuid
 
 request = ListItemRequest(
-        listId=906, 
-        name='Pending', 
-        id='4118d53a-9121-4345-8682-07f23d606daa', 
-        numericValue=0, 
-        color='#ffffff')
+    list_id=906,
+    name='Pending',
+    id=uuid.UUID('4118d53a-9121-4345-8682-07f23d606daa'),
+    numeric_value=0,
+    color='#ffffff',
+)
 
-response = client.AddOrUpdateListItem(request)
+response = client.add_or_update_list_item(request)
 
-print(f'Status Code: {response.statusCode}')
+print(f'Status Code: {response.status_code}')
 print(f'Id: {response.data.id}')
 ```
 
 #### Delete List Value
 
 ```python
-response = client.DeleteListItem(listId=906, itemId='36f94d8c-2b9d-465e-9ad1-ede04109efc9')
+response = client.delete_list_item(
+    list_id=906,
+    item_id='36f94d8c-2b9d-465e-9ad1-ede04109efc9',
+)
 
-print(f'Status Code: {response.statusCode}')
+print(f'Status Code: {response.status_code}')
 print(f'Message: {response.message}')
 ```
 
@@ -401,112 +430,113 @@ print(f'Message: {response.message}')
 
 #### Get Records By App Id
 
-Returns a paged colletion of records that can be paged through. By default the page size is 50 and page number is 1.
+Returns a paged collection of records that can be paged through. By default the page size is 50 and page number is 1.
 
 ```python
-request = GetRecordsByAppRequest(appId=195)
+from onspring_api_sdk.models import GetRecordsByAppRequest
 
-response = client.GetRecordsByAppId(request)
+request = GetRecordsByAppRequest(app_id=195)
+response = client.get_records_by_app_id(request)
 
-print(f'Status Code: {response.statusCode}')
-print(f'Page Size: {response.data.pageSize}')
-print(f'Page Number: {response.data.pageNumber}')
-print(f'Total Pages: {response.data.totalPages}')
-print(f'Total Records: {response.data.totalRecords}')
+print(f'Status Code: {response.status_code}')
+print(f'Page Size: {response.data.page_size}')
+print(f'Page Number: {response.data.page_number}')
+print(f'Total Pages: {response.data.total_pages}')
+print(f'Total Records: {response.data.total_records}')
 
 for record in response.data.records:
-    print(f'AppId: {record.appId}')
-    print(f'RecordId: {record.recordId}')
+    print(f'AppId: {record.app_id}')
+    print(f'RecordId: {record.record_id}')
 
     for field in record.fields:
         print(f'Type: {field.type}')
-        print(f'FieldId: {field.fieldId}')
-        print(f'Value: {field.GetResultValueString()}')
+        print(f'FieldId: {field.field_id}')
+        print(f'Value: {field.value}')
 ```
 
 You can set your own page size and page number (max is 1,000) as well. In addition to specifying what field values to return and in what format (Raw vs. Formatted) to return them.
 
 ```python
-from OnspringApiSdk.Models import PagingRequest, GetRecordsByAppRequest
-from OnspringApiSdk.Enums import DataFormat 
-
-pagingRequest = PagingRequest(1,10)
+from onspring_api_sdk.models import GetRecordsByAppRequest
+from onspring_api_sdk.enums import DataFormat
 
 request = GetRecordsByAppRequest(
-    appId=195,
-    fieldIds=[9686],
-    dataFormat=DataFormat.Formatted.name,
-    pagingRequest)
+    app_id=195,
+    field_ids=[9686],
+    data_format=DataFormat.Formatted.name,
+    page_number=1,
+    page_size=10,
+)
 
-response = client.GetRecordsByAppId(request)
+response = client.get_records_by_app_id(request)
 
-print(f'Status Code: {response.statusCode}')
-print(f'Page Size: {response.data.pageSize}')
-print(f'Page Number: {response.data.pageNumber}')
-print(f'Total Pages: {response.data.totalPages}')
-print(f'Total Records: {response.data.totalRecords}')
+print(f'Status Code: {response.status_code}')
+print(f'Page Size: {response.data.page_size}')
+print(f'Page Number: {response.data.page_number}')
+print(f'Total Pages: {response.data.total_pages}')
+print(f'Total Records: {response.data.total_records}')
 
 for record in response.data.records:
-    print(f'AppId: {record.appId}')
-    print(f'RecordId: {record.recordId}')
+    print(f'AppId: {record.app_id}')
+    print(f'RecordId: {record.record_id}')
 
     for field in record.fields:
         print(f'Type: {field.type}')
-        print(f'FieldId: {field.fieldId}')
-        print(f'Value: {field.GetResultValueString()}')
+        print(f'FieldId: {field.field_id}')
+        print(f'Value: {field.value}')
 ```
 
 #### Get Record By Id
 
-Returns an onspring record based on the provided app and record ids.
+Returns an Onspring record based on the provided app and record ids.
 
 ```python
-from OnspringApiSdk.Models import GetRecordByIdRequest
+from onspring_api_sdk.models import GetRecordByIdRequest
 
-request = GetRecordByIdRequest(appId=195, recordId=60)
+request = GetRecordByIdRequest(app_id=195, record_id=60)
+response = client.get_record_by_id(request)
 
-response = client.GetRecordById(request)
-
-print(f'Status Code: {response.statusCode}')
-print(f'AppId: {response.data.appId}')
-print(f'RecordId: {response.data.recordId}')
+print(f'Status Code: {response.status_code}')
+print(f'AppId: {response.data.app_id}')
+print(f'RecordId: {response.data.record_id}')
 
 for field in response.data.fields:
     print(f'Type: {field.type}')
-    print(f'FieldId: {field.fieldId}')
-    print(f'Value: {field.GetResultValueString()}')
+    print(f'FieldId: {field.field_id}')
+    print(f'Value: {field.value}')
 ```
 
 You can also specify what field values to return and in what format (Raw vs. Formatted) to return them.
 
 ```python
-from OnspringApiSdk.Models import GetRecordByIdRequest
-from OnspringApiSdk.Enums import DataFormat
+from onspring_api_sdk.models import GetRecordByIdRequest
+from onspring_api_sdk.enums import DataFormat
 
 request = GetRecordByIdRequest(
-    appId=195, 
-    recordId=60,
-    fieldIds=[9686],
-    dataFormat=DataFormat.Formatted.name)
+    app_id=195,
+    record_id=60,
+    field_ids=[9686],
+    data_format=DataFormat.Formatted.name,
+)
 
-response = client.GetRecordById(request)
+response = client.get_record_by_id(request)
 
-print(f'Status Code: {response.statusCode}')
-print(f'AppId: {response.data.appId}')
-print(f'RecordId: {response.data.recordId}')
+print(f'Status Code: {response.status_code}')
+print(f'AppId: {response.data.app_id}')
+print(f'RecordId: {response.data.record_id}')
 
 for field in response.data.fields:
     print(f'Type: {field.type}')
-    print(f'FieldId: {field.fieldId}')
-    print(f'Value: {field.GetResultValueString()}')
+    print(f'FieldId: {field.field_id}')
+    print(f'Value: {field.value}')
 ```
 
 #### Delete Record By Id
 
 ```python
-response = client.DeleteRecordById(appId=195, recordId=60)
+response = client.delete_record_by_id(app_id=195, record_id=60)
 
-print(f'Status Code: {response.statusCode}')
+print(f'Status Code: {response.status_code}')
 print(f'Message: {response.message}')
 ```
 
@@ -515,117 +545,117 @@ print(f'Message: {response.message}')
 Returns a collection of Onspring records based on the provided appId and recordIds.
 
 ```python
-from OnspringApiSdk.Models import GetBatchRecordsRequest
+from onspring_api_sdk.models import GetBatchRecordsRequest
 
-request = GetBatchRecordsRequest(appId=195, recordIds=[1, 2, 3])
+request = GetBatchRecordsRequest(app_id=195, record_ids=[1, 2, 3])
+response = client.get_records_by_ids(request)
 
-response = client.GetRecordsByIds(request)
-
-print(f'Status Code: {response.statusCode}')
+print(f'Status Code: {response.status_code}')
 print(f'Count: {response.data.count}')
 
 for record in response.data.records:
-    print(f'AppId: {record.appId}')
-    print(f'RecordId: {record.recordId}')
+    print(f'AppId: {record.app_id}')
+    print(f'RecordId: {record.record_id}')
 
     for field in record.fields:
         print(f'Type: {field.type}')
-        print(f'FieldId: {field.fieldId}')
-        print(f'Value: {field.GetResultValueString()}')
+        print(f'FieldId: {field.field_id}')
+        print(f'Value: {field.value}')
 ```
 
 You can also specify what field values to return and in what format (Raw vs. Formatted) to return them.
 
 ```python
-from OnspringApiSdk.Models import GetBatchRecordsRequest
-from OnspringApiSdk.Enums import DataFormat
+from onspring_api_sdk.models import GetBatchRecordsRequest
+from onspring_api_sdk.enums import DataFormat
 
 request = GetBatchRecordsRequest(
-    appId=195, 
-    recordIds=[1, 2, 3],
-    fieldIds=[9686],
-    dataFormat=DataFormat.Formatted.name)
+    app_id=195,
+    record_ids=[1, 2, 3],
+    field_ids=[9686],
+    data_format=DataFormat.Formatted.name,
+)
 
-response = client.GetRecordsByIds(request)
+response = client.get_records_by_ids(request)
 
-print(f'Status Code: {response.statusCode}')
+print(f'Status Code: {response.status_code}')
 print(f'Count: {response.data.count}')
 
 for record in response.data.records:
-    print(f'AppId: {record.appId}')
-    print(f'RecordId: {record.recordId}')
+    print(f'AppId: {record.app_id}')
+    print(f'RecordId: {record.record_id}')
 
     for field in record.fields:
         print(f'Type: {field.type}')
-        print(f'FieldId: {field.fieldId}')
-        print(f'Value: {field.GetResultValueString()}')
+        print(f'FieldId: {field.field_id}')
+        print(f'Value: {field.value}')
 ```
 
 #### Query Records
 
-Returns a paged colletion of records based on a criteria that can be paged through. By default the page size is 50 and page number is 1.
+Returns a paged collection of records based on a criteria that can be paged through. By default the page size is 50 and page number is 1.
 
 ```python
-from OnspringApiSdk.Models import QueryRecordsRequest
+from onspring_api_sdk.models import QueryRecordsRequest
 
-fieldId = 6983
+field_id = 6983
 operator = 'eq'
-value = '\'Test Task 5\''
+value = "'Test Task 5'"
 
-request = QueryRecordsRequest(appId=195, filter=f'{fieldId} {operator} {value}')
+request = QueryRecordsRequest(app_id=195, filter=f'{field_id} {operator} {value}')
+response = client.query_records(request)
 
-response = client.QueryRecords(request)
-
-print(f'Status Code: {response.statusCode}')
-print(f'Page Size: {response.data.pageSize}')
-print(f'Page Number: {response.data.pageNumber}')
-print(f'Total Pages: {response.data.totalPages}')
-print(f'Total Records: {response.data.totalRecords}')
+print(f'Status Code: {response.status_code}')
+print(f'Page Size: {response.data.page_size}')
+print(f'Page Number: {response.data.page_number}')
+print(f'Total Pages: {response.data.total_pages}')
+print(f'Total Records: {response.data.total_records}')
 
 for record in response.data.records:
-    print(f'AppId: {record.appId}')
-    print(f'RecordId: {record.recordId}')
+    print(f'AppId: {record.app_id}')
+    print(f'RecordId: {record.record_id}')
 
     for field in record.fields:
         print(f'Type: {field.type}')
-        print(f'FieldId: {field.fieldId}')
-        print(f'Value: {field.GetResultValueString()}')
+        print(f'FieldId: {field.field_id}')
+        print(f'Value: {field.value}')
 ```
 
 You can set your own page size and page number (max is 1,000) as well. In addition to specifying what field values to return and in what format (Raw vs. Formatted) to return them.
 
 ```python
-from OnspringApiSdk.Models import PagingRequest, QueryRecordsRequest
-from OnspringApiSdk.Enums import DataFormat
+from onspring_api_sdk.models import QueryRecordsRequest
+from onspring_api_sdk.enums import DataFormat
 
-pagingRequest = PagingRequest(1, 10)
-fieldId = 6983
+field_id = 6983
 operator = 'eq'
-value = '\'Test Task 5\''
+value = "'Test Task 5'"
 
 request = QueryRecordsRequest(
-    appId=195, 
-    filter=f'{fieldId} {operator} {value}',
-    fieldIds=[9686],
-    dataFormat=DataFormat.Formatted.name,
-    pagingRequest)
+    app_id=195,
+    filter=f'{field_id} {operator} {value}',
+    field_ids=[9686],
+    data_format=DataFormat.Formatted.name,
+    page_number=1,
+    page_size=10,
+)
 
-response = client.QueryRecords(request)
+response = client.query_records(request)
 
-print(f'Status Code: {response.statusCode}')
-print(f'Page Size: {response.data.pageSize}')
-print(f'Page Number: {response.data.pageNumber}')
-print(f'Total Pages: {response.data.totalPages}')
-print(f'Total Records: {response.data.totalRecords}')
+print(f'Status Code: {response.status_code}')
+print(f'Page Size: {response.data.page_size}')
+print(f'Page Number: {response.data.page_number}')
+print(f'Total Pages: {response.data.total_pages}')
+print(f'Total Records: {response.data.total_records}')
 
 for record in response.data.records:
-    print(f'AppId: {record.appId}')
-    print(f'RecordId: {record.recordId}')
+    print(f'AppId: {record.app_id}')
+    print(f'RecordId: {record.record_id}')
 
     for field in record.fields:
         print(f'Type: {field.type}')
-        print(f'FieldId: {field.fieldId}')
-        print(f'Value: {field.GetResultValueString()}')
+        print(f'FieldId: {field.field_id}')
+        print(f'Value: {field.value}')
 ```
 
 For further details on constructing the `filter` parameter please refer to the [documentation](https://software.onspring.com/hubfs/Training/Admin%20Guide%20-%20v2%20API.pdf) for v2 of the Onspring API.
@@ -635,27 +665,34 @@ For further details on constructing the `filter` parameter please refer to the [
 You can add a record by not providing a record id value. If successful will return the id of the added record.
 
 ```python
-from OnspringApiSdk.Models import StringFieldValue, GuidFieldValue, DateFieldValue, IntegerListValue, Record
+from onspring_api_sdk.models import (
+    StringFieldValue,
+    GuidFieldValue,
+    DateFieldValue,
+    IntegerListValue,
+    Record,
+)
+import uuid
+from datetime import datetime
 
 fields = []
 
 status = uuid.UUID('4118d53a-9121-4345-8682-07f23d606daa')
-dueDate = datetime.utcnow()
+due_date = datetime.utcnow()
 
-fields.append(StringFieldValue(6983, 'Test Task via API'))
-fields.append(StringFieldValue(6984, 'This is a task.'))
-fields.append(GuidFieldValue(6986, status))
-fields.append(DateFieldValue(6985, dueDate))
-fields.append(IntegerListValue(6987, [4]))
+fields.append(StringFieldValue(field_id=6983, value='Test Task via API'))
+fields.append(StringFieldValue(field_id=6984, value='This is a task.'))
+fields.append(GuidFieldValue(field_id=6986, value=status))
+fields.append(DateFieldValue(field_id=6985, value=due_date))
+fields.append(IntegerListValue(field_id=6987, value=[4]))
 
-record = Record(
-    appId=195, 
-    fields)
+record = Record(app_id=195, fields=fields)
 
-response = client.AddOrUpdateRecord(record)
+response = client.add_or_update_record(record)
 
-print(f'Status Code: {response.statusCode}')
+print(f'Status Code: {response.status_code}')
 print(f'Id: {response.data.id}')
+
 for warning in response.data.warnings:
     print(f'Warning: {warning}')
 ```
@@ -663,28 +700,34 @@ for warning in response.data.warnings:
 You can update a record by providing its id. If successful will return the id of record updated.
 
 ```python
-from OnspringApiSdk.Models import StringFieldValue, GuidFieldValue, DateFieldValue, IntegerListValue, Record
+from onspring_api_sdk.models import (
+    StringFieldValue,
+    GuidFieldValue,
+    DateFieldValue,
+    IntegerListValue,
+    Record,
+)
+import uuid
+from datetime import datetime
 
 fields = []
 
 status = uuid.UUID('1c1c5f7e-cd03-4b70-9790-0f83b24b5863')
-dueDate = datetime.utcnow()
+due_date = datetime.utcnow()
 
-fields.append(StringFieldValue(6983, 'Test Task via API'))
-fields.append(StringFieldValue(6984, 'This is a task.'))
-fields.append(GuidFieldValue(6986, status))
-fields.append(DateFieldValue(6985, dueDate))
-fields.append(IntegerListValue(6987, [4]))
+fields.append(StringFieldValue(field_id=6983, value='Test Task via API'))
+fields.append(StringFieldValue(field_id=6984, value='This is a task.'))
+fields.append(GuidFieldValue(field_id=6986, value=status))
+fields.append(DateFieldValue(field_id=6985, value=due_date))
+fields.append(IntegerListValue(field_id=6987, value=[4]))
 
-record = Record(
-    appId=195, 
-    fields, 
-    recordId=103)
+record = Record(app_id=195, fields=fields, record_id=103)
 
-response = client.AddOrUpdateRecord(record)
+response = client.add_or_update_record(record)
 
-print(f'Status Code: {response.statusCode}')
+print(f'Status Code: {response.status_code}')
 print(f'Id: {response.data.id}')
+
 for warning in response.data.warnings:
     print(f'Warning: {warning}')
 ```
@@ -692,13 +735,13 @@ for warning in response.data.warnings:
 #### Delete Records By Ids
 
 ```python
-from OnspringApiSdk.Models import DeleteBatchRecordsRequest
+from onspring_api_sdk.models import DeleteBatchRecordsRequest
 
-request = DeleteBatchRecordsRequest(appId=195, recordIds=[1, 2, 3])
+request = DeleteBatchRecordsRequest(app_id=195, record_ids=[1, 2, 3])
 
-response = client.DeleteRecordsByIds(request)
+response = client.delete_records_by_ids(request)
 
-print(f'Status Code: {response.statusCode}')
+print(f'Status Code: {response.status_code}')
 print(f'Message: {response.message}')
 ```
 
@@ -709,39 +752,43 @@ print(f'Message: {response.message}')
 Returns the report for the provided id.
 
 ```python
-from OnspringApiSdk.Models import GetReportByIdRequest
+from onspring_api_sdk.models import GetReportByIdRequest
 
-request = GetReportByIdRequest(reportId=53)
+request = GetReportByIdRequest(report_id=53)
+response = client.get_report_by_id(request)
 
-response = client.GetReportById(request)
-
-print(f'Status Code: {response.statusCode}')
+print(f'Status Code: {response.status_code}')
 print('Columns:')
 print(f'{", ".join(response.data.columns)}')
 print('Rows:')
+
 for row in response.data.rows:
-    print(f'Record Id {row.recordId}: {", ".join([str(cell) for cell in row.cells])}')
+    cells = ', '.join([str(cell) for cell in row.cells])
+    print(f'Record Id {row.record_id}: {cells}')
 ```
 
 You can also specify the format of the data in the report as well as whether you are requesting the report's data or its chart data.
 
 ```python
-from OnspringApiSdk.Models import GetReportByIdRequest
-from OnspringApiSdk.Enums import DataFormat, ReportDataType
+from onspring_api_sdk.models import GetReportByIdRequest
+from onspring_api_sdk.enums import DataFormat, ReportDataType
 
 request = GetReportByIdRequest(
-    reportId=53,
-    apiDataFormat=DataFormat.Formatted.name,
-    dataFormat=ReportDataType.ChartData.name)
+    report_id=53,
+    api_data_format=DataFormat.Formatted.name,
+    data_type=ReportDataType.ChartData.name,
+)
 
-response = client.GetReportById(request)
+response = client.get_report_by_id(request)
 
-print(f'Status Code: {response.statusCode}')
+print(f'Status Code: {response.status_code}')
 print('Columns:')
 print(f'{", ".join(response.data.columns)}')
 print('Rows:')
+
 for row in response.data.rows:
-    print(f'Record Id {row.recordId}: {", ".join([str(cell) for cell in row.cells])}')
+    cells = ', '.join([str(cell) for cell in row.cells])
+    print(f'Record Id {row.record_id}: {cells}')
 ```
 
 #### Get Reports By App Id
@@ -749,10 +796,9 @@ for row in response.data.rows:
 Returns a paged collection of reports that can be paged through. By default the page size is 50 and page number is 1.
 
 ```python
-response = client.GetReportsByAppId(appId=195)
+response = client.get_reports_by_app_id(app_id=195)
 
-print(f'Status Code: {response.statusCode}')
-print(f'App Id: {appId}')
+print(f'Status Code: {response.status_code}')
 print('Reports:')
 
 for report in response.data.reports:
@@ -764,18 +810,16 @@ for report in response.data.reports:
 You can set your own page size and page number (max is 1,000) as well.
 
 ```python
-from OnspringApiSdk.Models import PagingRequest
+from onspring_api_sdk.models import PagingRequest
 
-pagingRequest = PagingRequest(1,10)
+paging_request = PagingRequest(page_number=1, page_size=10)
+response = client.get_reports_by_app_id(app_id=195, paging_request=paging_request)
 
-response = client.GetReportsByAppId(appId=195, pagingRequest)
-
-print(f'Status Code: {response.statusCode}')
-print(f'Page Number: {response.data.pageNumber}')
-print(f'Page Number: {response.data.pageSize}')
-print(f'Page Number: {response.data.totalPages}')
-print(f'Page Number: {response.data.totalRecords}')
-print(f'App Id: {appId}')
+print(f'Status Code: {response.status_code}')
+print(f'Page Number: {response.data.page_number}')
+print(f'Page Size: {response.data.page_size}')
+print(f'Total Pages: {response.data.total_pages}')
+print(f'Total Records: {response.data.total_records}')
 print('Reports:')
 
 for report in response.data.reports:
