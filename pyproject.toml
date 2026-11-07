@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "OnspringApiSdk"
-version = "3.0.0"
+version = "3.0.1"
 description = "A package for interacting with version 2 of the Onspring API."
 readme = "README.md"
 requires-python = ">=3.10"
