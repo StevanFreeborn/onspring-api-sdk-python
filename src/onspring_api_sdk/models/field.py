@@ -34,6 +34,7 @@ class OnspringField(BaseModel):
     values: Optional[list[ListValue]] = None
     multiplicity: Optional[str] = None
     output_type: Optional[str] = Field(default=None, alias="outputType")
+    referenced_app_id: Optional[int] = Field(default=None, alias="referencedAppId")
 
 
 class GetFieldByIdResponse(BaseModel):

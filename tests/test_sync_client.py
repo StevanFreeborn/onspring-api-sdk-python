@@ -47,6 +47,7 @@ from .conftest import (
     MOCK_RECORD,
     MOCK_RECORDS_BATCH_RESPONSE,
     MOCK_RECORDS_RESPONSE,
+    MOCK_REFERENCE_FIELD,
     MOCK_REPORT_RESPONSE,
     MOCK_REPORTS_BY_APP_RESPONSE,
     MOCK_SAVE_FILE_RESPONSE,
@@ -252,6 +253,16 @@ class TestGetFieldById:
             assert response.data.field.values[0].name == "list_value_1"
             assert response.data.field.values[0].numeric_value == 1
             assert response.data.field.values[0].color == "#008e8e"
+
+    def test_reference_field(self, client: OnspringClient):
+        with respx.mock:
+            respx.get(f"{TEST_URL}/Fields/id/4808").mock(return_value=Response(200, json=MOCK_REFERENCE_FIELD))
+
+            response = client.get_field_by_id(4808)
+
+            assert response.data.field.type == 'Reference'
+            assert response.data.field.referenced_app_id == 2
+            assert response.data.field.multiplicity == 'MultiSelect'
 
 
 class TestGetFieldsByIds:

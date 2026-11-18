@@ -72,6 +72,18 @@ MOCK_LIST_FIELD = {
     ],
 }
 
+MOCK_REFERENCE_FIELD = {
+    "multiplicity": "MultiSelect",
+    "referencedAppId": 2,
+    "id": 4808,
+    "appId": 130,
+    "name": "multi_select_reference_field",
+    "type": "Reference",
+    "status": "Enabled",
+    "isRequired": False,
+    "isUnique": False
+}
+
 MOCK_FIELDS_RESPONSE = {
     "pageNumber": 1,
     "pageSize": 50,
