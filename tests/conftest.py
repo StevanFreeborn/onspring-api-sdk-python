@@ -81,7 +81,7 @@ MOCK_REFERENCE_FIELD = {
     "type": "Reference",
     "status": "Enabled",
     "isRequired": False,
-    "isUnique": False
+    "isUnique": False,
 }
 
 MOCK_FIELDS_RESPONSE = {
