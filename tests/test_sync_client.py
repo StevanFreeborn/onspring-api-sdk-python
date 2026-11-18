@@ -260,9 +260,9 @@ class TestGetFieldById:
 
             response = client.get_field_by_id(4808)
 
-            assert response.data.field.type == 'Reference'
+            assert response.data.field.type == "Reference"
             assert response.data.field.referenced_app_id == 2
-            assert response.data.field.multiplicity == 'MultiSelect'
+            assert response.data.field.multiplicity == "MultiSelect"
 
 
 class TestGetFieldsByIds:
